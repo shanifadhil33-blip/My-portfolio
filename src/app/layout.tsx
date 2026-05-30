@@ -9,24 +9,24 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Adhil Shanif — AI Integration Engineer",
+  title: "Adhil Shanif — Full-Stack AI Engineer",
   description:
-    "I ship production Next.js apps with Claude, GPT, and Groq integrations. AI-powered web applications and automation systems for businesses.",
+    "I build production AI systems end-to-end — LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
   keywords: [
-    "AI Engineer",
+    "Full-Stack AI Engineer",
+    "LLM Applications",
+    "Autonomous Agents",
     "Next.js Developer",
-    "Claude API",
-    "GPT Integration",
-    "Groq",
+    "OpenAI API",
     "Supabase",
-    "Full Stack Developer",
+    "AI SaaS",
     "Dubai",
   ],
   authors: [{ name: "Adhil Shanif" }],
   openGraph: {
-    title: "Adhil Shanif — AI Integration Engineer",
+    title: "Adhil Shanif — Full-Stack AI Engineer",
     description:
-      "I ship production Next.js apps with Claude, GPT, and Groq integrations.",
+      "I build production AI systems end-to-end — LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
     type: "website",
   },
 };

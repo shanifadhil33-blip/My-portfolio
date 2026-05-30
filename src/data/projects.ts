@@ -18,6 +18,7 @@ export interface Project {
   role?: string;
   methodology?: string;
   techStackDetailed?: string[];
+  keyDecisions?: string;
   systemOverview?: string;
   stages?: { title: string; engine?: string; description?: string; bulletPoints?: string[] }[];
   constraints?: { title: string; description: string }[];
@@ -30,44 +31,96 @@ const baseProjects: Project[] = [
     title: "Reclaim",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "An AI-powered SaaS that parses medical insurance documents, flags claim errors, and autonomously drafts appeal letters for denied bills.",
-    tags: ["Next.js", "PDF Parsing", "LLM APIs", "Supabase"],
+      "A comprehensive B2B SaaS platform that automates the end-to-end medical billing appeals process — from EOB document ingestion to AI-generated denial appeal letters.",
+    tags: ["Next.js", "Supabase", "OpenAI API", "Microservice Architecture"],
     thumbnail: "/screenshots/reclaim-thumb.png",
+    role: "Full-Stack AI Engineer",
+    methodology: "Microservice Architecture",
+    techStackDetailed: [
+      "Next.js (React)",
+      "Tailwind CSS",
+      "Supabase (PostgreSQL, Row Level Security)",
+      "OpenAI API (GPT-4o)",
+      "Supabase Storage",
+      "Vercel Serverless Functions",
+    ],
     caseStudy: {
       problem:
-        "Medical billing teams waste countless hours manually reviewing complex Explanation of Benefits (EOB) PDFs to spot denials and writing custom appeal letters from scratch.",
+        "Medical billing teams spend countless hours manually reviewing complex, non-standardized Explanation of Benefits (EOB) PDFs and cross-referencing them to write insurance denial appeals. This tedious, error-prone workflow leads to a backlog of denied claims, missed filing deadlines, and millions in unrecovered revenue for healthcare providers.",
       solution:
-        "Built an automated parsing engine that extracts structured billing data from insurance documents, combined with an AI agent that analyzes the denial reasons and generates highly contextualized appeal letters.",
+        "Reclaim is a comprehensive B2B SaaS platform that automates the end-to-end medical billing appeals process. It utilizes a decoupled architecture where a specialized extraction module (the EOB Reader) ingests and parses messy EOB documents into clean, structured JSON data. The main application then feeds this structured data into an LLM agent to automatically draft highly accurate, payer-specific appeal letters for the biller to review and export.",
       outcome:
-        "A streamlined extraction and appeals pipeline that dramatically accelerates the claim resolution process.",
+        "The decoupled architecture is actively deployed, successfully reducing the time it takes a medical biller to process a denied EOB and draft a comprehensive appeal letter from over 30 minutes down to under 2 minutes per claim.",
       screenshots: [
         "/screenshots/reclaim-1.png",
         "/screenshots/reclaim-2.png",
         "/screenshots/reclaim-3.png",
       ],
     },
+    keyDecisions:
+      "We made the deliberate decision to decouple the EOB Reader from the main Reclaim application, deploying the extraction engine as its own distinct microservice on Vercel. While this introduced a slight overhead in managing cross-service API communication, the tradeoff was necessary to ensure that heavy PDF parsing computations wouldn't block the main UI thread or degrade dashboard performance. This separation of concerns also allows us to scale the computationally expensive parsing engine independently as document volume increases.",
+    systemOverview:
+      "Reclaim is the comprehensive, user-facing SaaS platform that handles the entire lifecycle of a denied insurance claim. It acts as the front-end and main API gateway — managing user sessions, database interactions, and the final logic for generating appeal letters.\n\nThe platform connects to a decoupled extraction engine (the EOB Reader) via an internal API pipeline: the biller uploads a denied EOB, Reclaim hands the raw PDF off to the Reader for parsing, receives structured JSON back, merges it with appeal prompt templates, and runs it through an AI agent to produce the final letter.",
+    stages: [
+      {
+        title: "1. Document Upload",
+        engine: "Reclaim (Next.js)",
+        description: "The medical biller logs into the Reclaim dashboard and uploads a denied EOB PDF. Reclaim receives the file and authenticates the user.",
+      },
+      {
+        title: "2. API Handoff to Engine",
+        engine: "Internal API",
+        description: "Reclaim sends the raw PDF file via an internal API call directly to the EOB Reader microservice running on Vercel.",
+      },
+      {
+        title: "3. Parsing & Extraction",
+        engine: "EOB Reader (Serverless)",
+        description: "The EOB Reader processes the document, navigating the layout to extract specific denial codes, patient data, and billing amounts.",
+      },
+      {
+        title: "4. Structured Data Return",
+        engine: "JSON Payload",
+        description: "The EOB Reader packages the extracted information into a clean JSON payload and sends it back to Reclaim's main application logic.",
+      },
+      {
+        title: "5. Appeals Generation",
+        engine: "OpenAI GPT-4o",
+        description: "Reclaim takes the structured JSON, merges it with its appeals prompt templates, and runs it through the AI agent to draft the final appeal letter.",
+      },
+      {
+        title: "6. User Review & Export",
+        engine: "Reclaim Dashboard",
+        description: "The generated appeal letter is rendered on the front-end dashboard for the medical biller to review, edit, and export.",
+      },
+    ],
   },
   {
     id: "eob-reader",
     title: "EOB Reader",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "An AI tool that parses medical insurance documents to extract billing data and identify claim denials.",
-    tags: ["Next.js", "PDF Parsing", "LLM APIs", "Supabase"],
+      "A stateless extraction microservice that ingests complex Explanation of Benefits PDFs and outputs clean, structured JSON — the dedicated parsing engine behind Reclaim.",
+    tags: ["Vercel Serverless", "PDF Parsing", "REST API", "Microservice"],
     thumbnail: "/screenshots/eob-reader-thumb.png",
+    role: "Backend Engineer",
+    methodology: "Stateless Microservice",
+    techStackDetailed: [
+      "Vercel Serverless Functions",
+      "PDF parsing libraries (pdf-parse)",
+      "REST API",
+    ],
     caseStudy: {
       problem:
-        "Medical billing teams waste hours manually reviewing complex Explanation of Benefits (EOB) PDFs to spot claim denials.",
+        "Insurance companies issue Explanation of Benefits documents in wildly inconsistent formats, with no standardized layout for denial codes, patient information, or billing amounts. Attempting to parse these documents within the main application creates computational bottlenecks that degrade user experience.",
       solution:
-        "Built an automated parsing engine that reads insurance documents, extracts structured billing data, and flags denials for immediate review.",
+        "The EOB Reader is deployed as its own distinct microservice on Vercel, purpose-built for a single job: ingesting a raw PDF, navigating its specific layout, and extracting key variables — denial codes, patient info, billed amounts, dates of service — into a clean, standardized JSON payload. It handles error detection at the document level, flagging illegible documents or missing mandatory fields before the data ever reaches the appeals generator.",
       outcome:
-        "A streamlined extraction pipeline ready for payment flow integration.",
-      screenshots: [
-        "/screenshots/eob-reader-1.png",
-        "/screenshots/eob-reader-2.png",
-        "/screenshots/eob-reader-3.png",
-      ],
+        "A stateless, independently scalable extraction engine that processes documents in isolation and returns structured data without impacting main application performance.",
     },
+    keyDecisions:
+      "Deploying the parser as a standalone Vercel project rather than embedding it within Reclaim's codebase was a deliberate architectural choice. The stateless design means it processes a file and immediately forgets it — no sessions, no stored data — which simplifies scaling and keeps security surface area minimal. This also allows the parsing engine to be versioned and updated independently without redeploying the entire SaaS platform.",
+    systemOverview:
+      "The EOB Reader is a specialized microservice focused entirely on data extraction. It has one job — taking a complex, messy Explanation of Benefits PDF and turning it into clean, structured data. Deployed as its own specific project on Vercel, it operates as a distinct compute engine separated from the main user interface.\n\nCore responsibilities include PDF ingestion and parsing across varied insurance company layouts, data structuring into standardized JSON payloads, and document-level error handling to flag illegible or incomplete documents.",
   },
   {
     id: "cold-email-agent",
@@ -88,16 +141,78 @@ const baseProjects: Project[] = [
     id: "youtube-automation",
     title: "YouTube Automation Pipeline",
     brief:
-      "A fully automated daily YouTube video generation and processing pipeline.",
-    tags: ["GitHub Actions", "Python", "Video APIs", "Automation"],
+      "A fully automated, $0-cost content pipeline that writes, illustrates, narrates, and assembles long-form documentary videos without human intervention.",
+    tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
     thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
+    role: "AI Systems Engineer / Architect",
+    methodology: "Agentic Automation",
+    techStackDetailed: [
+      "GitHub Actions (Ubuntu runner)",
+      "Ollama Cloud (gpt-oss:120b-cloud)",
+      "Tavily API",
+      "HuggingFace Inference API (FLUX.1-schnell)",
+      "Cloudflare Workers AI",
+      "Pollinations.ai",
+      "Microsoft Edge TTS",
+      "Kokoro-82M (local ONNX)",
+      "faster-whisper",
+      "FFmpeg",
+      "Cloudflare R2 (S3-compatible)",
+      "Telegram Bot API",
+    ],
     caseStudy: {
       problem:
-        "Managing daily YouTube content creation requires constant manual oversight of rendering, scripting, and uploading.",
+        "Content creators spend dozens of hours per video manually researching topics, writing scripts, sourcing visual assets, recording voiceovers, and editing timelines. This tedious manual workflow limits publishing consistency and becomes financially unsustainable when using expensive, subscription-based AI creation tools.",
       solution:
-        "Engineered a hands-free workflow triggered via GitHub Actions to generate scripts, synthesize video, and deploy content daily.",
-      outcome: "A completely automated, zero-touch daily video pipeline.",
+        "Akhir Zamaan is an entirely automated, $0 content pipeline that writes, illustrates, narrates, and assembles long-form documentary videos without human intervention. Operating on a twice-weekly schedule, the system orchestrates approximately 10 different free-tier APIs to handle sequential tasks from web research to final video assembly. The compiled media files and transcripts are then automatically delivered directly to the operator's phone for manual upload.",
+      outcome:
+        "The pipeline is fully operational, successfully generating complete 10–13 minute documentary videos twice a week at a total monthly cost of exactly ~$0.00.",
     },
+    keyDecisions:
+      "We made the radical decision to use ephemeral GitHub Actions CI runners as the entire backend compute runtime instead of provisioning a persistent virtual private server (VPS). While this \"compute-as-a-runner\" strategy achieved a strict $0 operating cost, the tradeoff meant surviving without local storage or a GPU, forcing us to download models on every single clean boot and navigate rigid 6-hour runtime constraints. To prevent timeouts, we had to compromise on visual density — capping the pipeline at 150 images per video — and switch from local CPU voice rendering to cloud-based Edge TTS to save hours of processing time.",
+    systemOverview:
+      "Akhir Zamaan is a fully autonomous content factory that runs entirely on free-tier cloud infrastructure. Given no input beyond a scheduled cron trigger, the system researches trending topics via web APIs, generates a complete documentary script using a large language model, synthesizes hundreds of cinematic images, renders a professional voiceover with synchronized subtitles, and assembles the final video — all within a single ephemeral CI runner session.\n\nThe compiled video and transcript are then pushed to cloud storage and delivered via Telegram for manual upload, completing the entire creation pipeline without any human intervention.",
+    stages: [
+      {
+        title: "1. Research & Scriptwriting",
+        engine: "Ollama Cloud + Tavily API",
+        description: "The pipeline begins by researching a topic via web search APIs, then feeds the research context into a large language model to generate a complete, structured documentary script with scene descriptions.",
+      },
+      {
+        title: "2. Visual Asset Generation",
+        engine: "HuggingFace / Cloudflare Workers AI / Pollinations.ai",
+        description: "Each scene description is converted into an image generation prompt. The system distributes requests across three free-tier image APIs to generate up to 150 cinematic background plates per video.",
+        bulletPoints: [
+          "Parallel API routing across HuggingFace, Cloudflare Workers AI, and Pollinations.ai for redundancy and speed.",
+          "Zero text rendered in images to eliminate AI spelling hallucinations.",
+        ],
+      },
+      {
+        title: "3. Audio & Subtitles",
+        engine: "Edge TTS / Kokoro-82M / faster-whisper",
+        description: "The script is narrated using cloud-based text-to-speech, then the audio is processed through a local whisper model to generate perfectly synchronized subtitle tracks.",
+      },
+      {
+        title: "4. Video Assembly & Delivery",
+        engine: "FFmpeg / Cloudflare R2 / Telegram Bot API",
+        description: "FFmpeg composites the images, audio, and subtitles into a final video file. The compiled output is uploaded to Cloudflare R2 and a download link is pushed to Telegram for the operator.",
+      },
+    ],
+    constraints: [
+      {
+        title: "Zero-Cost Compute",
+        description: "Uses ephemeral GitHub Actions CI runners as the entire backend runtime instead of a persistent VPS, achieving a strict $0/month operating cost.",
+      },
+      {
+        title: "No Persistent Storage",
+        description: "Models must be downloaded on every single clean boot since CI runners are destroyed after each run. All persistent state lives in Cloudflare R2.",
+      },
+      {
+        title: "6-Hour Runtime Limit",
+        description: "GitHub Actions enforces a hard 6-hour cap per job. Visual density is capped at 150 images per video and voice rendering was moved to cloud TTS to stay within limits.",
+      },
+    ],
+    maintenanceProfile: "Fully autonomous. Generates 2 complete 10–13 minute documentary videos per week at $0.00/month operating cost.",
   },
   {
     id: "instagram-carousel",

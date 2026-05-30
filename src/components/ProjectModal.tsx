@@ -202,6 +202,37 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   </div>
                 ))}
 
+                {/* Tech Stack */}
+                {project.techStackDetailed && project.techStackDetailed.length > 0 && (
+                  <div>
+                    <h3 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-indigo-400/80 mb-3">
+                      Tech Stack
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {project.techStackDetailed.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1.5 text-[11px] font-semibold text-slate-300 bg-white/[0.04] border border-white/[0.08] rounded-lg"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Key Engineering Decisions */}
+                {project.keyDecisions && (
+                  <div>
+                    <h3 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-indigo-400/80 mb-2">
+                      Key Engineering Decisions
+                    </h3>
+                    <p className="text-sm text-slate-400 leading-relaxed">
+                      {project.keyDecisions}
+                    </p>
+                  </div>
+                )}
+
                 {/* Detailed System Specifications Section */}
                 {project.systemOverview && (
                   <div id="technical-details" className="pt-4 border-t border-white/[0.06] space-y-6 scroll-mt-6">
