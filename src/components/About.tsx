@@ -235,7 +235,7 @@ export default function About() {
                 <span className="text-xs font-bold tracking-widest uppercase">Engineering Approach</span>
               </div>
               <blockquote className="text-base sm:text-lg text-slate-200 font-medium leading-relaxed italic">
-                &ldquo;Most AI tools being sold right now are a UI on top of an API call. I work the layer below. Direct model access, open-source packages, lean infrastructure. The gap between building that way and stitching together SaaS subscriptions usually comes out to cents versus hundreds a month.&rdquo;
+                Most AI tools being sold right now are a UI on top of an API call. I work the layer below. Direct model access, open-source packages, lean infrastructure. The gap between building that way and stitching together SaaS subscriptions usually comes out to cents versus hundreds a month.
               </blockquote>
             </div>
           </motion.div>
