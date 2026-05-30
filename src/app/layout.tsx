@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Adhil Shanif — Full-Stack AI Engineer",
   description:
-    "I build production AI systems end-to-end — LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
+    "I build production AI systems end-to-end: LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
   keywords: [
     "Full-Stack AI Engineer",
     "LLM Applications",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Adhil Shanif — Full-Stack AI Engineer",
     description:
-      "I build production AI systems end-to-end — LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
+      "I build production AI systems end-to-end: LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
     type: "website",
   },
 };

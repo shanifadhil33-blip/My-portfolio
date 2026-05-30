@@ -99,10 +99,10 @@ export default function About() {
           <div className="lg:col-span-7">
             <ScrollReveal delay={0.1}>
               <p className="text-xl sm:text-2xl text-slate-200 leading-[1.6] font-medium mb-6">
-                I build production AI systems end-to-end — the model layer, the product around it, and the infrastructure it runs on.
+                I build production AI systems end-to-end: the model layer, the product around it, and the infrastructure it runs on.
               </p>
               <p className="text-base sm:text-lg text-slate-400 leading-[1.8] mb-6">
-                I work close to the primitives — packages, protocols, model APIs — and assemble upward instead of stacking heavy, brittle abstractions. Most of what I build runs on free tiers, open-source libraries, and direct API calls billed in cents. The whole stack stays lean by design.
+                I work close to the primitives (packages, protocols, model APIs) and assemble upward instead of stacking heavy, brittle abstractions. Most of what I build runs on free tiers, open-source libraries, and direct API calls billed in cents. The whole stack stays lean by design.
               </p>
             </ScrollReveal>
           </div>

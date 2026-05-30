@@ -31,7 +31,7 @@ const baseProjects: Project[] = [
     title: "Reclaim",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "A comprehensive B2B SaaS platform that automates the end-to-end medical billing appeals process — from EOB document ingestion to AI-generated denial appeal letters.",
+      "A comprehensive B2B SaaS platform that automates the end-to-end medical billing appeals process, from EOB document ingestion to AI-generated denial appeal letters.",
     tags: ["Next.js", "Supabase", "OpenAI API", "Microservice Architecture"],
     thumbnail: "/screenshots/reclaim-thumb.png",
     role: "Full-Stack AI Engineer",
@@ -60,7 +60,7 @@ const baseProjects: Project[] = [
     keyDecisions:
       "We made the deliberate decision to decouple the EOB Reader from the main Reclaim application, deploying the extraction engine as its own distinct microservice on Vercel. While this introduced a slight overhead in managing cross-service API communication, the tradeoff was necessary to ensure that heavy PDF parsing computations wouldn't block the main UI thread or degrade dashboard performance. This separation of concerns also allows us to scale the computationally expensive parsing engine independently as document volume increases.",
     systemOverview:
-      "Reclaim is the comprehensive, user-facing SaaS platform that handles the entire lifecycle of a denied insurance claim. It acts as the front-end and main API gateway — managing user sessions, database interactions, and the final logic for generating appeal letters.\n\nThe platform connects to a decoupled extraction engine (the EOB Reader) via an internal API pipeline: the biller uploads a denied EOB, Reclaim hands the raw PDF off to the Reader for parsing, receives structured JSON back, merges it with appeal prompt templates, and runs it through an AI agent to produce the final letter.",
+      "Reclaim is the comprehensive, user-facing SaaS platform that handles the entire lifecycle of a denied insurance claim. It acts as the front-end and main API gateway, managing user sessions, database interactions, and the final logic for generating appeal letters.\n\nThe platform connects to a decoupled extraction engine (the EOB Reader) via an internal API pipeline: the biller uploads a denied EOB, Reclaim hands the raw PDF off to the Reader for parsing, receives structured JSON back, merges it with appeal prompt templates, and runs it through an AI agent to produce the final letter.",
     stages: [
       {
         title: "1. Document Upload",
@@ -99,7 +99,7 @@ const baseProjects: Project[] = [
     title: "EOB Reader",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "A stateless extraction microservice that ingests complex Explanation of Benefits PDFs and outputs clean, structured JSON — the dedicated parsing engine behind Reclaim.",
+      "A stateless extraction microservice that ingests complex Explanation of Benefits PDFs and outputs clean, structured JSON as the dedicated parsing engine behind Reclaim.",
     tags: ["Vercel Serverless", "PDF Parsing", "REST API", "Microservice"],
     thumbnail: "/screenshots/eob-reader-thumb.png",
     role: "Backend Engineer",
@@ -113,14 +113,14 @@ const baseProjects: Project[] = [
       problem:
         "Insurance companies issue Explanation of Benefits documents in wildly inconsistent formats, with no standardized layout for denial codes, patient information, or billing amounts. Attempting to parse these documents within the main application creates computational bottlenecks that degrade user experience.",
       solution:
-        "The EOB Reader is deployed as its own distinct microservice on Vercel, purpose-built for a single job: ingesting a raw PDF, navigating its specific layout, and extracting key variables — denial codes, patient info, billed amounts, dates of service — into a clean, standardized JSON payload. It handles error detection at the document level, flagging illegible documents or missing mandatory fields before the data ever reaches the appeals generator.",
+        "The EOB Reader is deployed as its own distinct microservice on Vercel, purpose-built for a single job: ingesting a raw PDF, navigating its specific layout, and extracting key variables (denial codes, patient info, billed amounts, and dates of service) into a clean, standardized JSON payload. It handles error detection at the document level, flagging illegible documents or missing mandatory fields before the data ever reaches the appeals generator.",
       outcome:
         "A stateless, independently scalable extraction engine that processes documents in isolation and returns structured data without impacting main application performance.",
     },
     keyDecisions:
-      "Deploying the parser as a standalone Vercel project rather than embedding it within Reclaim's codebase was a deliberate architectural choice. The stateless design means it processes a file and immediately forgets it — no sessions, no stored data — which simplifies scaling and keeps security surface area minimal. This also allows the parsing engine to be versioned and updated independently without redeploying the entire SaaS platform.",
+      "Deploying the parser as a standalone Vercel project rather than embedding it within Reclaim's codebase was a deliberate architectural choice. The stateless design means it processes a file and immediately forgets it (no sessions, no stored data), which simplifies scaling and keeps security surface area minimal. This also allows the parsing engine to be versioned and updated independently without redeploying the entire SaaS platform.",
     systemOverview:
-      "The EOB Reader is a specialized microservice focused entirely on data extraction. It has one job — taking a complex, messy Explanation of Benefits PDF and turning it into clean, structured data. Deployed as its own specific project on Vercel, it operates as a distinct compute engine separated from the main user interface.\n\nCore responsibilities include PDF ingestion and parsing across varied insurance company layouts, data structuring into standardized JSON payloads, and document-level error handling to flag illegible or incomplete documents.",
+      "The EOB Reader is a specialized microservice focused entirely on data extraction. It has one job: taking a complex, messy Explanation of Benefits PDF and turning it into clean, structured data. Deployed as its own specific project on Vercel, it operates as a distinct compute engine separated from the main user interface.\n\nCore responsibilities include PDF ingestion and parsing across varied insurance company layouts, data structuring into standardized JSON payloads, and document-level error handling to flag illegible or incomplete documents.",
   },
   {
     id: "cold-email-agent",
@@ -169,9 +169,9 @@ const baseProjects: Project[] = [
         "The pipeline is fully operational, successfully generating complete 10–13 minute documentary videos twice a week at a total monthly cost of exactly ~$0.00.",
     },
     keyDecisions:
-      "We made the radical decision to use ephemeral GitHub Actions CI runners as the entire backend compute runtime instead of provisioning a persistent virtual private server (VPS). While this \"compute-as-a-runner\" strategy achieved a strict $0 operating cost, the tradeoff meant surviving without local storage or a GPU, forcing us to download models on every single clean boot and navigate rigid 6-hour runtime constraints. To prevent timeouts, we had to compromise on visual density — capping the pipeline at 150 images per video — and switch from local CPU voice rendering to cloud-based Edge TTS to save hours of processing time.",
+      "We made the radical decision to use ephemeral GitHub Actions CI runners as the entire backend compute runtime instead of provisioning a persistent virtual private server (VPS). While this \"compute-as-a-runner\" strategy achieved a strict $0 operating cost, the tradeoff meant surviving without local storage or a GPU, forcing us to download models on every single clean boot and navigate rigid 6-hour runtime constraints. To prevent timeouts, we had to compromise on visual density (capping the pipeline at 150 images per video) and switch from local CPU voice rendering to cloud-based Edge TTS to save hours of processing time.",
     systemOverview:
-      "Akhir Zamaan is a fully autonomous content factory that runs entirely on free-tier cloud infrastructure. Given no input beyond a scheduled cron trigger, the system researches trending topics via web APIs, generates a complete documentary script using a large language model, synthesizes hundreds of cinematic images, renders a professional voiceover with synchronized subtitles, and assembles the final video — all within a single ephemeral CI runner session.\n\nThe compiled video and transcript are then pushed to cloud storage and delivered via Telegram for manual upload, completing the entire creation pipeline without any human intervention.",
+      "Akhir Zamaan is a fully autonomous content factory that runs entirely on free-tier cloud infrastructure. Given no input beyond a scheduled cron trigger, the system researches trending topics via web APIs, generates a complete documentary script using a large language model, synthesizes hundreds of cinematic images, renders a professional voiceover with synchronized subtitles, and assembles the final video, all within a single ephemeral CI runner session.\n\nThe compiled video and transcript are then pushed to cloud storage and delivered via Telegram for manual upload, completing the entire creation pipeline without any human intervention.",
     stages: [
       {
         title: "1. Research & Scriptwriting",
@@ -245,7 +245,7 @@ const baseProjects: Project[] = [
       "Make.com",
       "Instagram Graph API"
     ],
-    systemOverview: "Designed and deployed a fully autonomous, zero-touch content generation pipeline that operates entirely on $0/month infrastructure. The system ingests a single raw YouTube video transcript (e.g., podcasts, interviews) and programmatically orchestrates multiple APIs and local compositing tools to extract, format, render, and schedule cinematic 9-slide Instagram carousels.\n\nBuilt using an agentic \"Vibe Coding\" approach—directing LLM agents to construct the backend—this pipeline runs headlessly. Once a transcript is pasted, the system feeds an automated posting schedule (09:00 and 18:00 GST) for 7–10 days without requiring local hardware to remain awake.",
+    systemOverview: "Designed and deployed a fully autonomous, zero-touch content generation pipeline that operates entirely on $0/month infrastructure. The system ingests a single raw YouTube video transcript (e.g., podcasts, interviews) and programmatically orchestrates multiple APIs and local compositing tools to extract, format, render, and schedule cinematic 9-slide Instagram carousels.\n\nBuilt using an agentic \"Vibe Coding\" approach (directing LLM agents to construct the backend), this pipeline runs headlessly. Once a transcript is pasted, the system feeds an automated posting schedule (09:00 and 18:00 GST) for 7–10 days without requiring local hardware to remain awake.",
     stages: [
       {
         title: "1. Ingestion & Extraction (The Brain)",
