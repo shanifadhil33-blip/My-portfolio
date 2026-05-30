@@ -208,6 +208,14 @@ export default function About() {
               );
             })}
           </div>
+
+          <ScrollReveal delay={0.3}>
+            <div className="mt-6 glass rounded-xl px-5 py-3.5 border border-white/[0.06] text-center">
+              <p className="text-xs sm:text-sm text-slate-400 font-medium italic">
+                These are my defaults. I pick up whatever a project actually requires.
+              </p>
+            </div>
+          </ScrollReveal>
         </div>
 
         {/* Engineering Approach Highlight Box */}
