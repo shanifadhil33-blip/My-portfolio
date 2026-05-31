@@ -92,7 +92,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-1 text-[10px] tracking-wider uppercase text-slate-500 bg-white/[0.03] border border-white/[0.06] rounded-md"
+                      className="px-2.5 py-1 text-[10px] tracking-wider uppercase text-slate-300 bg-white/[0.03] border border-white/[0.06] rounded-md"
                     >
                       {tag}
                     </span>

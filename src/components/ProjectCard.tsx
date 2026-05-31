@@ -53,7 +53,7 @@ export default function ProjectCard({ project, onClick, index }: ProjectCardProp
           <p className="mt-2.5 text-sm text-slate-500 leading-relaxed line-clamp-2">{project.brief}</p>
           <div className="mt-4 flex flex-wrap gap-1.5">
             {project.tags.map((tag) => (
-              <span key={tag} className="px-2.5 py-1 text-[10px] tracking-wider uppercase text-slate-500 bg-white/[0.03] border border-white/[0.06] rounded-md">{tag}</span>
+              <span key={tag} className="px-2.5 py-1 text-[10px] tracking-wider uppercase text-slate-300 bg-white/[0.03] border border-white/[0.06] rounded-md">{tag}</span>
             ))}
           </div>
         </div>
