@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Project } from "@/data/projects";
 import { ArrowUpRight, ImageIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -11,6 +12,8 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, onClick, index }: ProjectCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <motion.div
       id={`project-card-${project.id}`}
@@ -27,16 +30,19 @@ export default function ProjectCard({ project, onClick, index }: ProjectCardProp
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] to-violet-500/[0.03]" />
         
         {/* Placeholder beneath the image */}
-        <div className="flex flex-col items-center gap-2 text-slate-700 relative z-0">
-          <ImageIcon size={28} strokeWidth={1.5} />
-          <span className="text-[10px] tracking-wider uppercase">Screenshot</span>
-        </div>
+        {!isLoaded && (
+          <div className="flex flex-col items-center gap-2 text-slate-700 relative z-0">
+            <ImageIcon size={28} strokeWidth={1.5} />
+            <span className="text-[10px] tracking-wider uppercase">Screenshot</span>
+          </div>
+        )}
 
         {/* Actual Image */}
         <img 
           src={project.thumbnail} 
           alt={project.title} 
           className="absolute inset-0 w-full h-full object-cover z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+          onLoad={() => setIsLoaded(true)}
           onError={(e) => {
             // Fallback to hide broken images
             (e.target as HTMLImageElement).style.display = 'none';
