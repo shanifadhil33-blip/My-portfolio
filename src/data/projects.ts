@@ -53,8 +53,6 @@ const baseProjects: Project[] = [
         "The decoupled architecture is actively deployed, successfully reducing the time it takes a medical biller to process a denied EOB and draft a comprehensive appeal letter from over 30 minutes down to under 2 minutes per claim.",
       screenshots: [
         "/screenshots/reclaim-1.png",
-        "/screenshots/reclaim-2.png",
-        "/screenshots/reclaim-3.png",
       ],
     },
     keyDecisions:
