@@ -122,18 +122,89 @@ const baseProjects: Project[] = [
   },
   {
     id: "cold-email-agent",
-    title: "Cold Email Agent",
+    title: "Autonomous Cold Email Agent",
     brief:
-      "An autonomous agent for generating and executing targeted email outreach campaigns.",
-    tags: ["Next.js", "Claude API", "PostgreSQL", "Automation"],
+      "A zero-LLM, deterministic cold-email automation pipeline for Reclaim SaaS that runs entirely on free-tier cloud infrastructure and executes personalized B2B outreach autonomously.",
+    tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],
     thumbnail: "/screenshots/cold_email_agent.png",
+    role: "AI Systems Engineer / Architect",
+    methodology: "Deterministic Automation",
+    techStackDetailed: [
+      "Python 3.12",
+      "SQLite",
+      "MailerSend API",
+      "GitHub Actions",
+      "Cloudflare R2",
+      "hashlib (MD5 Variant Rotation)",
+    ],
     caseStudy: {
       problem:
-        "B2B outreach is often highly manual or generic, leading to low conversion rates.",
+        "Reclaim is a B2B SaaS targeting US-based freelance medical billers and 1–5-person billing agencies. The customer-acquisition channel is cold email, but a one-person founder cannot manually personalize, throttle, log, and honor opt-outs for hundreds of emails a week. Off-the-shelf outreach tools (Lemlist, Instantly, Mailshake) cost $50–$150/month per seat, which is financially prohibitive for an early-stage bootstrapped startup.",
       solution:
-        "Developed an AI agent that researches targets and drafts highly contextualized, personalized emails automatically.",
-      outcome: "Scalable, automated personalized outreach pipelines.",
+        "I built a focused alternative that runs entirely on free-tier cloud infrastructure. The Python agent reads target leads from a CSV, checks them against an SQLite suppression list for idempotency, and generates personalized openers based on the lead's role and company without an LLM in the loop. Subject lines and opener variants are rotated dynamically using stable email hashing. The workflow runs headlessly via scheduled GitHub Actions crons and tracks clicks/opens via the MailerSend API.",
+      outcome:
+        "A fully autonomous, production-ready cold outreach agent operating at a total software cost of $0/month. The pipeline is capable of sending 3,000 highly personalized emails monthly while strictly adhering to CAN-SPAM compliance, throttling limits, and suppression logic.",
     },
+    keyDecisions:
+      "We made several key architectural decisions to keep the pipeline stable, cost-effective, and secure. First, we opted for a zero-LLM deterministic opener generator: although we prototyped DeepSeek, we found that a structured, template-based approach based on the lead's title and company was 100% reliable, eliminated AI hallucinations, ran instantly, and cost nothing. Second, we designed a per-tick batch execution model rather than a long-running sleep loop: the GitHub Actions workflow executes every 15 minutes, sends up to 2 emails per run, updates state, and immediately shuts down—remaining well within GitHub's free usage limits. Finally, when the repository was made public, committing the SQLite state database to git created a privacy issue as prospect emails appeared in commit histories. We temporarily disabled the cron workflow and planned state migration to private Cloudflare R2 storage.",
+    systemOverview:
+      "The outreach pipeline runs entirely headlessly on a scheduled workflow. It starts with an Apollo.io lead export, which is fed into the system. A GitHub Actions cron runs the agent every 15 minutes during weekdays. The Python runner checks each lead against the local SQLite database to prevent double-contacting, generates a personalized email, sends it via MailerSend's API, and persists the updated database state back to cloud storage. This ensures the next execution starts exactly where the previous tick ended.",
+    stages: [
+      {
+        title: "1. Lead Ingestion & Deduplication",
+        engine: "Python / SQLite",
+        description:
+          "Loads target lead exports from a CSV file. The agent queries a local SQLite database to filter out any prospects who have already been emailed, are in a pending state, or are listed on the global suppression (opt-out) list.",
+      },
+      {
+        title: "2. Stable Variant Rotation",
+        engine: "hashlib (MD5)",
+        description:
+          "Uses the MD5 hash of the lead's email address combined with a salt to select one of five subject lines and one of five icebreaker opening lines. This guarantees that each lead receives a stable, consistent set of email variants across reruns, while distributing variants evenly across the mailing list.",
+      },
+      {
+        title: "3. Personalization & Assembly",
+        engine: "Deterministic Template Engine",
+        description:
+          "Generates a problem-first, highly contextual opener based on the prospect's job title and company name. It compiles the plain-text email body and embeds CAN-SPAM-compliant footer elements (including an opt-out link).",
+      },
+      {
+        title: "4. Outreach Execution",
+        engine: "MailerSend API",
+        description:
+          "Transmits the assembled email via the MailerSend API, enabling click and open tracking. Fired requests are logged to the SQLite database with an UPSERT statement to enable automatic retries for any failed sends.",
+      },
+      {
+        title: "5. State Persistence",
+        engine: "GitHub Actions / Cloudflare R2",
+        description:
+          "Saves the updated SQLite transaction state and lead queues. Workflows are scheduled to tick every 15 minutes during weekday business hours, throttled to 2 sends per tick with a daily hard cap of 30 emails to protect domain reputation.",
+      },
+    ],
+    constraints: [
+      {
+        title: "Zero-Cost Compute",
+        description:
+          "The entire stack runs on free-tier GitHub Actions workflows and the MailerSend free tier, resulting in $0/month software costs.",
+      },
+      {
+        title: "CAN-SPAM & Opt-Out Compliance",
+        description:
+          "Enforces a strict global suppression list in SQLite. All outgoing emails include plain-text headers and one-click opt-out links that instantly suppress the lead from future runs.",
+      },
+      {
+        title: "Public Repo Privacy",
+        description:
+          "Because committing an SQLite DB directly to a public git repo exposes prospect emails in commit history, the scheduler is disabled pending state migration to private Cloudflare R2 storage.",
+      },
+      {
+        title: "Domain Reputation Protection",
+        description:
+          "Throttles delivery to 2 emails per 15-minute tick and imposes a hard daily limit of 30 sends to prevent sender domain warming issues or spam classification.",
+      },
+    ],
+    maintenanceProfile:
+      "Minimal maintenance required. The operator only needs to upload a new Apollo.io leads CSV when the queue is exhausted and periodically process manual opt-out requests.",
   },
   {
     id: "youtube-automation",

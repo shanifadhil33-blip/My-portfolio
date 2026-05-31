@@ -9,7 +9,7 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
     liveUrl: "https://eob-reader.vercel.app", 
   },
   "cold-email-agent": {
-    githubUrl: "", // e.g. "https://github.com/yourusername/cold-email"
+    githubUrl: "https://github.com/shanifadhil33-blip/reclaim-outreach-agent",
   },
   "youtube-automation": {
     githubUrl: "https://github.com/shanifadhil33-blip/akhir-zamaan",
