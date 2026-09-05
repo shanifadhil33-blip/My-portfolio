@@ -115,7 +115,7 @@ export default function About() {
                     key={stat.label}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, amount: 0.1 }}
                     transition={{ delay: 0.1 * i, duration: 0.5 }}
                     whileHover={{ y: -4, borderColor: "rgba(99, 102, 241, 0.25)" }}
                     className="glass rounded-2xl p-6 flex flex-col items-center lg:items-start text-center lg:text-left border border-white/5 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.15)]"

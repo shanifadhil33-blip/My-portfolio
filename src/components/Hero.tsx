@@ -48,7 +48,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col items-center justify-center px-6 relative"
+      className="min-h-[100svh] flex flex-col items-center justify-center px-6 relative"
     >
       {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -76,12 +76,9 @@ export default function Hero() {
 
 
 
-          {/* Portrait with glassmorphic aura */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative cursor-pointer group/portrait"
+          {/* Portrait with glassmorphic aura — static DOM, CSS load-in */}
+          <div
+            className="hero-enter hero-enter-portrait relative cursor-pointer group/portrait"
             onClick={() => setIsCardOpen(true)}
           >
             {/* Outer animated glow ring */}
@@ -120,18 +117,13 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-indigo-950/20 opacity-0 group-hover/portrait:opacity-100 transition-opacity duration-300 pointer-events-none" />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Text Content */}
+        {/* Text Content — always mounted; CSS load-in only (no scroll/IO) */}
         <div className="text-center mt-8 flex flex-col items-center">
           {/* Location Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 hover:border-white/20 transition-all duration-300"
-          >
+          <div className="hero-enter hero-enter-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6 hover:border-white/20 transition-all duration-300">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -139,48 +131,29 @@ export default function Hero() {
             <span className="text-[11px] sm:text-xs text-slate-300 font-semibold tracking-wider uppercase">
               Dubai, United Arab Emirates
             </span>
-          </motion.div>
+          </div>
 
           {/* Name */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.05]"
-          >
+          <h1 className="hero-enter hero-enter-name text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.05]">
             <span className="text-gradient">Adhil Shanif</span>
-          </motion.h1>
+          </h1>
 
           {/* Role */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.48 }}
-            className="mt-4 text-xl sm:text-2xl font-bold text-indigo-400 tracking-wide"
-          >
+          <div className="hero-enter hero-enter-role mt-4 text-xl sm:text-2xl font-bold text-indigo-400 tracking-wide">
             Full-Stack AI Engineer
-          </motion.div>
+          </div>
 
           {/* Tagline */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.52 }}
-            className="mt-3 text-xs sm:text-sm text-slate-400 font-semibold tracking-wider max-w-2xl mx-auto uppercase flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5"
-          >
+          <div className="hero-enter hero-enter-tagline mt-3 text-xs sm:text-sm text-slate-400 font-semibold tracking-wider max-w-2xl mx-auto uppercase flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5">
             <span>End-to-End Custom AI Applications</span>
             <span className="hidden sm:inline text-indigo-500/50">•</span>
             <span>Automated Agents</span>
             <span className="hidden sm:inline text-indigo-500/50">•</span>
             <span>Full-Stack SaaS</span>
-          </motion.div>
+          </div>
 
           {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
+          <div className="hero-enter hero-enter-cta">
             <a
               href="#projects"
               id="view-projects-cta"
@@ -192,7 +165,7 @@ export default function Hero() {
                 className="group-hover:translate-y-0.5 transition-transform duration-300"
               />
             </a>
-          </motion.div>
+          </div>
         </div>
       </div>
 

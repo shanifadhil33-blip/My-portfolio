@@ -70,7 +70,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl max-h-[90vh] glass rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)] flex flex-col"
+            className="relative w-full max-w-2xl max-h-[90dvh] glass rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)] flex flex-col"
           >
             {/* Sticky close button header */}
             <div className="sticky top-0 z-20 flex justify-end p-4 pb-0">
@@ -334,7 +334,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             transition={{ duration: 0.25, ease: "easeOut" }}
             src={project.thumbnail}
             alt={`${project.title} screenshot full size`}
-            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            className="max-w-full max-h-[90dvh] object-contain rounded-lg shadow-2xl"
           />
         </motion.div>
       )}
