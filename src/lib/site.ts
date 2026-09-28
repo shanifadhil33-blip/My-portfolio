@@ -1,6 +1,6 @@
 export const SITE_URL = "https://adhilshanif.vercel.app";
 
-export const EMAIL = "shanifadhil6@gmail.com";
+export const EMAIL = "shanifadhil33@gmail.com";
 
 export const UPWORK_URL =
   "https://www.upwork.com/freelancers/~01cdd13e31bc19479c";
