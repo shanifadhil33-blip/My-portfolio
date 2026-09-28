@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { BUDGET_OPTIONS, TIMELINE_OPTIONS } from "@/lib/brief";
 import { EMAIL } from "@/lib/site";
 
@@ -11,6 +11,24 @@ export default function BriefForm() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [attachmentName, setAttachmentName] = useState("");
+  const attachmentRef = useRef<HTMLInputElement>(null);
+
+  function onAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    setAttachmentName(file?.name ?? "");
+    if (file && file.size > 4 * 1024 * 1024) {
+      setError("The file must be 4 MB or smaller.");
+      return;
+    }
+    setError((current) => (current === "The file must be 4 MB or smaller." ? "" : current));
+  }
+
+  function clearAttachment() {
+    if (attachmentRef.current) attachmentRef.current.value = "";
+    setAttachmentName("");
+    setError((current) => (current === "The file must be 4 MB or smaller." ? "" : current));
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,6 +52,7 @@ export default function BriefForm() {
       }
       setSent(true);
       form.reset();
+      setAttachmentName("");
     } catch {
       setError(`The brief could not be sent. Email ${EMAIL} instead.`);
     } finally {
@@ -51,7 +70,7 @@ export default function BriefForm() {
 
   return (
     <form method="post" action="/api/brief" onSubmit={onSubmit} className="relative mt-10 space-y-6" noValidate>
-      <div className="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
+      <div className="pointer-events-none absolute -left-[10000px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor="hp_field">Leave this empty</label>
         <input id="hp_field" name="hp_field" type="text" tabIndex={-1} autoComplete="off" />
       </div>
@@ -117,15 +136,38 @@ export default function BriefForm() {
       </div>
 
       <div>
-        <label htmlFor="attachment" className="text-sm font-medium text-muted">
+        <span id="attachment-label" className="text-sm font-medium text-muted">
           Attachment <span className="font-normal">(optional)</span>
-        </label>
+        </span>
+        <div className="mt-2 flex w-full min-w-0 items-stretch gap-2">
+          <label
+            htmlFor="attachment"
+            className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-base text-foreground transition-colors duration-150 hover:border-foreground/25"
+          >
+            <span className="shrink-0 font-medium">Choose file</span>
+            <span className="min-w-0 truncate text-muted" title={attachmentName || undefined}>
+              {attachmentName || "No file selected"}
+            </span>
+          </label>
+          {attachmentName ? (
+            <button
+              type="button"
+              onClick={clearAttachment}
+              className="inline-flex min-h-11 shrink-0 cursor-pointer items-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/25"
+            >
+              Remove
+            </button>
+          ) : null}
+        </div>
         <input
+          ref={attachmentRef}
           id="attachment"
           name="attachment"
           type="file"
           accept=".pdf,.docx,.png,.jpg,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg"
-          className={`${fieldClass} file:mr-3 file:rounded-md file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground`}
+          aria-labelledby="attachment-label"
+          onChange={onAttachmentChange}
+          className="sr-only"
         />
         <p className="mt-2 text-sm leading-relaxed text-muted">PDF, DOCX, PNG, or JPG. 4 MB max.</p>
       </div>
