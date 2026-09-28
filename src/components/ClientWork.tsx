@@ -32,7 +32,7 @@ const reviews = [
   },
   {
     quote:
-      "Technically excellent and, just as importantly, a genuinely reliable collaborator: clear communication, precise documentation, and careful, methodical work. He flagged issues proactively, filed follow-ups without being asked, and made the whole process smooth. Would work with him again without hesitation.",
+      "Technically excellent and, just as importantly, a genuinely reliable collaborator: clear communication, precise documentation (his credential-rotation inventory and deployment notes were exceptional), and careful, methodical work. He flagged issues proactively, filed follow-ups without being asked, and made the whole process smooth. Would work with him again without hesitation.",
     attribution: "Upwork client",
   },
 ];
