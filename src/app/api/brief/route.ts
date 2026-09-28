@@ -14,6 +14,7 @@ import {
 export const runtime = "nodejs";
 
 const FROM_ADDRESS = "onboarding@resend.dev";
+const BRIEF_TO = "shanifadhil33@gmail.com";
 
 function failure(error: string, status: number) {
   return NextResponse.json({ ok: false, error }, { status });
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
 
   const { error } = await resend.emails.send({
     from: FROM_ADDRESS,
-    to: EMAIL,
+    to: BRIEF_TO,
     replyTo: parsed.data.email,
     subject: briefSubject(parsed.data.name, parsed.data.company),
     text: briefBody(parsed.data),
