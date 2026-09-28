@@ -19,21 +19,6 @@ export const clientProjects: Project[] = [
     keyDecisions:
       "Tenant isolation enforced in the database with row-level security, not only in app code. Published snapshots made unchangeable with a database trigger. Publishing and going live kept as two separate steps, so rollback is simple and an accidental live change is hard. Every schema change written as a reviewed SQL file.",
   },
-  {
-    id: "case-study-3",
-    title: "[PLACEHOLDER: Case study 3, e.g. browser-based measurement app]",
-    brief: "[PLACEHOLDER: one-line summary of the work]",
-    tags: [],
-    hideMedia: true,
-    caseStudy: {
-      problem: "[PLACEHOLDER: the problem]",
-      solution: "[PLACEHOLDER: what you built]",
-      outcome: "[PLACEHOLDER: the outcome]",
-    },
-    keyDecisions: "[PLACEHOLDER: key engineering decisions]",
-  },
 ];
 
-export const namedClientProjects = clientProjects.filter(
-  (project) => project.id !== "case-study-3",
-);
+export const namedClientProjects = clientProjects;

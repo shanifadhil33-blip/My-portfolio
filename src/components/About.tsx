@@ -127,7 +127,8 @@ export default function About() {
                 </span>
               ))}
             </div>
-            <p className="mt-6 text-base leading-relaxed text-muted">
+            <p className="mb-4 mt-6 text-sm font-medium text-muted">Secondary</p>
+            <p className="text-base leading-relaxed text-muted">
               {secondaryStack.join(", ")}
             </p>
           </div>
