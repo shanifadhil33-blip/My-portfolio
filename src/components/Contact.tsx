@@ -23,7 +23,7 @@ export default function Contact() {
               <Mail size={16} aria-hidden />
               <a
                 href={`mailto:${EMAIL}`}
-                className="text-base break-all text-accent transition-colors duration-150 hover:text-accent-hover"
+                className="inline-flex min-h-11 items-center break-all text-base text-accent transition-colors duration-150 hover:text-accent-hover"
               >
                 {EMAIL}
               </a>

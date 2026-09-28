@@ -26,7 +26,7 @@ export default function Navbar() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
         <a
           href="#"
-          className="text-lg font-medium tracking-tight text-foreground transition-opacity duration-150 hover:opacity-80"
+          className="inline-flex min-h-11 min-w-11 items-center text-lg font-medium tracking-tight text-foreground transition-opacity duration-150 hover:opacity-80"
         >
           AS
         </a>

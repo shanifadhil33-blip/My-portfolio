@@ -85,7 +85,7 @@ export default function About() {
               href={UPWORK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-block text-sm text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover"
+              className="mt-4 inline-flex min-h-11 items-center text-sm text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover"
             >
               Verified on Upwork
             </a>
