@@ -134,6 +134,22 @@ const baseProjects: Project[] = [
     ],
   },
   {
+    id: "doctalk",
+    title: "DocTalk",
+    comingSoon: true,
+    hideMedia: true,
+    brief: "Chat with your own documents and get answers with sources.",
+    tags: [],
+  },
+  {
+    id: "pipeline",
+    title: "Pipeline",
+    comingSoon: true,
+    hideMedia: true,
+    brief: "An automated multi-step data and AI workflow, built for reliability.",
+    tags: [],
+  },
+  {
     id: "cold-email-agent",
     title: "Autonomous Cold Email Agent",
     brief:
@@ -367,22 +383,6 @@ const baseProjects: Project[] = [
     ],
     maintenanceProfile:
       "Paste a new transcript when you want another batch. Queued posts publish on the schedule.",
-  },
-  {
-    id: "doctalk",
-    title: "DocTalk",
-    comingSoon: true,
-    hideMedia: true,
-    brief: "Chat with your own documents and get answers with sources.",
-    tags: [],
-  },
-  {
-    id: "pipeline",
-    title: "Pipeline",
-    comingSoon: true,
-    hideMedia: true,
-    brief: "An automated multi-step data and AI workflow, built for reliability.",
-    tags: [],
   },
 ];
 
