@@ -78,7 +78,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
+            <div className="scrollbar-none flex-1 overflow-y-auto">
               <div className="px-5 pt-2 pb-0 sm:px-6">
                 {project.tags.length > 0 && (
                   <div className="mb-3 flex flex-wrap gap-1.5">

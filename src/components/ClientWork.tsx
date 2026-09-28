@@ -7,6 +7,23 @@ import ProjectCard from "./ProjectCard";
 import ProjectModal from "./ProjectModal";
 import { UPWORK_URL } from "@/lib/site";
 
+function StarIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="#C4B59A"
+        d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+      />
+    </svg>
+  );
+}
+
 const review = {
   quote:
     "He successfully designed and built the foundations and administration system for a complex multi-site recommendation platform, taking it from the initial architecture through to a working, versioned publishing system. He is highly capable, thoughtful and exceptionally thorough. He does not simply implement instructions mechanically; he understands the wider commercial objective, identifies potential problems early and proposes sensible, well-reasoned solutions. He takes genuine ownership of the outcome, tests carefully and frequently goes beyond the immediate specification to ensure that the underlying system is secure, scalable and maintainable.",
@@ -44,7 +61,14 @@ export default function ClientWork() {
           </h3>
 
           <figure className="mt-8 max-w-3xl rounded-lg border border-border p-6 sm:p-8">
-            <p className="text-sm text-muted">5.0</p>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex gap-0.5" role="img" aria-label="5 out of 5 stars">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <StarIcon key={index} />
+                ))}
+              </span>
+              <p className="text-sm text-muted">5.0</p>
+            </div>
             <blockquote className="mt-4 text-pretty text-base leading-relaxed text-foreground">
               {review.quote}
             </blockquote>

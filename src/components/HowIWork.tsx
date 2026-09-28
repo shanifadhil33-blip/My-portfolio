@@ -2,6 +2,7 @@ const points = [
   "Fixed-price milestones. You fund a milestone, I deliver it, you approve it.",
   "Written communication only, so every decision is on record.",
   "You own the code, the accounts and the infrastructure from day one.",
+  "Pricing is set by scope, after I understand what you need.",
 ];
 
 export default function HowIWork() {
@@ -21,11 +22,6 @@ export default function HowIWork() {
               {point}
             </p>
           ))}
-          {/* DELETE THIS BLOCK to remove the minimum project size line */}
-          <p className="rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground">
-            Projects start from US$1,000.
-          </p>
-          {/* END DELETE BLOCK */}
         </div>
       </div>
     </section>
