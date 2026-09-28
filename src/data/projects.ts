@@ -5,14 +5,16 @@ export interface Project {
   title: string;
   brief: string;
   tags: string[];
-  thumbnail: string;
+  thumbnail?: string;
+  hideMedia?: boolean;
+  comingSoon?: boolean;
   githubUrl?: string;
   liveUrl?: string;
   liveUrlLabel?: string;
-  caseStudy: {
+  caseStudy?: {
     problem: string;
     solution: string;
-    outcome: string;
+    outcome?: string;
     screenshots?: string[];
   };
   role?: string;
@@ -20,7 +22,12 @@ export interface Project {
   techStackDetailed?: string[];
   keyDecisions?: string;
   systemOverview?: string;
-  stages?: { title: string; engine?: string; description?: string; bulletPoints?: string[] }[];
+  stages?: {
+    title: string;
+    engine?: string;
+    description?: string;
+    bulletPoints?: string[];
+  }[];
   constraints?: { title: string; description: string }[];
   maintenanceProfile?: string;
 }
@@ -31,64 +38,48 @@ const baseProjects: Project[] = [
     title: "Reclaim",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "A comprehensive B2B SaaS platform that automates the end-to-end medical billing appeals process, from EOB document ingestion to AI-generated denial appeal letters.",
-    tags: ["Next.js", "Supabase", "OpenAI API", "Microservice Architecture"],
+      "For freelance medical billers. Vision AI reads EOB pages, extracts only denied claims, and generates editable appeal letters (.docx or ZIP).",
+    tags: ["Vision", "Appeal letters", "Next.js"],
     thumbnail: "/screenshots/reclaim-thumb.png",
-    role: "Full-Stack AI Engineer",
-    methodology: "Microservice Architecture",
+    role: "Solo engineer",
+    methodology: "End to end",
     techStackDetailed: [
-      "Next.js (React)",
-      "Tailwind CSS",
-      "Supabase (PostgreSQL, Row Level Security)",
-      "OpenAI API (GPT-4o)",
-      "Supabase Storage",
-      "Vercel Serverless Functions",
+      "Next.js",
+      "TypeScript",
+      "Supabase with RLS",
+      "Google sign-in",
+      "OpenRouter",
+      "Sentry",
+      "Polar",
     ],
     caseStudy: {
       problem:
-        "Medical billing teams spend countless hours manually reviewing complex, non-standardized Explanation of Benefits (EOB) PDFs and cross-referencing them to write insurance denial appeals. This tedious, error-prone workflow leads to a backlog of denied claims, missed filing deadlines, and millions in unrecovered revenue for healthcare providers.",
+        "Freelance medical billers work from Explanation of Benefits PDFs that mix paid lines and denials. Writing an appeal means finding the denied claims and turning the biller's notes into a letter.",
       solution:
-        "Reclaim is a comprehensive B2B SaaS platform that automates the end-to-end medical billing appeals process. It utilizes a decoupled architecture where a specialized extraction module (the EOB Reader) ingests and parses messy EOB documents into clean, structured JSON data. The main application then feeds this structured data into an LLM agent to automatically draft highly accurate, payer-specific appeal letters for the biller to review and export.",
-      outcome:
-        "The decoupled architecture is actively deployed, successfully reducing the time it takes a medical biller to process a denied EOB and draft a comprehensive appeal letter from over 30 minutes down to under 2 minutes per claim.",
-      screenshots: [
-        "/screenshots/reclaim-1.png",
-      ],
+        "The biller uploads an EOB PDF. Vision AI reads each page and extracts only the denied claims, with validation and retries. From the biller's notes, the app generates editable appeal letters that download as a .docx or a ZIP.",
     },
     keyDecisions:
-      "We made the deliberate decision to decouple the EOB Reader from the main Reclaim application, deploying the extraction engine as its own distinct microservice on Vercel. While this introduced a slight overhead in managing cross-service API communication, the tradeoff was necessary to ensure that heavy PDF parsing computations wouldn't block the main UI thread or degrade dashboard performance. This separation of concerns also allows us to scale the computationally expensive parsing engine independently as document volume increases.",
+      "Vision AI reads each page and keeps only the denied claims. Validation and retries run on that extraction before a letter is written. The letters stay editable and download as a .docx, or as a ZIP when there is more than one.",
     systemOverview:
-      "Reclaim is the comprehensive, user-facing SaaS platform that handles the entire lifecycle of a denied insurance claim. It acts as the front-end and main API gateway, managing user sessions, database interactions, and the final logic for generating appeal letters.\n\nThe platform connects to a decoupled extraction engine (the EOB Reader) via an internal API pipeline: the biller uploads a denied EOB, Reclaim hands the raw PDF off to the Reader for parsing, receives structured JSON back, merges it with appeal prompt templates, and runs it through an AI agent to produce the final letter.",
+      "Reclaim is a web app for freelance medical billers. A biller uploads an Explanation of Benefits PDF. Vision AI reads EOB pages and extracts only denied claims. The biller adds notes, and the app generates editable appeal letters as a .docx or a ZIP.",
     stages: [
       {
-        title: "1. Document Upload",
-        engine: "Reclaim (Next.js)",
-        description: "The medical biller logs into the Reclaim dashboard and uploads a denied EOB PDF. Reclaim receives the file and authenticates the user.",
+        title: "1. Upload",
+        description: "The biller uploads an Explanation of Benefits PDF.",
       },
       {
-        title: "2. API Handoff to Engine",
-        engine: "Internal API",
-        description: "Reclaim sends the raw PDF file via an internal API call directly to the EOB Reader microservice running on Vercel.",
+        title: "2. Extract denied claims",
+        description:
+          "Vision AI reads each page and extracts only the denied claims, with validation and retries.",
       },
       {
-        title: "3. Parsing & Extraction",
-        engine: "EOB Reader (Serverless)",
-        description: "The EOB Reader processes the document, navigating the layout to extract specific denial codes, patient data, and billing amounts.",
+        title: "3. Biller notes",
+        description: "The biller adds notes for the denied claims.",
       },
       {
-        title: "4. Structured Data Return",
-        engine: "JSON Payload",
-        description: "The EOB Reader packages the extracted information into a clean JSON payload and sends it back to Reclaim's main application logic.",
-      },
-      {
-        title: "5. Appeals Generation",
-        engine: "OpenAI GPT-4o",
-        description: "Reclaim takes the structured JSON, merges it with its appeals prompt templates, and runs it through the AI agent to draft the final appeal letter.",
-      },
-      {
-        title: "6. User Review & Export",
-        engine: "Reclaim Dashboard",
-        description: "The generated appeal letter is rendered on the front-end dashboard for the medical biller to review, edit, and export.",
+        title: "4. Appeal letters",
+        description:
+          "The app generates editable appeal letters, downloadable as a .docx or a ZIP.",
       },
     ],
   },
@@ -97,124 +88,136 @@ const baseProjects: Project[] = [
     title: "EOB Reader",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "A stateless extraction microservice that ingests complex Explanation of Benefits PDFs and outputs clean, structured JSON as the dedicated parsing engine behind Reclaim.",
-    tags: ["Vercel Serverless", "PDF Parsing", "REST API", "Microservice"],
+      "For US dental practices. Batch-upload EOB PDFs, AI extracts claim data from PDF text, staff review and approve, then export an X12 835 ERA with a balance check plus CSVs for Dentrix, Eaglesoft and Open Dental.",
+    tags: ["X12 835", "ERA export", "Dental"],
     thumbnail: "/screenshots/eob-reader-thumb.png",
-    role: "Backend Engineer",
-    methodology: "Stateless Microservice",
+    role: "Solo engineer",
+    methodology: "End to end",
     techStackDetailed: [
-      "Vercel Serverless Functions",
-      "PDF parsing libraries (pdf-parse)",
-      "REST API",
+      "Next.js",
+      "TypeScript",
+      "Supabase (database, auth, storage, RLS)",
+      "OpenRouter",
+      "Polar",
     ],
     caseStudy: {
       problem:
-        "Insurance companies issue Explanation of Benefits documents in wildly inconsistent formats, with no standardized layout for denial codes, patient information, or billing amounts. Attempting to parse these documents within the main application creates computational bottlenecks that degrade user experience.",
+        "US dental practices receive Explanation of Benefits as PDFs. Staff still have to get the claim data into an ERA file and into the practice management system.",
       solution:
-        "The EOB Reader is deployed as its own distinct microservice on Vercel, purpose-built for a single job: ingesting a raw PDF, navigating its specific layout, and extracting key variables (denial codes, patient info, billed amounts, and dates of service) into a clean, standardized JSON payload. It handles error detection at the document level, flagging illegible documents or missing mandatory fields before the data ever reaches the appeals generator.",
+        "Staff batch-upload EOB PDFs. AI extracts claim data from the PDF text. Staff review and approve each claim, then export an X12 835 ERA file with a balance check, plus CSVs for Dentrix, Eaglesoft and Open Dental.",
       outcome:
-        "A stateless, independently scalable extraction engine that processes documents in isolation and returns structured data without impacting main application performance.",
+        "The app is live. A practice can turn a batch of EOB PDFs into an X12 835 ERA file and CSVs for Dentrix, Eaglesoft and Open Dental.",
     },
     keyDecisions:
-      "Deploying the parser as a standalone Vercel project rather than embedding it within Reclaim's codebase was a deliberate architectural choice. The stateless design means it processes a file and immediately forgets it (no sessions, no stored data), which simplifies scaling and keeps security surface area minimal. This also allows the parsing engine to be versioned and updated independently without redeploying the entire SaaS platform.",
+      "Extraction reads the PDF text. Staff review and approve each claim before anything is exported. The X12 835 file includes a balance check, and separate CSVs cover Dentrix, Eaglesoft and Open Dental.",
     systemOverview:
-      "The EOB Reader is a specialized microservice focused entirely on data extraction. It has one job: taking a complex, messy Explanation of Benefits PDF and turning it into clean, structured data. Deployed as its own specific project on Vercel, it operates as a distinct compute engine separated from the main user interface.\n\nCore responsibilities include PDF ingestion and parsing across varied insurance company layouts, data structuring into standardized JSON payloads, and document-level error handling to flag illegible or incomplete documents.",
+      "Staff sign in, batch-upload EOB PDFs. AI extracts claim data from the PDF text. Staff review and approve each claim, then export an X12 835 ERA with a balance check, plus CSVs for Dentrix, Eaglesoft and Open Dental.",
+    stages: [
+      {
+        title: "1. Sign in",
+        description: "Sign in through Supabase auth.",
+      },
+      {
+        title: "2. Batch upload",
+        description: "Staff upload a batch of EOB PDFs.",
+      },
+      {
+        title: "3. Review and approve",
+        description:
+          "AI extracts claim data from the PDF text. Staff review and approve each claim.",
+      },
+      {
+        title: "4. Export",
+        description:
+          "Download an X12 835 ERA file with a balance check, plus CSVs for Dentrix, Eaglesoft and Open Dental.",
+      },
+    ],
   },
   {
     id: "cold-email-agent",
     title: "Autonomous Cold Email Agent",
     brief:
-      "A zero-LLM, deterministic cold-email automation pipeline for Reclaim SaaS that runs entirely on free-tier cloud infrastructure and executes personalized B2B outreach autonomously.",
+      "A working prototype that sends personalized cold email on a schedule, with a hard cap of 30 emails per day.",
     tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],
     thumbnail: "/screenshots/cold_email_agent.png",
-    role: "AI Systems Engineer / Architect",
-    methodology: "Deterministic Automation",
+    role: "Solo engineer",
+    methodology: "Scheduled automation",
     techStackDetailed: [
       "Python 3.12",
       "SQLite",
       "MailerSend API",
       "GitHub Actions",
       "Cloudflare R2",
-      "hashlib (MD5 Variant Rotation)",
+      "hashlib (MD5 variant rotation)",
     ],
     caseStudy: {
       problem:
-        "Reclaim is a B2B SaaS targeting US-based freelance medical billers and 1–5-person billing agencies. The customer-acquisition channel is cold email, but a one-person founder cannot manually personalize, throttle, log, and honor opt-outs for hundreds of emails a week. Off-the-shelf outreach tools (Lemlist, Instantly, Mailshake) cost $50–$150/month per seat, which is financially prohibitive for an early-stage bootstrapped startup.",
+        "Personalized cold email does not scale by hand. Someone has to throttle sends, log who was contacted, and honor opt-outs.",
       solution:
-        "I built a focused alternative that runs entirely on free-tier cloud infrastructure. The Python agent reads target leads from a CSV, checks them against an SQLite suppression list for idempotency, and generates personalized openers based on the lead's role and company without an LLM in the loop. Subject lines and opener variants are rotated dynamically using stable email hashing. The workflow runs headlessly via scheduled GitHub Actions crons and tracks clicks/opens via the MailerSend API.",
+        "I built a Python agent that reads leads from a CSV, skips anyone already contacted or opted out, and fills a template opener from the lead's role and company. No model is in the loop. Subject lines rotate from a stable hash of the email address. GitHub Actions runs a short job on a schedule, MailerSend sends the message, and the day stops at 30 emails.",
       outcome:
-        "A fully autonomous, production-ready cold outreach agent operating at a total software cost of $0/month. The pipeline is capable of sending 3,000 highly personalized emails monthly while strictly adhering to CAN-SPAM compliance, throttling limits, and suppression logic.",
+        "A working prototype. It sends on a schedule and stops at 30 emails per day.",
     },
     keyDecisions:
-      "We made several key architectural decisions to keep the pipeline stable, cost-effective, and secure. First, we opted for a zero-LLM deterministic opener generator: although we prototyped DeepSeek, we found that a structured, template-based approach based on the lead's title and company was 100% reliable, eliminated AI hallucinations, ran instantly, and cost nothing. Second, we designed a per-tick batch execution model rather than a long-running sleep loop: the GitHub Actions workflow executes every 15 minutes, sends up to 2 emails per run, updates state, and immediately shuts down—remaining well within GitHub's free usage limits. Finally, when the repository was made public, committing the SQLite state database to git created a privacy issue as prospect emails appeared in commit histories. We temporarily disabled the cron workflow and planned state migration to private Cloudflare R2 storage.",
+      "I kept the opener as a template, with no model in the loop, so the text stays consistent and does not invent details. Each run is a short GitHub Actions job that sends up to 2 emails, saves state, and exits. The hard cap is 30 emails per day. Lesson: keep all prospect data out of version control and in environment-level storage.",
     systemOverview:
-      "The outreach pipeline runs entirely headlessly on a scheduled workflow. It starts with an Apollo.io lead export, which is fed into the system. A GitHub Actions cron runs the agent every 15 minutes during weekdays. The Python runner checks each lead against the local SQLite database to prevent double-contacting, generates a personalized email, sends it via MailerSend's API, and persists the updated database state back to cloud storage. This ensures the next execution starts exactly where the previous tick ended.",
+      "The pipeline starts from a lead export. A GitHub Actions job runs the agent on a weekday schedule. The Python runner checks each lead against SQLite so it does not contact the same person twice, fills the email, sends it through the MailerSend API, and writes the updated state back so the next run continues from there.",
     stages: [
       {
-        title: "1. Lead Ingestion & Deduplication",
+        title: "1. Lead ingestion and deduplication",
         engine: "Python / SQLite",
         description:
-          "Loads target lead exports from a CSV file. The agent queries a local SQLite database to filter out any prospects who have already been emailed, are in a pending state, or are listed on the global suppression (opt-out) list.",
+          "Loads leads from a CSV. The agent skips anyone already emailed, still pending, or on the opt-out list.",
       },
       {
-        title: "2. Stable Variant Rotation",
+        title: "2. Stable variant rotation",
         engine: "hashlib (MD5)",
         description:
-          "Uses the MD5 hash of the lead's email address combined with a salt to select one of five subject lines and one of five icebreaker opening lines. This guarantees that each lead receives a stable, consistent set of email variants across reruns, while distributing variants evenly across the mailing list.",
+          "Uses a hash of the email address to pick one of five subject lines and one of five openers. The same lead keeps the same variant on a rerun.",
       },
       {
-        title: "3. Personalization & Assembly",
-        engine: "Deterministic Template Engine",
+        title: "3. Personalization and assembly",
+        engine: "Template",
         description:
-          "Generates a problem-first, highly contextual opener based on the prospect's job title and company name. It compiles the plain-text email body and embeds CAN-SPAM-compliant footer elements (including an opt-out link).",
+          "Fills an opener from the prospect's job title and company name, then adds a plain-text body and an opt-out link.",
       },
       {
-        title: "4. Outreach Execution",
+        title: "4. Send",
         engine: "MailerSend API",
         description:
-          "Transmits the assembled email via the MailerSend API, enabling click and open tracking. Fired requests are logged to the SQLite database with an UPSERT statement to enable automatic retries for any failed sends.",
+          "Sends the email through the MailerSend API. Each attempt is logged in SQLite so a failed send can be retried.",
       },
       {
-        title: "5. State Persistence",
-        engine: "GitHub Actions / Cloudflare R2",
+        title: "5. State and cap",
+        engine: "GitHub Actions",
         description:
-          "Saves the updated SQLite transaction state and lead queues. Workflows are scheduled to tick every 15 minutes during weekday business hours, throttled to 2 sends per tick with a daily hard cap of 30 emails to protect domain reputation.",
+          "Saves state after the run. Jobs are scheduled through the weekday, with up to 2 sends per run and a hard cap of 30 emails per day.",
       },
     ],
     constraints: [
       {
-        title: "Zero-Cost Compute",
+        title: "Opt-out",
         description:
-          "The entire stack runs on free-tier GitHub Actions workflows and the MailerSend free tier, resulting in $0/month software costs.",
+          "A suppression list in SQLite blocks future sends. Outgoing email includes an opt-out link.",
       },
       {
-        title: "CAN-SPAM & Opt-Out Compliance",
+        title: "Daily cap",
         description:
-          "Enforces a strict global suppression list in SQLite. All outgoing emails include plain-text headers and one-click opt-out links that instantly suppress the lead from future runs.",
-      },
-      {
-        title: "Public Repo Privacy",
-        description:
-          "Because committing an SQLite DB directly to a public git repo exposes prospect emails in commit history, the scheduler is disabled pending state migration to private Cloudflare R2 storage.",
-      },
-      {
-        title: "Domain Reputation Protection",
-        description:
-          "Throttles delivery to 2 emails per 15-minute tick and imposes a hard daily limit of 30 sends to prevent sender domain warming issues or spam classification.",
+          "Up to 2 emails per run, and a hard stop at 30 emails per day.",
       },
     ],
     maintenanceProfile:
-      "Minimal maintenance required. The operator only needs to upload a new Apollo.io leads CSV when the queue is exhausted and periodically process manual opt-out requests.",
+      "Upload a new leads CSV when the queue is empty, and process opt-out requests.",
   },
   {
     id: "youtube-automation",
     title: "YouTube Automation Pipeline",
     brief:
-      "A fully automated, $0-cost content pipeline that writes, illustrates, narrates, and assembles long-form documentary videos without human intervention.",
+      "Automates script, voice and video generation for long-form documentary videos, with a manual upload step.",
     tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
     thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
-    role: "AI Systems Engineer / Architect",
-    methodology: "Agentic Automation",
+    role: "Solo engineer",
+    methodology: "Scheduled pipeline",
     techStackDetailed: [
       "GitHub Actions (Ubuntu runner)",
       "Ollama Cloud (gpt-oss:120b-cloud)",
@@ -231,80 +234,70 @@ const baseProjects: Project[] = [
     ],
     caseStudy: {
       problem:
-        "Content creators spend dozens of hours per video manually researching topics, writing scripts, sourcing visual assets, recording voiceovers, and editing timelines. This tedious manual workflow limits publishing consistency and becomes financially unsustainable when using expensive, subscription-based AI creation tools.",
+        "A long-form video means research, a script, images, a voiceover and an edit. Doing each of those by hand limits how often a video can go out.",
       solution:
-        "Akhir Zamaan is an entirely automated, $0 content pipeline that writes, illustrates, narrates, and assembles long-form documentary videos without human intervention. Operating on a twice-weekly schedule, the system orchestrates approximately 10 different free-tier APIs to handle sequential tasks from web research to final video assembly. The compiled media files and transcripts are then automatically delivered directly to the operator's phone for manual upload.",
+        "The pipeline automates script, voice and video generation. On a schedule it researches a topic, writes a documentary script, generates images, renders a voiceover with subtitles, and assembles the file with FFmpeg. The finished video is sent to Telegram. Upload to YouTube is a manual step.",
       outcome:
-        "The pipeline is fully operational, successfully generating complete 10–13 minute documentary videos twice a week at a total monthly cost of exactly ~$0.00.",
+        "It produces a complete documentary video on a twice-weekly schedule. Putting it on YouTube is still done by hand.",
     },
     keyDecisions:
-      "We made the radical decision to use ephemeral GitHub Actions CI runners as the entire backend compute runtime instead of provisioning a persistent virtual private server (VPS). While this \"compute-as-a-runner\" strategy achieved a strict $0 operating cost, the tradeoff meant surviving without local storage or a GPU, forcing us to download models on every single clean boot and navigate rigid 6-hour runtime constraints. To prevent timeouts, we had to compromise on visual density (capping the pipeline at 150 images per video) and switch from local CPU voice rendering to cloud-based Edge TTS to save hours of processing time.",
+      "I run the job on ephemeral GitHub Actions runners instead of a rented server. Runners have no disk that survives the job and no GPU, so models are downloaded on each boot, and the job has to finish inside the runner time limit. I cap the video at 150 images and use cloud text to speech instead of rendering the voice on the runner CPU.",
     systemOverview:
-      "Akhir Zamaan is a fully autonomous content factory that runs entirely on free-tier cloud infrastructure. Given no input beyond a scheduled cron trigger, the system researches trending topics via web APIs, generates a complete documentary script using a large language model, synthesizes hundreds of cinematic images, renders a professional voiceover with synchronized subtitles, and assembles the final video, all within a single ephemeral CI runner session.\n\nThe compiled video and transcript are then pushed to cloud storage and delivered via Telegram for manual upload, completing the entire creation pipeline without any human intervention.",
+      "Given a scheduled trigger, the system researches a topic, writes a documentary script, generates images, renders a voiceover with subtitles, and assembles the video in one runner session. The file and transcript go to cloud storage, and a Telegram message carries the download link. Upload is manual.",
     stages: [
       {
-        title: "1. Research & Scriptwriting",
+        title: "1. Research and script",
         engine: "Ollama Cloud + Tavily API",
-        description: "The pipeline begins by researching a topic via web search APIs, then feeds the research context into a large language model to generate a complete, structured documentary script with scene descriptions.",
+        description:
+          "The job searches the web for a topic, then asks a language model for a documentary script with scene descriptions.",
       },
       {
-        title: "2. Visual Asset Generation",
+        title: "2. Images",
         engine: "HuggingFace / Cloudflare Workers AI / Pollinations.ai",
-        description: "Each scene description is converted into an image generation prompt. The system distributes requests across three free-tier image APIs to generate up to 150 cinematic background plates per video.",
+        description:
+          "Each scene becomes an image prompt. Requests are spread across image APIs, up to 150 images per video.",
         bulletPoints: [
-          "Parallel API routing across HuggingFace, Cloudflare Workers AI, and Pollinations.ai for redundancy and speed.",
-          "Zero text rendered in images to eliminate AI spelling hallucinations.",
+          "Requests go to HuggingFace, Cloudflare Workers AI and Pollinations.ai.",
+          "Images are generated with no text in the frame, so the model is not asked to spell words.",
         ],
       },
       {
-        title: "3. Audio & Subtitles",
-        engine: "Edge TTS / Kokoro-82M / faster-whisper",
-        description: "The script is narrated using cloud-based text-to-speech, then the audio is processed through a local whisper model to generate perfectly synchronized subtitle tracks.",
+        title: "3. Audio and subtitles",
+        engine: "Edge TTS / faster-whisper",
+        description:
+          "The script is narrated with cloud text to speech. A whisper model builds subtitle timings from that audio.",
       },
       {
-        title: "4. Video Assembly & Delivery",
+        title: "4. Assembly and handoff",
         engine: "FFmpeg / Cloudflare R2 / Telegram Bot API",
-        description: "FFmpeg composites the images, audio, and subtitles into a final video file. The compiled output is uploaded to Cloudflare R2 and a download link is pushed to Telegram for the operator.",
+        description:
+          "FFmpeg combines images, audio and subtitles. The file is uploaded to Cloudflare R2 and a link is sent on Telegram for manual upload.",
       },
     ],
     constraints: [
       {
-        title: "Zero-Cost Compute",
-        description: "Uses ephemeral GitHub Actions CI runners as the entire backend runtime instead of a persistent VPS, achieving a strict $0/month operating cost.",
+        title: "Runner limits",
+        description:
+          "The job runs on a GitHub Actions runner. There is no disk that survives the job, and the runner time limit caps how many images can be generated.",
       },
       {
-        title: "No Persistent Storage",
-        description: "Models must be downloaded on every single clean boot since CI runners are destroyed after each run. All persistent state lives in Cloudflare R2.",
-      },
-      {
-        title: "6-Hour Runtime Limit",
-        description: "GitHub Actions enforces a hard 6-hour cap per job. Visual density is capped at 150 images per video and voice rendering was moved to cloud TTS to stay within limits.",
+        title: "Manual upload",
+        description:
+          "The pipeline stops at a finished file and a Telegram link. Uploading to YouTube is a separate manual step.",
       },
     ],
-    maintenanceProfile: "Fully autonomous. Generates 2 complete 10–13 minute documentary videos per week at $0.00/month operating cost.",
+    maintenanceProfile:
+      "Runs twice a week and sends a finished video for manual upload.",
   },
   {
     id: "instagram-carousel",
     title: "Automated Instagram Carousel Pipeline",
     brief:
-      "An end-to-end automation system that transforms raw YouTube transcripts into fully generated, visually rich Instagram carousels and posts them autonomously.",
-    tags: [
-      "LLM APIs",
-      "Image Gen APIs (Flux/Leonardo)",
-      "Automation",
-      "Social APIs",
-    ],
+      "Takes a YouTube transcript and builds Instagram carousel slides (copy, images and type), then publishes them on a schedule.",
+    tags: ["LLM APIs", "Image generation", "Automation", "Instagram API"],
     thumbnail: "/screenshots/instagram_carousel_pipeline.png",
-    caseStudy: {
-      problem:
-        "Creating high-value Instagram carousels from long-form content is highly manual, requiring content extraction, slide-by-slide copywriting, image prompting, and manual scheduling.",
-      solution:
-        "Built an automated workflow that accepts a YouTube transcript, uses an LLM to extract original concepts and structure them into carousel slides, generates precise prompts for AI image synthesis, and automatically publishes the final asset.",
-      outcome:
-        "A zero-touch content multiplier that turns video transcripts into ready-to-publish social assets without manual intervention.",
-    },
-    role: "AI Systems Engineer / Architect",
-    methodology: "Agentic Workflow",
+    role: "Solo engineer",
+    methodology: "Scheduled pipeline",
     techStackDetailed: [
       "Node.js (sharp)",
       "Google Gemini 2.5 Flash",
@@ -312,57 +305,84 @@ const baseProjects: Project[] = [
       "Cloudflare R2",
       "Cloudflare Workers",
       "Make.com",
-      "Instagram Graph API"
+      "Instagram Graph API",
     ],
-    systemOverview: "Designed and deployed a fully autonomous, zero-touch content generation pipeline that operates entirely on $0/month infrastructure. The system ingests a single raw YouTube video transcript (e.g., podcasts, interviews) and programmatically orchestrates multiple APIs and local compositing tools to extract, format, render, and schedule cinematic 9-slide Instagram carousels.\n\nBuilt using an agentic \"Vibe Coding\" approach (directing LLM agents to construct the backend), this pipeline runs headlessly. Once a transcript is pasted, the system feeds an automated posting schedule (09:00 and 18:00 GST) for 7–10 days without requiring local hardware to remain awake.",
+    caseStudy: {
+      problem:
+        "Turning a long video into an Instagram carousel means pulling out the points, writing each slide, making images and posting them.",
+      solution:
+        "The pipeline takes a YouTube transcript, uses a language model to split it into carousel slides, generates background images, composites the type in code, and publishes on a schedule through the Instagram API.",
+      outcome:
+        "A transcript becomes a queued set of carousel posts. Publishing follows the schedule after the transcript is pasted in.",
+    },
+    systemOverview:
+      "Paste one YouTube transcript. The pipeline extracts the points, writes slide text and a caption, generates background images, composites the type, and stores the files with a queue file. A Cloudflare Worker runs at 09:00 and 18:00 GST, reads the queue, and sends the post to Make.com, which publishes it with the Instagram Graph API.\n\nAfter the transcript is pasted, later posts go out from that queue. The laptop does not have to stay on.",
     stages: [
       {
-        title: "1. Ingestion & Extraction (The Brain)",
+        title: "1. Transcript to slides",
         engine: "Gemini 2.5 Flash API",
-        description: "The model digests raw, unformatted transcripts and parses them into high-signal 9-slide storyboards. It outputs a strictly typed JSON array containing the visual prompts, slide-by-slide typography (including highlight words), and the final SEO-optimized captions and hashtags."
+        description:
+          "The model reads the transcript and returns a JSON array of 9 slides: image prompt, slide text, highlight words, caption and hashtags.",
       },
       {
-        title: "2. Cinematic Visual Generation",
+        title: "2. Background images",
         engine: "Pollinations.ai (FLUX.1-schnell)",
-        description: "Generates photorealistic, cinematic background plates based on the Gemini visual prompts.",
-        bulletPoints: [
-          "Constraint: Explicitly generates zero text in the images to eliminate AI spelling hallucinations and layout drift.",
-          "Operates completely free of API keys or rate-limit caps."
-        ]
+        description:
+          "Generates a background plate from each slide's image prompt, with no text in the image.",
       },
       {
-        title: "3. Programmatic Typography (Local Compositor)",
-        engine: "Node.js (sharp & SVG)",
-        description: "The system dynamically calculates text wrapping, gradient overlays, and highlighted keyword formatting via SVGs. It composites these vector text layers perfectly over the Pollinations.ai background plates.",
-        bulletPoints: [
-          "Result: 100% accurate spelling, perfectly aligned typography, and rigid brand consistency that generative image models cannot guarantee."
-        ]
+        title: "3. Type compositing",
+        engine: "Node.js (sharp and SVG)",
+        description:
+          "Slide text is drawn as SVG and composited over the background, so spelling and alignment come from the layout code.",
       },
       {
-        title: "4. Headless Orchestration & Cloud State",
-        engine: "Cloudflare Workers & R2",
-        description: "Compiled JPEGs and a master queue.json state file are pushed to public R2 URLs. A Cloudflare Worker, triggered by Cron events twice daily, reads the JSON queue from R2 and fires a webhook payload to Make.com containing the public R2 image links and captions. Make.com validates the array and executes the final OAuth handshake with the Instagram Graph API."
-      }
+        title: "4. Queue and publish",
+        engine: "Cloudflare Workers, R2 and Make.com",
+        description:
+          "JPEGs and a queue.json file go to R2. A Worker on a twice-daily cron reads the queue and calls Make.com, which posts through the Instagram Graph API.",
+      },
     ],
     constraints: [
       {
-        title: "Zero-Billing Infrastructure",
-        description: "Replaced premium image-generation APIs and $10/mo prepayment requirements with Pollinations.ai and Gemini Flash, effectively dropping operational costs to $0 while maintaining 4K visual fidelity."
+        title: "Text stays out of the image model",
+        description:
+          "Backgrounds are generated with no words in them. The words are composited afterward so spelling does not depend on the image model.",
       },
       {
-        title: "Public R2 URLs over Custom DNS",
-        description: "Removed custom domain routing (which previously caused silent DNS lags and Meta API OAuthException failures) in favor of standard public R2 dev links. Make.com acts as the reliable bridge to the Graph API."
+        title: "Public R2 URLs",
+        description:
+          "Posts use the public R2 object URLs. Make.com sits between the worker and the Instagram Graph API.",
       },
       {
-        title: "Cloud as the Single Source of Truth",
-        description: "Migrated state management from local storage to a cloud-hosted JSON queue. This prevents local sync bugs from clobbering updates and allows the pipeline to run even when the local staging machine is offline."
+        title: "Queue file in R2",
+        description:
+          "The queue lives in R2, so posting continues after the machine that built the slides is off.",
       },
       {
-        title: "Self-Cleaning Protocol",
-        description: "Implemented an automated weekly cleanup script that sweeps the R2 bucket and deletes objects older than 7 days, guaranteeing the system never exceeds Cloudflare's free-tier storage limits."
-      }
+        title: "Cleanup",
+        description:
+          "A weekly script deletes R2 objects older than 7 days so the bucket does not grow without a limit.",
+      },
     ],
-    maintenanceProfile: "~10 minutes per week (pasting a new raw transcript). The machine handles the rest indefinitely."
+    maintenanceProfile:
+      "Paste a new transcript when you want another batch. Queued posts publish on the schedule.",
+  },
+  {
+    id: "doctalk",
+    title: "DocTalk",
+    comingSoon: true,
+    hideMedia: true,
+    brief: "Chat with your own documents and get answers with sources.",
+    tags: [],
+  },
+  {
+    id: "pipeline",
+    title: "Pipeline",
+    comingSoon: true,
+    hideMedia: true,
+    brief: "An automated multi-step data and AI workflow, built for reliability.",
+    tags: [],
   },
 ];
 

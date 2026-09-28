@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PAGE_DESCRIPTION, PAGE_TITLE, SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -9,25 +10,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Adhil Shanif — Full-Stack AI Engineer",
-  description:
-    "I build production AI systems end-to-end: LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
+  metadataBase: new URL(SITE_URL),
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: SITE_URL,
+  },
   keywords: [
-    "Full-Stack AI Engineer",
-    "LLM Applications",
-    "Autonomous Agents",
-    "Next.js Developer",
-    "OpenAI API",
+    "Custom software engineer",
+    "AI systems",
+    "Internal tools",
+    "SaaS",
+    "Next.js",
     "Supabase",
-    "AI SaaS",
     "Dubai",
   ],
   authors: [{ name: "Adhil Shanif" }],
   openGraph: {
-    title: "Adhil Shanif — Full-Stack AI Engineer",
-    description:
-      "I build production AI systems end-to-end: LLM apps, autonomous agents, full-stack SaaS, and automation pipelines.",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: SITE_URL,
     type: "website",
+    siteName: "Adhil Shanif",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
   },
 };
 

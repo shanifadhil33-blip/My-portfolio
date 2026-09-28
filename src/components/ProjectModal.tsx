@@ -2,13 +2,18 @@
 
 import { useEffect, useCallback, useState } from "react";
 import { Project } from "@/data/projects";
-import { X, ImageIcon } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 
 interface ProjectModalProps {
   project: Project | null;
   onClose: () => void;
 }
+
+const labelClass = "mb-2 text-sm font-medium text-muted";
+const primaryButtonClass =
+  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent-hover";
+const secondaryButtonClass =
+  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent hover:text-accent";
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [isImageZoomed, setIsImageZoomed] = useState(false);
@@ -16,13 +21,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
 
-  // Stable close handler
   const handleClose = useCallback(() => {
     setIsImageZoomed(false);
     onClose();
   }, [onClose]);
 
-  // Lock body scroll when modal is open
   useEffect(() => {
     if (project) {
       document.body.style.overflow = "hidden";
@@ -34,7 +37,6 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     };
   }, [project]);
 
-  // ESC key to close
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") handleClose();
@@ -44,71 +46,71 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   }, [handleClose]);
 
   return (
-    <AnimatePresence>
+    <>
       {project && (
-        <motion.div
+        <div
           id="project-modal-overlay"
-          key="project-modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-6"
+          className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-6"
         >
-          {/* Backdrop — clicking this closes the modal */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer"
+            className="absolute inset-0 cursor-pointer bg-black/80"
             onClick={handleClose}
             aria-label="Close modal"
           />
 
-          {/* Modal panel — stop click propagation so clicks inside don't close */}
-          <motion.div
+          <div
             id="project-modal-content"
-            initial={{ opacity: 0, scale: 0.92, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 20 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-modal-title"
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl max-h-[90dvh] glass rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)] flex flex-col"
+            className="relative flex max-h-[90dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-lg border border-border bg-background sm:rounded-lg"
           >
-            {/* Sticky close button header */}
             <div className="sticky top-0 z-20 flex justify-end p-4 pb-0">
               <button
                 id="project-modal-close"
+                type="button"
                 onClick={handleClose}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/[0.08] border border-white/[0.1] hover:bg-white/[0.15] transition-colors cursor-pointer"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border transition-colors duration-150 hover:border-foreground/30"
                 aria-label="Close modal"
               >
                 <X size={16} />
               </button>
             </div>
 
-            {/* Scrollable content */}
-            <div className="overflow-y-auto flex-1 -mt-4">
-              {/* Header */}
-              <div className="px-6 pt-2 pb-0">
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2.5 py-1 text-[10px] tracking-wider uppercase text-slate-300 bg-white/[0.03] border border-white/[0.06] rounded-md"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-start justify-between gap-4 mt-2">
-                  <h2 className="text-2xl font-bold text-gradient">
+            <div className="flex-1 overflow-y-auto">
+              <div className="px-5 pt-2 pb-0 sm:px-6">
+                {project.tags.length > 0 && (
+                  <div className="mb-3 flex flex-wrap gap-1.5">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-md border border-border px-2.5 py-1 text-xs text-muted"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {project.comingSoon && (
+                  <span className="mb-3 inline-block rounded-md border border-border px-2 py-1 text-xs text-muted">
+                    Coming soon
+                  </span>
+                )}
+                <div className="mt-2 flex flex-col items-start gap-3 sm:flex-row sm:justify-between">
+                  <h2
+                    id="project-modal-title"
+                    className="text-balance text-2xl font-medium tracking-tight text-foreground"
+                  >
                     {project.title}
                   </h2>
-                  <div className="flex items-center gap-2">
+                  <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-end">
                     {hasGithub && (
                       <a
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="shrink-0 px-4 py-1.5 text-xs font-medium text-slate-300 bg-white/[0.05] border border-white/[0.1] rounded-lg hover:bg-white/[0.1] hover:text-white transition-colors"
+                        className={secondaryButtonClass}
                       >
                         View on GitHub
                       </a>
@@ -118,101 +120,99 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="shrink-0 px-4 py-1.5 text-xs font-medium text-slate-950 bg-white border border-white rounded-lg hover:bg-slate-200 transition-colors shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)]"
+                        className={primaryButtonClass}
                       >
                         {project.liveUrlLabel || "Visit Site"}
                       </a>
                     )}
                     {!hasGithub && !hasLive && project.systemOverview && (
                       <button
+                        type="button"
                         onClick={() => {
                           document
                             .getElementById("technical-details")
                             ?.scrollIntoView({ behavior: "smooth" });
                         }}
-                        className="shrink-0 px-4 py-1.5 text-xs font-medium text-slate-950 bg-white border border-white rounded-lg hover:bg-slate-200 transition-colors shadow-[0_0_15px_-3px_rgba(255,255,255,0.3)] cursor-pointer"
+                        className={`${primaryButtonClass} cursor-pointer`}
                       >
                         View Specs
                       </button>
                     )}
                   </div>
                 </div>
-                <p className="mt-2 text-sm text-slate-400 leading-relaxed">
+                <p className="mt-3 text-pretty text-base leading-relaxed text-muted">
                   {project.brief}
                 </p>
               </div>
 
-              {/* Main screenshot */}
-              <button 
-                onClick={() => setIsImageZoomed(true)}
-                className="mx-6 mt-6 aspect-video bg-slate-900/40 border border-white/[0.04] rounded-xl flex items-center justify-center relative overflow-hidden group/image cursor-zoom-in block w-[calc(100%-3rem)] text-left focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                title="Zoom image"
-              >
-                <div className="flex flex-col items-center gap-2 text-slate-700 relative z-0 w-full h-full justify-center">
-                  <ImageIcon size={36} strokeWidth={1.5} />
-                  <span className="text-[10px] tracking-wider uppercase">
+              {project.thumbnail && !project.hideMedia && (
+                <button
+                  type="button"
+                  onClick={() => setIsImageZoomed(true)}
+                  className="relative mx-5 mt-6 block aspect-video w-[calc(100%-2.5rem)] cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left sm:mx-6 sm:w-[calc(100%-3rem)]"
+                  title="Zoom image"
+                >
+                  <span className="flex h-full w-full items-center justify-center text-sm text-muted">
                     Main Screenshot
                   </span>
-                </div>
-                <img 
-                  src={project.thumbnail} 
-                  alt={`${project.title} main screenshot`} 
-                  className="absolute inset-0 w-full h-full object-cover z-10 opacity-90 group-hover/image:opacity-100 transition-opacity duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
-              </button>
+                  <img
+                    src={project.thumbnail}
+                    alt={`${project.title} main screenshot`}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                </button>
+              )}
 
-              {/* Case Study */}
-              <div className="p-6 space-y-6">
-                <div className="h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              <div className="space-y-6 p-5 sm:p-6">
+                <div className="h-px bg-border" />
 
-                {/* Role / Methodology Metadata Grid */}
                 {(project.role || project.methodology) && (
-                  <div className="grid grid-cols-2 gap-4 bg-white/[0.02] border border-white/[0.06] rounded-xl p-4">
+                  <div className="grid grid-cols-1 gap-4 rounded-lg border border-border p-4 sm:grid-cols-2">
                     {project.role && (
                       <div>
-                        <span className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase">Role</span>
-                        <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-0.5">{project.role}</p>
+                        <span className="text-sm font-medium text-muted">Role</span>
+                        <p className="mt-1 text-base font-medium text-foreground">{project.role}</p>
                       </div>
                     )}
                     {project.methodology && (
                       <div>
-                        <span className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase">Methodology</span>
-                        <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-0.5">{project.methodology}</p>
+                        <span className="text-sm font-medium text-muted">Methodology</span>
+                        <p className="mt-1 text-base font-medium text-foreground">
+                          {project.methodology}
+                        </p>
                       </div>
                     )}
                   </div>
                 )}
 
-                {/* Problem, Solution, Outcome */}
                 {[
-                  { label: "Problem", text: project.caseStudy.problem },
-                  { label: "Solution", text: project.caseStudy.solution },
-                  { label: "Outcome", text: project.caseStudy.outcome },
-                ].map((section) => (
-                  <div key={section.label}>
-                    <h3 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-indigo-400/80 mb-2">
-                      {section.label}
-                    </h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">
-                      {section.text}
-                    </p>
-                  </div>
-                ))}
+                  { label: "Problem", text: project.caseStudy?.problem },
+                  { label: "Solution", text: project.caseStudy?.solution },
+                  { label: "Outcome", text: project.caseStudy?.outcome },
+                ]
+                  .filter((section): section is { label: string; text: string } =>
+                    Boolean(section.text),
+                  )
+                  .map((section) => (
+                    <div key={section.label}>
+                      <h3 className={labelClass}>{section.label}</h3>
+                      <p className="text-pretty text-base leading-relaxed text-muted">
+                        {section.text}
+                      </p>
+                    </div>
+                  ))}
 
-                {/* Tech Stack */}
                 {project.techStackDetailed && project.techStackDetailed.length > 0 && (
                   <div>
-                    <h3 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-indigo-400/80 mb-3">
-                      Tech Stack
-                    </h3>
+                    <h3 className={`${labelClass} mb-3`}>Tech Stack</h3>
                     <div className="flex flex-wrap gap-2">
                       {project.techStackDetailed.map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1.5 text-[11px] font-semibold text-slate-300 bg-white/[0.04] border border-white/[0.08] rounded-lg"
+                          className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground"
                         >
                           {tech}
                         </span>
@@ -221,54 +221,56 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   </div>
                 )}
 
-                {/* Key Engineering Decisions */}
                 {project.keyDecisions && (
                   <div>
-                    <h3 className="text-[11px] font-semibold tracking-[0.2em] uppercase text-indigo-400/80 mb-2">
-                      Key Engineering Decisions
-                    </h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">
+                    <h3 className={labelClass}>Key Engineering Decisions</h3>
+                    <p className="text-pretty text-base leading-relaxed text-muted">
                       {project.keyDecisions}
                     </p>
                   </div>
                 )}
 
-                {/* Detailed System Specifications Section */}
                 {project.systemOverview && (
-                  <div id="technical-details" className="pt-4 border-t border-white/[0.06] space-y-6 scroll-mt-6">
+                  <div
+                    id="technical-details"
+                    className="scroll-mt-6 space-y-6 border-t border-border pt-4"
+                  >
                     <div>
-                      <h3 className="text-[11px] font-bold tracking-[0.2em] uppercase text-indigo-400 mb-3">
-                        System Overview
-                      </h3>
-                      <p className="text-sm text-slate-400 leading-relaxed whitespace-pre-line">
+                      <h3 className={`${labelClass} mb-3`}>System Overview</h3>
+                      <p className="text-pretty text-base leading-relaxed whitespace-pre-line text-muted">
                         {project.systemOverview}
                       </p>
                     </div>
 
-                    {/* Detailed stages */}
                     {project.stages && project.stages.length > 0 && (
                       <div className="space-y-4 pt-2">
-                        <h3 className="text-[11px] font-bold tracking-[0.2em] uppercase text-indigo-400 mb-2">
-                          The 4-Stage Architecture
-                        </h3>
+                        <h3 className={labelClass}>The 4-Stage Architecture</h3>
                         <div className="space-y-4">
                           {project.stages.map((stage) => (
-                            <div key={stage.title} className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.04] hover:border-white/[0.08] transition-colors">
-                              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                                <h4 className="text-xs sm:text-sm font-bold text-slate-200">{stage.title}</h4>
+                            <div
+                              key={stage.title}
+                              className="rounded-lg border border-border p-4 transition-colors duration-150 hover:border-foreground/25"
+                            >
+                              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                                <h4 className="text-base font-medium text-foreground">
+                                  {stage.title}
+                                </h4>
                                 {stage.engine && (
-                                  <span className="px-2 py-0.5 text-[9px] font-bold text-indigo-400 bg-indigo-500/10 rounded border border-indigo-500/20">
+                                  <span className="rounded border border-border px-2 py-1 text-xs text-muted">
                                     {stage.engine}
                                   </span>
                                 )}
                               </div>
-                              <p className="text-xs text-slate-400 leading-relaxed">{stage.description}</p>
+                              <p className="text-sm leading-relaxed text-muted">{stage.description}</p>
                               {stage.bulletPoints && stage.bulletPoints.length > 0 && (
                                 <ul className="mt-2.5 space-y-1.5">
                                   {stage.bulletPoints.map((pt, index) => (
-                                    <li key={index} className="text-xs text-slate-400 flex items-start gap-1.5">
-                                      <span className="text-indigo-400 mt-1 select-none">•</span>
-                                      <span>{pt.startsWith("Constraint: ") ? pt.substring(12) : pt.startsWith("Result: ") ? pt.substring(8) : pt}</span>
+                                    <li key={index} className="text-sm leading-relaxed text-muted">
+                                      {pt.startsWith("Constraint: ")
+                                        ? pt.substring(12)
+                                        : pt.startsWith("Result: ")
+                                          ? pt.substring(8)
+                                          : pt}
                                     </li>
                                   ))}
                                 </ul>
@@ -279,65 +281,51 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                       </div>
                     )}
 
-                    {/* Constraints & Solutions */}
                     {project.constraints && project.constraints.length > 0 && (
                       <div className="space-y-4 pt-2">
-                        <h3 className="text-[11px] font-bold tracking-[0.2em] uppercase text-indigo-400 mb-2">
-                          Engineering Constraints & Solutions
-                        </h3>
+                        <h3 className={labelClass}>Engineering Constraints & Solutions</h3>
                         <div className="grid grid-cols-1 gap-3.5">
                           {project.constraints.map((c) => (
-                            <div key={c.title} className="p-4 rounded-xl bg-white/[0.01] border border-white/[0.04] hover:border-white/[0.08] transition-colors">
-                              <h4 className="text-xs font-bold text-slate-200 mb-1.5 uppercase tracking-wider">{c.title}</h4>
-                              <p className="text-xs text-slate-400 leading-relaxed">{c.description}</p>
+                            <div
+                              key={c.title}
+                              className="rounded-lg border border-border p-4 transition-colors duration-150 hover:border-foreground/25"
+                            >
+                              <h4 className="mb-1.5 text-sm font-medium text-foreground">{c.title}</h4>
+                              <p className="text-sm leading-relaxed text-muted">{c.description}</p>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
 
-                    {/* Maintenance Profile */}
                     {project.maintenanceProfile && (
                       <div className="pt-2">
-                        <h3 className="text-[11px] font-bold tracking-[0.2em] uppercase text-indigo-400 mb-2.5">
-                          Maintenance Profile
-                        </h3>
-                        <p className="text-xs text-slate-400 leading-relaxed bg-white/[0.02] border border-white/[0.04] p-3 rounded-lg">
+                        <h3 className={labelClass}>Maintenance Profile</h3>
+                        <p className="rounded-lg border border-border p-3 text-sm leading-relaxed text-muted">
                           {project.maintenanceProfile}
                         </p>
                       </div>
                     )}
-
                   </div>
                 )}
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
 
-      {/* Image Lightbox Overlay */}
-      {project && isImageZoomed && (
-        <motion.div
-          key="project-modal-lightbox"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+      {project?.thumbnail && !project.hideMedia && isImageZoomed && (
+        <div
           onClick={() => setIsImageZoomed(false)}
-          className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
+          className="fixed inset-0 z-[200] flex cursor-zoom-out items-center justify-center bg-black/95 p-4"
         >
-          <motion.img
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+          <img
             src={project.thumbnail}
             alt={`${project.title} screenshot full size`}
-            className="max-w-full max-h-[90dvh] object-contain rounded-lg shadow-2xl"
+            className="max-h-[90dvh] max-w-full object-contain"
           />
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
