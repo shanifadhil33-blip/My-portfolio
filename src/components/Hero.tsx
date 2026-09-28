@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { ArrowDown, X, Mail } from "lucide-react";
-import { EMAIL, GITHUB_URL, LINKEDIN_URL, ROLE, mailtoHref } from "@/lib/site";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, ROLE } from "@/lib/site";
 
 const GithubIcon = ({ size = 18 }: { size?: number }) => (
   <svg
@@ -68,13 +69,13 @@ export default function Hero() {
           </p>
 
           <div className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
-            <a
-              href={mailtoHref("Project brief")}
+            <Link
+              href="/brief"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover"
             >
               <Mail size={16} aria-hidden />
               Send a written brief
-            </a>
+            </Link>
             <a
               href="#client-work"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-accent hover:text-accent"

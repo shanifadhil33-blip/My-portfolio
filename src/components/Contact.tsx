@@ -1,5 +1,6 @@
+import Link from "next/link";
 import { Mail } from "lucide-react";
-import { EMAIL, LINKEDIN_URL, mailtoHref } from "@/lib/site";
+import { EMAIL, LINKEDIN_URL } from "@/lib/site";
 
 const LinkedinIcon = ({ size = 16 }: { size?: number }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden>
@@ -31,13 +32,13 @@ export default function Contact() {
           </div>
 
           <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <a
-              href={mailtoHref("Project brief")}
+            <Link
+              href="/brief"
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover sm:w-auto"
             >
               <Mail size={16} aria-hidden />
               Send a written brief
-            </a>
+            </Link>
             <a
               href={LINKEDIN_URL}
               target="_blank"
