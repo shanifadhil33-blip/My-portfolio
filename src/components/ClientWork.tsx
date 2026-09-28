@@ -24,11 +24,18 @@ function StarIcon() {
   );
 }
 
-const review = {
-  quote:
-    "He successfully designed and built the foundations and administration system for a complex multi-site recommendation platform, taking it from the initial architecture through to a working, versioned publishing system. He is highly capable, thoughtful and exceptionally thorough. He does not simply implement instructions mechanically; he understands the wider commercial objective, identifies potential problems early and proposes sensible, well-reasoned solutions. He takes genuine ownership of the outcome, tests carefully and frequently goes beyond the immediate specification to ensure that the underlying system is secure, scalable and maintainable.",
-  attribution: "Client, multi-site recommendation platform (Upwork)",
-};
+const reviews = [
+  {
+    quote:
+      "He successfully designed and built the foundations and administration system for a complex multi-site recommendation platform, taking it from the initial architecture through to a working, versioned publishing system. He is highly capable, thoughtful and exceptionally thorough. He does not simply implement instructions mechanically; he understands the wider commercial objective, identifies potential problems early and proposes sensible, well-reasoned solutions. He takes genuine ownership of the outcome, tests carefully and frequently goes beyond the immediate specification to ensure that the underlying system is secure, scalable and maintainable.",
+    attribution: "Client, multi-site recommendation platform (Upwork)",
+  },
+  {
+    quote:
+      "Technically excellent and, just as importantly, a genuinely reliable collaborator: clear communication, precise documentation, and careful, methodical work. He flagged issues proactively, filed follow-ups without being asked, and made the whole process smooth. Would work with him again without hesitation.",
+    attribution: "Upwork client",
+  },
+];
 
 export default function ClientWork() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -60,20 +67,27 @@ export default function ClientWork() {
             Client reviews
           </h3>
 
-          <figure className="mt-8 max-w-3xl rounded-lg border border-border p-6 sm:p-8">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex gap-0.5" role="img" aria-label="5 out of 5 stars">
-                {Array.from({ length: 5 }, (_, index) => (
-                  <StarIcon key={index} />
-                ))}
-              </span>
-              <p className="text-sm text-muted">5.0</p>
-            </div>
-            <blockquote className="mt-4 text-pretty text-base leading-relaxed text-foreground">
-              {review.quote}
-            </blockquote>
-            <figcaption className="mt-4 text-sm text-muted">{review.attribution}</figcaption>
-          </figure>
+          <div className="mt-8 grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
+            {reviews.map((review) => (
+              <figure
+                key={review.attribution}
+                className="flex h-full flex-col rounded-lg border border-border p-6 sm:p-8"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex gap-0.5" role="img" aria-label="5 out of 5 stars">
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <StarIcon key={index} />
+                    ))}
+                  </span>
+                  <p className="text-sm text-muted">5.0</p>
+                </div>
+                <blockquote className="mt-4 text-pretty text-base leading-relaxed text-foreground">
+                  {review.quote}
+                </blockquote>
+                <figcaption className="mt-auto pt-4 text-sm text-muted">{review.attribution}</figcaption>
+              </figure>
+            ))}
+          </div>
 
           <a
             href={UPWORK_URL}
