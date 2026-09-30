@@ -3,8 +3,8 @@ import Link from "next/link";
 import BriefForm from "@/components/BriefForm";
 
 export const metadata: Metadata = {
-  title: "Send a written brief | Adhil Shanif",
-  description: "Tell me what you need built, your timeline and your budget. I reply in writing within 24 hours.",
+  title: "Send a brief | Adhil Shanif",
+  description: "Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.",
 };
 
 export default function BriefPage() {
@@ -18,10 +18,10 @@ export default function BriefPage() {
           Adhil Shanif
         </Link>
         <h1 className="mt-6 text-balance text-3xl font-medium tracking-tight text-foreground">
-          Send a written brief
+          Send a brief
         </h1>
         <p className="mt-4 text-pretty text-base leading-relaxed text-muted">
-          Tell me what you need built, your timeline and your budget. I reply in writing within 24 hours.
+          Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.
         </p>
         <BriefForm />
       </div>

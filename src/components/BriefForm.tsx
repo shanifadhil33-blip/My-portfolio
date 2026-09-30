@@ -63,7 +63,7 @@ export default function BriefForm() {
   if (sent) {
     return (
       <p className="mt-10 rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground">
-        Thanks. I&apos;ll reply in writing within 24 hours.
+        Thanks. I&apos;ll reply by email within 24 hours.
       </p>
     );
   }
