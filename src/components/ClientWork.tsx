@@ -93,7 +93,7 @@ export default function ClientWork() {
             href={UPWORK_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-flex min-h-11 items-center text-base text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover"
+            className="mt-8 inline-flex min-h-11 items-center text-base text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover active:opacity-80"
           >
             See all reviews on Upwork
           </a>

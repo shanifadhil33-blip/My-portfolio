@@ -15,8 +15,8 @@ export const runtime = "nodejs";
 
 const FROM_ADDRESS = "onboarding@resend.dev";
 
-function failure(error: string, status: number) {
-  return NextResponse.json({ ok: false, error }, { status });
+function failure(error: string, status: number, fields: string[] = []) {
+  return NextResponse.json({ ok: false, error, fields }, { status });
 }
 
 export async function POST(request: Request) {
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     hpField: text("hp_field"),
   });
 
-  if (!parsed.ok) return failure(parsed.error, 400);
+  if (!parsed.ok) return failure(parsed.error, 400, parsed.fields);
   if (parsed.data.hpField.trim() !== "") {
     return NextResponse.json({ ok: true });
   }

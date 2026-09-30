@@ -38,14 +38,29 @@ const briefFields = z.object({
     .trim()
     .min(1, "Describe what you need built.")
     .max(8000, "That description is too long."),
-  timeline: z.enum(TIMELINE_OPTIONS, { error: "Choose a timeline." }),
-  budget: z.enum(BUDGET_OPTIONS, { error: "Choose a budget range." }),
+  timeline: z.union([z.literal(""), z.enum(TIMELINE_OPTIONS)], { error: "Choose a timeline." }),
+  budget: z.union([z.literal(""), z.enum(BUDGET_OPTIONS)], { error: "Choose a budget range." }),
   hpField: z.string(),
 });
 
 export type BriefFields = z.infer<typeof briefFields>;
 
-export function parseBriefFields(input: {
+export const BRIEF_FIELD_NAMES = ["name", "email", "project", "timeline", "budget", "company"] as const;
+
+export type BriefFieldName = (typeof BRIEF_FIELD_NAMES)[number];
+
+const FIELD_LABELS: Record<BriefFieldName, string> = {
+  name: "Name",
+  email: "Email",
+  project: "What you need built",
+  timeline: "Timeline",
+  budget: "Budget range",
+  company: "Company",
+};
+
+const REQUIRED_FIELDS = new Set<BriefFieldName>(["name", "email", "project"]);
+
+export type BriefInput = {
   name: string;
   email: string;
   company: string;
@@ -53,12 +68,62 @@ export function parseBriefFields(input: {
   timeline: string;
   budget: string;
   hpField: string;
-}): { ok: true; data: BriefFields } | { ok: false; error: string } {
+};
+
+export function isBriefFieldName(value: string): value is BriefFieldName {
+  return (BRIEF_FIELD_NAMES as readonly string[]).includes(value);
+}
+
+function formatFieldList(labels: string[]): string {
+  if (labels.length <= 1) return labels[0] ?? "";
+  if (labels.length === 2) return `${labels[0]} and ${labels[1]}`;
+  return `${labels.slice(0, -1).join(", ")}, and ${labels[labels.length - 1]}`;
+}
+
+function sentence(message: string): string {
+  return message.endsWith(".") ? message : `${message}.`;
+}
+
+export function parseBriefFields(
+  input: BriefInput,
+): { ok: true; data: BriefFields } | { ok: false; error: string; fields: BriefFieldName[] } {
   const parsed = briefFields.safeParse(input);
-  if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? "Check the form and try again." };
+  if (parsed.success) return { ok: true, data: parsed.data };
+
+  const messages = new Map<BriefFieldName, string>();
+  for (const issue of parsed.error.issues) {
+    const key = issue.path[0];
+    if (typeof key !== "string" || !isBriefFieldName(key) || messages.has(key)) continue;
+    messages.set(key, issue.message);
   }
-  return { ok: true, data: parsed.data };
+
+  const fields = BRIEF_FIELD_NAMES.filter((field) => messages.has(field));
+  const missing: string[] = [];
+  const rest: string[] = [];
+
+  for (const field of fields) {
+    const message = messages.get(field);
+    if (!message) continue;
+    if (REQUIRED_FIELDS.has(field) && input[field].trim() === "") {
+      missing.push(FIELD_LABELS[field]);
+      continue;
+    }
+    rest.push(sentence(message));
+  }
+
+  const parts = ["The brief was not sent."];
+  if (missing.length === 1) parts.push(`Fill in ${missing[0]}.`);
+  else if (missing.length > 1) parts.push(`Fill in ${formatFieldList(missing)}.`);
+  parts.push(...rest);
+
+  return {
+    ok: false,
+    error:
+      parts.length > 1
+        ? parts.join(" ")
+        : "The brief was not sent. Check the form and try again.",
+    fields,
+  };
 }
 
 export function attachmentError(file: File | null): string | null {
@@ -108,8 +173,8 @@ export function briefBody(fields: BriefFields): string {
     `Name: ${fields.name}`,
     `Email: ${fields.email}`,
     `Company: ${company}`,
-    `Timeline: ${fields.timeline}`,
-    `Budget: ${fields.budget}`,
+    `Timeline: ${fields.timeline || "Not given"}`,
+    `Budget: ${fields.budget || "Not given"}`,
     "",
     "What you need built:",
     fields.project,

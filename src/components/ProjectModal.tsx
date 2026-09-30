@@ -19,9 +19,9 @@ function imagesForModal(project: Project): string[] {
 
 const labelClass = "mb-2 text-sm font-medium text-muted";
 const primaryButtonClass =
-  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent-hover";
+  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed";
 const secondaryButtonClass =
-  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent hover:text-accent";
+  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5";
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [zoomedSrc, setZoomedSrc] = useState<string | null>(null);
@@ -80,7 +80,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 id="project-modal-close"
                 type="button"
                 onClick={handleClose}
-                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border transition-colors duration-150 hover:border-foreground/30"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
                 aria-label="Close modal"
               >
                 <X size={16} />

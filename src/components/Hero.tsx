@@ -29,7 +29,7 @@ const LinkedinIcon = ({ size = 18 }: { size?: number }) => (
 );
 
 const socialLinkClass =
-  "flex h-11 w-11 items-center justify-center rounded-full border border-border text-foreground transition-colors duration-150 hover:border-accent hover:text-accent";
+  "flex h-11 w-11 items-center justify-center rounded-full border border-border text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5";
 
 export default function Hero() {
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -46,7 +46,7 @@ export default function Hero() {
           onClick={() => setIsCardOpen(true)}
           aria-label="Open profile"
         >
-          <div className="h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 group-hover/portrait:border-accent sm:h-44 sm:w-44">
+          <div className="h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44">
             <img
               src="/adhil-portrait.jpg"
               alt="Adhil Shanif"
@@ -71,14 +71,14 @@ export default function Hero() {
           <div className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
             <Link
               href="/brief"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed"
             >
               <Mail size={16} aria-hidden />
               Send a written brief
             </Link>
             <a
               href="#client-work"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-accent hover:text-accent"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
             >
               View work
               <ArrowDown size={16} aria-hidden />
@@ -102,7 +102,7 @@ export default function Hero() {
             <button
               type="button"
               onClick={() => setIsCardOpen(false)}
-              className="absolute top-8 right-8 flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground"
+              className="absolute top-8 right-8 flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70"
               aria-label="Close card"
             >
               <X size={18} />

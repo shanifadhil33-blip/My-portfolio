@@ -67,7 +67,7 @@ export default function PartnersPage() {
 
           <a
             href={mailtoHref("Partnership")}
-            className="mt-8 inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover"
+            className="mt-8 inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed"
           >
             Email me about a project
           </a>
