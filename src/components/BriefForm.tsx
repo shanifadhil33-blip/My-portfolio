@@ -13,7 +13,11 @@ import {
 import { EMAIL } from "@/lib/site";
 
 function controlClass(invalid: boolean, extra = ""): string {
-  return `mt-2 w-full min-h-11 rounded-lg border ${invalid ? "border-accent" : "border-border"} bg-background px-4 py-3 text-base text-foreground${extra ? ` ${extra}` : ""}`;
+  return `field mt-2 w-full min-h-11 rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground${invalid ? " is-invalid" : ""}${extra ? ` ${extra}` : ""}`;
+}
+
+function selectClass(invalid: boolean): string {
+  return `field select-field mt-2 w-full min-h-11 cursor-pointer rounded-lg border border-border bg-background py-3 pl-4 text-base text-foreground${invalid ? " is-invalid" : ""}`;
 }
 
 function labelClass(invalid: boolean): string {
@@ -163,7 +167,7 @@ export default function BriefForm() {
     <div className="mx-auto w-full max-w-xl">
       <Link
         href="/"
-        className="inline-flex min-h-11 items-center text-sm text-muted transition-colors duration-150 hover:text-accent"
+        className="inline-flex min-h-11 items-center text-sm text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
       >
         Adhil Shanif
       </Link>
@@ -174,183 +178,183 @@ export default function BriefForm() {
         Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.
       </p>
       <form method="post" action="/api/brief" onSubmit={onSubmit} className="relative mt-10 space-y-6" noValidate>
-      <div className="pointer-events-none absolute -left-[10000px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
-        <label htmlFor="hp_field">Leave this empty</label>
-        <input id="hp_field" name="hp_field" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
-
-      <div>
-        <label htmlFor="name" className={labelClass(invalidFields.includes("name"))}>
-          Name
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          required
-          autoComplete="name"
-          aria-invalid={invalidFields.includes("name") || undefined}
-          aria-describedby={invalidFields.includes("name") ? "brief-error" : undefined}
-          onChange={onFieldChange}
-          className={controlClass(invalidFields.includes("name"))}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="email" className={labelClass(invalidFields.includes("email"))}>
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          aria-invalid={invalidFields.includes("email") || undefined}
-          aria-describedby={invalidFields.includes("email") ? "brief-error" : undefined}
-          onChange={onFieldChange}
-          className={controlClass(invalidFields.includes("email"))}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="company" className={labelClass(invalidFields.includes("company"))}>
-          Company <span className="font-normal">(optional)</span>
-        </label>
-        <input
-          id="company"
-          name="company"
-          type="text"
-          autoComplete="organization"
-          aria-invalid={invalidFields.includes("company") || undefined}
-          aria-describedby={invalidFields.includes("company") ? "brief-error" : undefined}
-          onChange={onFieldChange}
-          className={controlClass(invalidFields.includes("company"))}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="project" className={labelClass(invalidFields.includes("project"))}>
-          What you need built
-        </label>
-        <textarea
-          id="project"
-          name="project"
-          required
-          rows={6}
-          aria-invalid={invalidFields.includes("project") || undefined}
-          aria-describedby={invalidFields.includes("project") ? "brief-error" : undefined}
-          onChange={onFieldChange}
-          className={controlClass(invalidFields.includes("project"), "min-h-36")}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="timeline" className={labelClass(invalidFields.includes("timeline"))}>
-          Timeline <span className="font-normal">(optional)</span>
-        </label>
-        <select
-          id="timeline"
-          name="timeline"
-          defaultValue=""
-          aria-invalid={invalidFields.includes("timeline") || undefined}
-          aria-describedby={invalidFields.includes("timeline") ? "brief-error" : undefined}
-          onChange={onFieldChange}
-          className={controlClass(invalidFields.includes("timeline"))}
-        >
-          <option value="" disabled>
-            Select a timeline
-          </option>
-          {TIMELINE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="budget" className={labelClass(invalidFields.includes("budget"))}>
-          Budget range <span className="font-normal">(optional)</span>
-        </label>
-        <select
-          id="budget"
-          name="budget"
-          defaultValue=""
-          aria-invalid={invalidFields.includes("budget") || undefined}
-          aria-describedby={invalidFields.includes("budget") ? "brief-error" : undefined}
-          onChange={onFieldChange}
-          className={controlClass(invalidFields.includes("budget"))}
-        >
-          <option value="" disabled>
-            Select a budget range
-          </option>
-          {BUDGET_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <span id="attachment-label" className="text-sm font-medium text-muted">
-          Attachment <span className="font-normal">(optional)</span>
-        </span>
-        <div className="mt-2 flex w-full min-w-0 items-stretch gap-2">
-          <label
-            htmlFor="attachment"
-            className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-base text-foreground transition-colors duration-150 hover:border-foreground/25"
-          >
-            <span className="shrink-0 font-medium">Choose file</span>
-            <span className="min-w-0 truncate text-muted" title={attachmentName || undefined}>
-              {attachmentName || "No file selected"}
-            </span>
-          </label>
-          {attachmentName ? (
-            <button
-              type="button"
-              onClick={clearAttachment}
-              className="inline-flex min-h-11 shrink-0 cursor-pointer items-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/25"
-            >
-              Remove
-            </button>
-          ) : null}
+        <div className="pointer-events-none absolute -left-[10000px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
+          <label htmlFor="hp_field">Leave this empty</label>
+          <input id="hp_field" name="hp_field" type="text" tabIndex={-1} autoComplete="off" />
         </div>
-        <input
-          ref={attachmentRef}
-          id="attachment"
-          name="attachment"
-          type="file"
-          accept=".pdf,.docx,.png,.jpg,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg"
-          aria-labelledby="attachment-label"
-          onChange={onAttachmentChange}
-          className="sr-only"
-        />
-        <p className="mt-2 text-sm leading-relaxed text-muted">PDF, DOCX, PNG, or JPG. 4 MB max.</p>
-      </div>
 
-      {error && (
-        <p
-          ref={errorRef}
-          id="brief-error"
-          role="alert"
-          tabIndex={-1}
-          className="rounded-lg border border-accent px-4 py-3 text-base font-medium leading-relaxed text-foreground"
+        <div>
+          <label htmlFor="name" className={labelClass(invalidFields.includes("name"))}>
+            Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            autoComplete="name"
+            aria-invalid={invalidFields.includes("name") || undefined}
+            aria-describedby={invalidFields.includes("name") ? "brief-error" : undefined}
+            onChange={onFieldChange}
+            className={controlClass(invalidFields.includes("name"))}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className={labelClass(invalidFields.includes("email"))}>
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            aria-invalid={invalidFields.includes("email") || undefined}
+            aria-describedby={invalidFields.includes("email") ? "brief-error" : undefined}
+            onChange={onFieldChange}
+            className={controlClass(invalidFields.includes("email"))}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="company" className={labelClass(invalidFields.includes("company"))}>
+            Company <span className="font-normal">(optional)</span>
+          </label>
+          <input
+            id="company"
+            name="company"
+            type="text"
+            autoComplete="organization"
+            aria-invalid={invalidFields.includes("company") || undefined}
+            aria-describedby={invalidFields.includes("company") ? "brief-error" : undefined}
+            onChange={onFieldChange}
+            className={controlClass(invalidFields.includes("company"))}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="project" className={labelClass(invalidFields.includes("project"))}>
+            What you need built
+          </label>
+          <textarea
+            id="project"
+            name="project"
+            required
+            rows={6}
+            aria-invalid={invalidFields.includes("project") || undefined}
+            aria-describedby={invalidFields.includes("project") ? "brief-error" : undefined}
+            onChange={onFieldChange}
+            className={controlClass(invalidFields.includes("project"), "min-h-36")}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="timeline" className={labelClass(invalidFields.includes("timeline"))}>
+            Timeline <span className="font-normal">(optional)</span>
+          </label>
+          <select
+            id="timeline"
+            name="timeline"
+            defaultValue=""
+            aria-invalid={invalidFields.includes("timeline") || undefined}
+            aria-describedby={invalidFields.includes("timeline") ? "brief-error" : undefined}
+            onChange={onFieldChange}
+            className={selectClass(invalidFields.includes("timeline"))}
+          >
+            <option value="" disabled>
+              Select a timeline
+            </option>
+            {TIMELINE_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="budget" className={labelClass(invalidFields.includes("budget"))}>
+            Budget range <span className="font-normal">(optional)</span>
+          </label>
+          <select
+            id="budget"
+            name="budget"
+            defaultValue=""
+            aria-invalid={invalidFields.includes("budget") || undefined}
+            aria-describedby={invalidFields.includes("budget") ? "brief-error" : undefined}
+            onChange={onFieldChange}
+            className={selectClass(invalidFields.includes("budget"))}
+          >
+            <option value="" disabled>
+              Select a budget range
+            </option>
+            {BUDGET_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <span id="attachment-label" className="text-sm font-medium text-muted">
+            Attachment <span className="font-normal">(optional)</span>
+          </span>
+          <div className="relative mt-2 flex w-full min-w-0 items-stretch gap-2">
+            <input
+              ref={attachmentRef}
+              id="attachment"
+              name="attachment"
+              type="file"
+              accept=".pdf,.docx,.png,.jpg,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg"
+              aria-labelledby="attachment-label"
+              onChange={onAttachmentChange}
+              className="peer sr-only"
+            />
+            <label
+              htmlFor="attachment"
+              className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-base text-foreground transition-colors duration-150 hover:border-foreground/30 peer-focus-visible:border-foreground/35 active:border-foreground/40 active:bg-foreground/5"
+            >
+              <span className="shrink-0 font-medium">Choose file</span>
+              <span className="min-w-0 truncate text-muted" title={attachmentName || undefined}>
+                {attachmentName || "No file selected"}
+              </span>
+            </label>
+            {attachmentName ? (
+              <button
+                type="button"
+                onClick={clearAttachment}
+                className="inline-flex min-h-11 shrink-0 cursor-pointer items-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
+              >
+                Remove
+              </button>
+            ) : null}
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-muted">PDF, DOCX, PNG, or JPG. 4 MB max.</p>
+        </div>
+
+        {error ? (
+          <p
+            ref={errorRef}
+            id="brief-error"
+            role="alert"
+            tabIndex={-1}
+            className="rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground outline-none"
+          >
+            {error}
+          </p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={pending}
+          aria-describedby={error ? "brief-error" : undefined}
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed disabled:opacity-60 sm:w-auto"
         >
-          {error}
-        </p>
-      )}
-
-      <button
-        type="submit"
-        disabled={pending}
-        aria-describedby={error ? "brief-error" : undefined}
-        className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover disabled:opacity-60 sm:w-auto"
-      >
-        {pending ? "Sending..." : "Send brief"}
-      </button>
-    </form>
+          {pending ? "Sending..." : "Send brief"}
+        </button>
+      </form>
     </div>
   );
 }

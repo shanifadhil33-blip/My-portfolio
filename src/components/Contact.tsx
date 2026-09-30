@@ -24,7 +24,7 @@ export default function Contact() {
               <Mail size={16} aria-hidden />
               <a
                 href={`mailto:${EMAIL}`}
-                className="inline-flex min-h-11 items-center break-all text-base text-accent transition-colors duration-150 hover:text-accent-hover"
+                className="inline-flex min-h-11 items-center break-all text-base text-accent transition-colors duration-150 hover:text-accent-hover active:opacity-80"
               >
                 {EMAIL}
               </a>
@@ -34,7 +34,7 @@ export default function Contact() {
           <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
             <Link
               href="/brief"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed sm:w-auto"
             >
               <Mail size={16} aria-hidden />
               Send a brief
@@ -43,7 +43,7 @@ export default function Contact() {
               href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-accent hover:text-accent sm:w-auto"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5 sm:w-auto"
             >
               <LinkedinIcon size={16} />
               LinkedIn
