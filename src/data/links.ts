@@ -8,6 +8,10 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
   "eob-reader": {
     liveUrl: "https://eob-reader.vercel.app", 
   },
+  "doctalk": {
+    liveUrl: "https://doctalk-ten.vercel.app",
+    githubUrl: "https://github.com/shanifadhil33-blip/doctalk",
+  },
   "cold-email-agent": {
     githubUrl: "https://github.com/shanifadhil33-blip/reclaim-outreach-agent",
   },
