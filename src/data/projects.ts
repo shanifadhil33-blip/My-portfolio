@@ -84,6 +84,42 @@ const baseProjects: Project[] = [
     ],
   },
   {
+    id: "doctalk",
+    title: "DocTalk",
+    liveUrlLabel: "Visit Web Application",
+    brief:
+      "Ask a PDF a question and get an answer that cites the page it came from, with the PDF opened on that page.",
+    tags: ["Next.js", "pgvector", "Citations"],
+    thumbnail: "/screenshots/doctalk-home.png",
+    role: "Solo engineer",
+    methodology: "End to end",
+    techStackDetailed: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Auth.js",
+      "Neon Postgres",
+      "pgvector",
+      "Drizzle",
+      "Gemini API",
+      "Vercel Blob",
+      "react-pdf",
+    ],
+    caseStudy: {
+      problem:
+        "When you ask a chatbot about a contract or an invoice, you get an answer but no way to check it without reading the whole file. For anything with money or legal terms in it, an answer you can't check isn't much use.",
+      solution:
+        "The app reads the PDF page by page and keeps the page number on every chunk. A question is matched against that one document only. The answer comes back with Source p. N chips, and clicking one opens the PDF on that page. If the document doesn't contain the answer, it says \"That is not in this document.\" and cites nothing. Signed-in uploads stay private. Three demo PDFs are open to everyone.",
+      outcome:
+        "The app is live. A visitor can open a demo PDF, ask a question, and land on the page the answer came from.",
+      screenshots: [
+        "/screenshots/doctalk-home.png",
+        "/screenshots/doctalk-documents.png",
+        "/screenshots/doctalk-invoice.png",
+      ],
+    },
+  },
+  {
     id: "eob-reader",
     title: "EOB Reader",
     liveUrlLabel: "Visit Web Application",
@@ -132,42 +168,6 @@ const baseProjects: Project[] = [
           "Download an X12 835 ERA file with a balance check, plus CSVs for Dentrix, Eaglesoft and Open Dental.",
       },
     ],
-  },
-  {
-    id: "doctalk",
-    title: "DocTalk",
-    liveUrlLabel: "Visit Web Application",
-    brief:
-      "Ask a PDF a question and get an answer that cites the page it came from, with the PDF opened on that page.",
-    tags: ["Next.js", "pgvector", "Citations"],
-    thumbnail: "/screenshots/doctalk-invoice.png",
-    role: "Solo engineer",
-    methodology: "End to end",
-    techStackDetailed: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Auth.js",
-      "Neon Postgres",
-      "pgvector",
-      "Drizzle",
-      "Gemini API",
-      "Vercel Blob",
-      "react-pdf",
-    ],
-    caseStudy: {
-      problem:
-        "When you ask a chatbot about a contract or an invoice, you get an answer but no way to check it without reading the whole file. For anything with money or legal terms in it, an answer you can't check isn't much use.",
-      solution:
-        "The app reads the PDF page by page and keeps the page number on every chunk. A question is matched against that one document only. The answer comes back with Source p. N chips, and clicking one opens the PDF on that page. If the document doesn't contain the answer, it says \"That is not in this document.\" and cites nothing. Signed-in uploads stay private. Three demo PDFs are open to everyone.",
-      outcome:
-        "The app is live. A visitor can open a demo PDF, ask a question, and land on the page the answer came from.",
-      screenshots: [
-        "/screenshots/doctalk-home.png",
-        "/screenshots/doctalk-documents.png",
-        "/screenshots/doctalk-invoice.png",
-      ],
-    },
   },
   {
     id: "pipeline",
