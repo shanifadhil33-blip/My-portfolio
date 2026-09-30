@@ -10,10 +10,10 @@ export const TIMELINE_OPTIONS = [
 ] as const;
 
 export const BUDGET_OPTIONS = [
-  "under US$1,000",
-  "US$1,000-3,000",
-  "US$3,000-10,000",
-  "US$10,000+",
+  "under US $1,000",
+  "US $1,000-3,000",
+  "US $3,000-10,000",
+  "US $10,000+",
   "not sure",
 ] as const;
 
