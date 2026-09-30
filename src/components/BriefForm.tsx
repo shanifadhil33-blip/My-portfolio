@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
   attachmentError,
@@ -150,14 +151,29 @@ export default function BriefForm() {
 
   if (sent) {
     return (
-      <p className="mt-10 rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground">
-        Thanks. I&apos;ll reply by email within 24 hours.
-      </p>
+      <div className="mx-auto flex w-full max-w-xl flex-1 items-center">
+        <p className="w-full rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground">
+          Thanks. I&apos;ll reply by email within 24 hours.
+        </p>
+      </div>
     );
   }
 
   return (
-    <form method="post" action="/api/brief" onSubmit={onSubmit} className="relative mt-10 space-y-6" noValidate>
+    <div className="mx-auto w-full max-w-xl">
+      <Link
+        href="/"
+        className="inline-flex min-h-11 items-center text-sm text-muted transition-colors duration-150 hover:text-accent"
+      >
+        Adhil Shanif
+      </Link>
+      <h1 className="mt-6 text-balance text-3xl font-medium tracking-tight text-foreground">
+        Send a brief
+      </h1>
+      <p className="mt-4 text-pretty text-base leading-relaxed text-muted">
+        Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.
+      </p>
+      <form method="post" action="/api/brief" onSubmit={onSubmit} className="relative mt-10 space-y-6" noValidate>
       <div className="pointer-events-none absolute -left-[10000px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor="hp_field">Leave this empty</label>
         <input id="hp_field" name="hp_field" type="text" tabIndex={-1} autoComplete="off" />
@@ -231,12 +247,11 @@ export default function BriefForm() {
 
       <div>
         <label htmlFor="timeline" className={labelClass(invalidFields.includes("timeline"))}>
-          Timeline
+          Timeline <span className="font-normal">(optional)</span>
         </label>
         <select
           id="timeline"
           name="timeline"
-          required
           defaultValue=""
           aria-invalid={invalidFields.includes("timeline") || undefined}
           aria-describedby={invalidFields.includes("timeline") ? "brief-error" : undefined}
@@ -256,12 +271,11 @@ export default function BriefForm() {
 
       <div>
         <label htmlFor="budget" className={labelClass(invalidFields.includes("budget"))}>
-          Budget range
+          Budget range <span className="font-normal">(optional)</span>
         </label>
         <select
           id="budget"
           name="budget"
-          required
           defaultValue=""
           aria-invalid={invalidFields.includes("budget") || undefined}
           aria-describedby={invalidFields.includes("budget") ? "brief-error" : undefined}
@@ -337,5 +351,6 @@ export default function BriefForm() {
         {pending ? "Sending..." : "Send brief"}
       </button>
     </form>
+    </div>
   );
 }

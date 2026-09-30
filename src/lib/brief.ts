@@ -38,8 +38,8 @@ const briefFields = z.object({
     .trim()
     .min(1, "Describe what you need built.")
     .max(8000, "That description is too long."),
-  timeline: z.enum(TIMELINE_OPTIONS, { error: "Choose a timeline." }),
-  budget: z.enum(BUDGET_OPTIONS, { error: "Choose a budget range." }),
+  timeline: z.union([z.literal(""), z.enum(TIMELINE_OPTIONS)], { error: "Choose a timeline." }),
+  budget: z.union([z.literal(""), z.enum(BUDGET_OPTIONS)], { error: "Choose a budget range." }),
   hpField: z.string(),
 });
 
@@ -58,7 +58,7 @@ const BRIEF_FIELD_LABEL: Record<BriefFieldName, string> = {
   company: "Company",
 };
 
-const REQUIRED_BRIEF_FIELDS = new Set<BriefFieldName>(["name", "email", "project", "timeline", "budget"]);
+const REQUIRED_BRIEF_FIELDS = new Set<BriefFieldName>(["name", "email", "project"]);
 
 export type BriefInput = {
   name: string;
@@ -165,12 +165,14 @@ export function briefSubject(name: string, company: string): string {
 
 export function briefBody(fields: BriefFields): string {
   const company = fields.company.trim() || "Not given";
+  const timeline = fields.timeline.trim() || "Not given";
+  const budget = fields.budget.trim() || "Not given";
   return [
     `Name: ${fields.name}`,
     `Email: ${fields.email}`,
     `Company: ${company}`,
-    `Timeline: ${fields.timeline}`,
-    `Budget: ${fields.budget}`,
+    `Timeline: ${timeline}`,
+    `Budget: ${budget}`,
     "",
     "What you need built:",
     fields.project,
