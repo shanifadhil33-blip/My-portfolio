@@ -1,22 +1,92 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { BUDGET_OPTIONS, TIMELINE_OPTIONS } from "@/lib/brief";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import {
+  attachmentError,
+  BRIEF_FIELD_ORDER,
+  BUDGET_OPTIONS,
+  type BriefFieldName,
+  parseBriefFields,
+  TIMELINE_OPTIONS,
+} from "@/lib/brief";
 import { EMAIL } from "@/lib/site";
 
-const fieldClass =
-  "mt-2 w-full min-h-11 rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground";
+function controlClass(invalid: boolean, extra = ""): string {
+  return `mt-2 w-full min-h-11 rounded-lg border ${invalid ? "border-accent" : "border-border"} bg-background px-4 py-3 text-base text-foreground${extra ? ` ${extra}` : ""}`;
+}
+
+function labelClass(invalid: boolean): string {
+  return `text-sm font-medium ${invalid ? "text-foreground" : "text-muted"}`;
+}
+
+function readBrief(data: FormData) {
+  const text = (key: string) => {
+    const value = data.get(key);
+    return typeof value === "string" ? value : "";
+  };
+  return {
+    name: text("name"),
+    email: text("email"),
+    company: text("company"),
+    project: text("project"),
+    timeline: text("timeline"),
+    budget: text("budget"),
+    hpField: text("hp_field"),
+  };
+}
+
+function invalidBrief(data: FormData): { error: string; fields: BriefFieldName[] } | null {
+  const parsed = parseBriefFields(readBrief(data));
+  const file = data.get("attachment");
+  const fileProblem = file instanceof File ? attachmentError(file) : null;
+  if (parsed.ok && !fileProblem) return null;
+  return {
+    error: [parsed.ok ? "" : parsed.error, fileProblem ?? ""].filter(Boolean).join(" "),
+    fields: parsed.ok ? [] : parsed.fields,
+  };
+}
 
 export default function BriefForm() {
   const [error, setError] = useState("");
+  const [invalidFields, setInvalidFields] = useState<BriefFieldName[]>([]);
   const [pending, setPending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [attempted, setAttempted] = useState(false);
   const [attachmentName, setAttachmentName] = useState("");
+  const [errorTick, setErrorTick] = useState(0);
   const attachmentRef = useRef<HTMLInputElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!errorTick) return;
+    errorRef.current?.focus();
+  }, [errorTick]);
+
+  function showInvalid(next: { error: string; fields: BriefFieldName[] }) {
+    setInvalidFields(next.fields);
+    setError(next.error);
+    setErrorTick((tick) => tick + 1);
+  }
+
+  function refreshAfterAttempt(form: HTMLFormElement) {
+    if (!attempted) return;
+    const failure = invalidBrief(new FormData(form));
+    if (!failure) {
+      setInvalidFields([]);
+      setError("");
+      return;
+    }
+    setInvalidFields(failure.fields);
+    setError(failure.error);
+  }
 
   function onAttachmentChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     setAttachmentName(file?.name ?? "");
+    if (attempted && event.currentTarget.form) {
+      refreshAfterAttempt(event.currentTarget.form);
+      return;
+    }
     if (file && file.size > 4 * 1024 * 1024) {
       setError("The file must be 4 MB or smaller.");
       return;
@@ -27,34 +97,52 @@ export default function BriefForm() {
   function clearAttachment() {
     if (attachmentRef.current) attachmentRef.current.value = "";
     setAttachmentName("");
+    const form = attachmentRef.current?.form;
+    if (attempted && form) {
+      refreshAfterAttempt(form);
+      return;
+    }
     setError((current) => (current === "The file must be 4 MB or smaller." ? "" : current));
+  }
+
+  function onFieldChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    const form = event.currentTarget.form;
+    if (form) refreshAfterAttempt(form);
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError("");
+    setAttempted(true);
 
     const form = event.currentTarget;
-    const data = new FormData(form);
-    const file = data.get("attachment");
-    if (file instanceof File && file.size > 4 * 1024 * 1024) {
-      setError("The file must be 4 MB or smaller.");
+    const failure = invalidBrief(new FormData(form));
+    if (failure) {
+      showInvalid(failure);
       return;
     }
 
+    setInvalidFields([]);
+    setError("");
     setPending(true);
     try {
-      const response = await fetch("/api/brief", { method: "POST", body: data });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
+      const response = await fetch("/api/brief", { method: "POST", body: new FormData(form) });
+      const payload = (await response.json()) as { ok?: boolean; error?: string; fields?: BriefFieldName[] };
       if (!response.ok || !payload.ok) {
-        setError(payload.error || `The brief could not be sent. Email ${EMAIL} instead.`);
+        const fields = (payload.fields ?? []).filter((field): field is BriefFieldName =>
+          (BRIEF_FIELD_ORDER as readonly string[]).includes(field),
+        );
+        showInvalid({
+          error: payload.error || `The brief could not be sent. Email ${EMAIL} instead.`,
+          fields,
+        });
         return;
       }
       setSent(true);
       form.reset();
       setAttachmentName("");
+      setAttempted(false);
     } catch {
-      setError(`The brief could not be sent. Email ${EMAIL} instead.`);
+      showInvalid({ error: `The brief could not be sent. Email ${EMAIL} instead.`, fields: [] });
     } finally {
       setPending(false);
     }
@@ -76,38 +164,85 @@ export default function BriefForm() {
       </div>
 
       <div>
-        <label htmlFor="name" className="text-sm font-medium text-muted">
+        <label htmlFor="name" className={labelClass(invalidFields.includes("name"))}>
           Name
         </label>
-        <input id="name" name="name" type="text" required autoComplete="name" className={fieldClass} />
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          autoComplete="name"
+          aria-invalid={invalidFields.includes("name") || undefined}
+          aria-describedby={invalidFields.includes("name") ? "brief-error" : undefined}
+          onChange={onFieldChange}
+          className={controlClass(invalidFields.includes("name"))}
+        />
       </div>
 
       <div>
-        <label htmlFor="email" className="text-sm font-medium text-muted">
+        <label htmlFor="email" className={labelClass(invalidFields.includes("email"))}>
           Email
         </label>
-        <input id="email" name="email" type="email" required autoComplete="email" className={fieldClass} />
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          aria-invalid={invalidFields.includes("email") || undefined}
+          aria-describedby={invalidFields.includes("email") ? "brief-error" : undefined}
+          onChange={onFieldChange}
+          className={controlClass(invalidFields.includes("email"))}
+        />
       </div>
 
       <div>
-        <label htmlFor="company" className="text-sm font-medium text-muted">
+        <label htmlFor="company" className={labelClass(invalidFields.includes("company"))}>
           Company <span className="font-normal">(optional)</span>
         </label>
-        <input id="company" name="company" type="text" autoComplete="organization" className={fieldClass} />
+        <input
+          id="company"
+          name="company"
+          type="text"
+          autoComplete="organization"
+          aria-invalid={invalidFields.includes("company") || undefined}
+          aria-describedby={invalidFields.includes("company") ? "brief-error" : undefined}
+          onChange={onFieldChange}
+          className={controlClass(invalidFields.includes("company"))}
+        />
       </div>
 
       <div>
-        <label htmlFor="project" className="text-sm font-medium text-muted">
+        <label htmlFor="project" className={labelClass(invalidFields.includes("project"))}>
           What you need built
         </label>
-        <textarea id="project" name="project" required rows={6} className={`${fieldClass} min-h-36`} />
+        <textarea
+          id="project"
+          name="project"
+          required
+          rows={6}
+          aria-invalid={invalidFields.includes("project") || undefined}
+          aria-describedby={invalidFields.includes("project") ? "brief-error" : undefined}
+          onChange={onFieldChange}
+          className={controlClass(invalidFields.includes("project"), "min-h-36")}
+        />
       </div>
 
       <div>
-        <label htmlFor="timeline" className="text-sm font-medium text-muted">
+        <label htmlFor="timeline" className={labelClass(invalidFields.includes("timeline"))}>
           Timeline
         </label>
-        <select id="timeline" name="timeline" required defaultValue="" className={fieldClass}>
+        <select
+          id="timeline"
+          name="timeline"
+          required
+          defaultValue=""
+          aria-invalid={invalidFields.includes("timeline") || undefined}
+          aria-describedby={invalidFields.includes("timeline") ? "brief-error" : undefined}
+          onChange={onFieldChange}
+          className={controlClass(invalidFields.includes("timeline"))}
+        >
           <option value="" disabled>
             Select a timeline
           </option>
@@ -120,10 +255,19 @@ export default function BriefForm() {
       </div>
 
       <div>
-        <label htmlFor="budget" className="text-sm font-medium text-muted">
+        <label htmlFor="budget" className={labelClass(invalidFields.includes("budget"))}>
           Budget range
         </label>
-        <select id="budget" name="budget" required defaultValue="" className={fieldClass}>
+        <select
+          id="budget"
+          name="budget"
+          required
+          defaultValue=""
+          aria-invalid={invalidFields.includes("budget") || undefined}
+          aria-describedby={invalidFields.includes("budget") ? "brief-error" : undefined}
+          onChange={onFieldChange}
+          className={controlClass(invalidFields.includes("budget"))}
+        >
           <option value="" disabled>
             Select a budget range
           </option>
@@ -173,7 +317,13 @@ export default function BriefForm() {
       </div>
 
       {error && (
-        <p role="alert" className="text-base leading-relaxed text-foreground">
+        <p
+          ref={errorRef}
+          id="brief-error"
+          role="alert"
+          tabIndex={-1}
+          className="rounded-lg border border-accent px-4 py-3 text-base font-medium leading-relaxed text-foreground"
+        >
           {error}
         </p>
       )}
@@ -181,6 +331,7 @@ export default function BriefForm() {
       <button
         type="submit"
         disabled={pending}
+        aria-describedby={error ? "brief-error" : undefined}
         className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover disabled:opacity-60 sm:w-auto"
       >
         {pending ? "Sending..." : "Send brief"}

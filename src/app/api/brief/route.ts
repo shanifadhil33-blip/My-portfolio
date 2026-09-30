@@ -42,7 +42,9 @@ export async function POST(request: Request) {
     hpField: text("hp_field"),
   });
 
-  if (!parsed.ok) return failure(parsed.error, 400);
+  if (!parsed.ok) {
+    return NextResponse.json({ ok: false, error: parsed.error, fields: parsed.fields }, { status: 400 });
+  }
   if (parsed.data.hpField.trim() !== "") {
     return NextResponse.json({ ok: true });
   }
