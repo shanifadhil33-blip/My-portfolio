@@ -9,6 +9,14 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
+function imagesForModal(project: Project): string[] {
+  if (project.hideMedia) return [];
+  const shots = (project.caseStudy?.screenshots ?? []).filter((src) => src.trim() !== "");
+  if (!project.thumbnail) return shots;
+  if (shots.includes(project.thumbnail)) return shots;
+  return [project.thumbnail, ...shots];
+}
+
 const labelClass = "mb-2 text-sm font-medium text-muted";
 const primaryButtonClass =
   "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent-hover";
@@ -16,13 +24,14 @@ const secondaryButtonClass =
   "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent hover:text-accent";
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
-  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const [zoomedSrc, setZoomedSrc] = useState<string | null>(null);
 
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
+  const modalImages = project ? imagesForModal(project) : [];
 
   const handleClose = useCallback(() => {
-    setIsImageZoomed(false);
+    setZoomedSrc(null);
     onClose();
   }, [onClose]);
 
@@ -145,25 +154,34 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </p>
               </div>
 
-              {project.thumbnail && !project.hideMedia && (
-                <button
-                  type="button"
-                  onClick={() => setIsImageZoomed(true)}
-                  className="relative mx-5 mt-6 block aspect-video w-[calc(100%-2.5rem)] cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left sm:mx-6 sm:w-[calc(100%-3rem)]"
-                  title="Zoom image"
-                >
-                  <span className="flex h-full w-full items-center justify-center text-sm text-muted">
-                    Main Screenshot
-                  </span>
-                  <img
-                    src={project.thumbnail}
-                    alt={`${project.title} main screenshot`}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                </button>
+              {modalImages.length > 0 && (
+                <div className="mx-5 mt-6 space-y-4 sm:mx-6">
+                  {modalImages.map((src, index) => (
+                    <button
+                      key={src}
+                      type="button"
+                      onClick={() => setZoomedSrc(src)}
+                      className="relative block aspect-video w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left"
+                      title="Zoom image"
+                    >
+                      <span className="flex h-full w-full items-center justify-center text-sm text-muted">
+                        {modalImages.length === 1 ? "Main Screenshot" : "Screenshot"}
+                      </span>
+                      <img
+                        src={src}
+                        alt={
+                          modalImages.length === 1
+                            ? `${project.title} main screenshot`
+                            : `${project.title} screenshot ${index + 1}`
+                        }
+                        className="absolute inset-0 h-full w-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
               )}
 
               <div className="space-y-6 p-5 sm:p-6">
@@ -314,13 +332,13 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
       )}
 
-      {project?.thumbnail && !project.hideMedia && isImageZoomed && (
+      {project && zoomedSrc && (
         <div
-          onClick={() => setIsImageZoomed(false)}
+          onClick={() => setZoomedSrc(null)}
           className="fixed inset-0 z-[200] flex cursor-zoom-out items-center justify-center bg-black/95 p-4"
         >
           <img
-            src={project.thumbnail}
+            src={zoomedSrc}
             alt={`${project.title} screenshot full size`}
             className="max-h-[90dvh] max-w-full object-contain"
           />
