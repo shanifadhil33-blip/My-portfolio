@@ -45,11 +45,11 @@ const briefFields = z.object({
 
 export type BriefFields = z.infer<typeof briefFields>;
 
-export const BRIEF_FIELD_NAMES = ["name", "email", "project", "timeline", "budget", "company"] as const;
+export const BRIEF_FIELD_ORDER = ["name", "email", "project", "timeline", "budget", "company"] as const;
 
-export type BriefFieldName = (typeof BRIEF_FIELD_NAMES)[number];
+export type BriefFieldName = (typeof BRIEF_FIELD_ORDER)[number];
 
-const FIELD_LABELS: Record<BriefFieldName, string> = {
+const BRIEF_FIELD_LABEL: Record<BriefFieldName, string> = {
   name: "Name",
   email: "Email",
   project: "What you need built",
@@ -58,7 +58,7 @@ const FIELD_LABELS: Record<BriefFieldName, string> = {
   company: "Company",
 };
 
-const REQUIRED_FIELDS = new Set<BriefFieldName>(["name", "email", "project"]);
+const REQUIRED_BRIEF_FIELDS = new Set<BriefFieldName>(["name", "email", "project"]);
 
 export type BriefInput = {
   name: string;
@@ -70,60 +70,56 @@ export type BriefInput = {
   hpField: string;
 };
 
-export function isBriefFieldName(value: string): value is BriefFieldName {
-  return (BRIEF_FIELD_NAMES as readonly string[]).includes(value);
+function isBriefField(value: string): value is BriefFieldName {
+  return (BRIEF_FIELD_ORDER as readonly string[]).includes(value);
 }
 
-function formatFieldList(labels: string[]): string {
-  if (labels.length <= 1) return labels[0] ?? "";
-  if (labels.length === 2) return `${labels[0]} and ${labels[1]}`;
-  return `${labels.slice(0, -1).join(", ")}, and ${labels[labels.length - 1]}`;
+function englishList(items: string[]): string {
+  if (items.length <= 1) return items[0] ?? "";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
 }
 
-function sentence(message: string): string {
-  return message.endsWith(".") ? message : `${message}.`;
-}
-
-export function parseBriefFields(
-  input: BriefInput,
-): { ok: true; data: BriefFields } | { ok: false; error: string; fields: BriefFieldName[] } {
-  const parsed = briefFields.safeParse(input);
-  if (parsed.success) return { ok: true, data: parsed.data };
-
-  const messages = new Map<BriefFieldName, string>();
-  for (const issue of parsed.error.issues) {
-    const key = issue.path[0];
-    if (typeof key !== "string" || !isBriefFieldName(key) || messages.has(key)) continue;
-    messages.set(key, issue.message);
-  }
-
-  const fields = BRIEF_FIELD_NAMES.filter((field) => messages.has(field));
+function briefFailureMessage(input: BriefInput, fields: Partial<Record<BriefFieldName, string>>): string {
   const missing: string[] = [];
-  const rest: string[] = [];
+  const invalid: string[] = [];
 
-  for (const field of fields) {
-    const message = messages.get(field);
+  for (const field of BRIEF_FIELD_ORDER) {
+    const message = fields[field];
     if (!message) continue;
-    if (REQUIRED_FIELDS.has(field) && input[field].trim() === "") {
-      missing.push(FIELD_LABELS[field]);
+    if (REQUIRED_BRIEF_FIELDS.has(field) && input[field].trim() === "") {
+      missing.push(BRIEF_FIELD_LABEL[field]);
       continue;
     }
-    rest.push(sentence(message));
+    invalid.push(message.endsWith(".") ? message : `${message}.`);
   }
 
   const parts = ["The brief was not sent."];
   if (missing.length === 1) parts.push(`Fill in ${missing[0]}.`);
-  else if (missing.length > 1) parts.push(`Fill in ${formatFieldList(missing)}.`);
-  parts.push(...rest);
+  else if (missing.length > 1) parts.push(`Fill in ${englishList(missing)}.`);
+  parts.push(...invalid);
+  return parts.join(" ");
+}
 
-  return {
-    ok: false,
-    error:
-      parts.length > 1
-        ? parts.join(" ")
-        : "The brief was not sent. Check the form and try again.",
-    fields,
-  };
+export function parseBriefFields(input: BriefInput):
+  | { ok: true; data: BriefFields }
+  | { ok: false; error: string; fields: BriefFieldName[] } {
+  const parsed = briefFields.safeParse(input);
+  if (!parsed.success) {
+    const messages: Partial<Record<BriefFieldName, string>> = {};
+    for (const issue of parsed.error.issues) {
+      const key = issue.path[0];
+      if (typeof key !== "string" || !isBriefField(key) || messages[key]) continue;
+      messages[key] = issue.message;
+    }
+    const fields = BRIEF_FIELD_ORDER.filter((field) => messages[field]);
+    return {
+      ok: false,
+      error: fields.length > 0 ? briefFailureMessage(input, messages) : "The brief was not sent. Check the form and try again.",
+      fields,
+    };
+  }
+  return { ok: true, data: parsed.data };
 }
 
 export function attachmentError(file: File | null): string | null {
@@ -169,12 +165,14 @@ export function briefSubject(name: string, company: string): string {
 
 export function briefBody(fields: BriefFields): string {
   const company = fields.company.trim() || "Not given";
+  const timeline = fields.timeline.trim() || "Not given";
+  const budget = fields.budget.trim() || "Not given";
   return [
     `Name: ${fields.name}`,
     `Email: ${fields.email}`,
     `Company: ${company}`,
-    `Timeline: ${fields.timeline || "Not given"}`,
-    `Budget: ${fields.budget || "Not given"}`,
+    `Timeline: ${timeline}`,
+    `Budget: ${budget}`,
     "",
     "What you need built:",
     fields.project,

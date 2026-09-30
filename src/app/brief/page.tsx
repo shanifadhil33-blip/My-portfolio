@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import BriefForm from "@/components/BriefForm";
 
 export const metadata: Metadata = {
-  title: "Send a written brief | Adhil Shanif",
+  title: "Send a brief | Adhil Shanif",
   description: "Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.",
 };
 
