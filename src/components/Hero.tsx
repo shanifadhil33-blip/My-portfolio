@@ -74,7 +74,7 @@ export default function Hero() {
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover"
             >
               <Mail size={16} aria-hidden />
-              Send a written brief
+              Send a brief
             </Link>
             <a
               href="#client-work"

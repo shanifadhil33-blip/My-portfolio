@@ -18,7 +18,7 @@ export default function Contact() {
               Contact
             </h2>
             <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted">
-              Tell me what you need built, your timeline and your budget. I reply in writing within 24 hours.
+              Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.
             </p>
             <div className="mt-4 flex items-center gap-2.5 text-muted">
               <Mail size={16} aria-hidden />
@@ -37,7 +37,7 @@ export default function Contact() {
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover sm:w-auto"
             >
               <Mail size={16} aria-hidden />
-              Send a written brief
+              Send a brief
             </Link>
             <a
               href={LINKEDIN_URL}
