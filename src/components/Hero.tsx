@@ -113,13 +113,16 @@ export default function Hero() {
             className="relative flex aspect-square w-[min(22.5rem,calc(100vw-2rem))] flex-col items-center justify-center rounded-full border border-border bg-background p-8 text-center"
             onClick={(e) => {
               e.stopPropagation();
-              // The card is a circle inside a square box: taps in the square's
-              // corners are visually outside the card, so close on those too.
+              // Portrait, copy, and icon links sit inside the round card.
+              if (e.target !== e.currentTarget) return;
+              // The card is a rounded box. Taps in its square corners are
+              // outside the painted shape, so close on those too.
               const rect = e.currentTarget.getBoundingClientRect();
-              const r = rect.width / 2;
-              const dx = e.clientX - (rect.left + r);
-              const dy = e.clientY - (rect.top + rect.height / 2);
-              if (dx * dx + dy * dy > r * r) {
+              const rx = rect.width / 2;
+              const ry = rect.height / 2;
+              const dx = (e.clientX - rect.left - rx) / rx;
+              const dy = (e.clientY - rect.top - ry) / ry;
+              if (dx * dx + dy * dy > 1) {
                 e.preventDefault();
                 setIsCardOpen(false);
               }
