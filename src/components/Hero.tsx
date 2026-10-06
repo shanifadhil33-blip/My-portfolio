@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowDown, X, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowDown, Mail } from "lucide-react";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, ROLE } from "@/lib/site";
 
 const GithubIcon = ({ size = 18 }: { size?: number }) => (
@@ -33,6 +33,15 @@ const socialLinkClass =
 
 export default function Hero() {
   const [isCardOpen, setIsCardOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isCardOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsCardOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isCardOpen]);
 
   return (
     <section
@@ -89,25 +98,36 @@ export default function Hero() {
 
       {isCardOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
-          onClick={() => setIsCardOpen(false)}
+          className="fixed inset-0 z-[100] flex h-[100dvh] w-full items-center justify-center bg-black/80 p-4"
+          aria-label="Close profile"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsCardOpen(false);
+          }}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Adhil Shanif"
             className="relative flex aspect-square w-[min(22.5rem,calc(100vw-2rem))] flex-col items-center justify-center rounded-full border border-border bg-background p-8 text-center"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              // Portrait, copy, and icon links sit inside the round card.
+              if (e.target !== e.currentTarget) return;
+              // The card is a rounded box. Taps in its square corners are
+              // outside the painted shape, so close on those too.
+              const rect = e.currentTarget.getBoundingClientRect();
+              const rx = rect.width / 2;
+              const ry = rect.height / 2;
+              const dx = (e.clientX - rect.left - rx) / rx;
+              const dy = (e.clientY - rect.top - ry) / ry;
+              if (dx * dx + dy * dy > 1) {
+                e.preventDefault();
+                setIsCardOpen(false);
+              }
+            }}
           >
-            <button
-              type="button"
-              onClick={() => setIsCardOpen(false)}
-              className="absolute top-8 right-8 flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70"
-              aria-label="Close card"
-            >
-              <X size={18} />
-            </button>
-
             <div className="mb-4 h-20 w-20 overflow-hidden rounded-full border border-border bg-background sm:h-24 sm:w-24">
               <img
                 src="/adhil-portrait.jpg"
