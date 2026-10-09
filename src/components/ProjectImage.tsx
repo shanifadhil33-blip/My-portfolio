@@ -11,6 +11,9 @@ const SCREENSHOT_SIZE: Record<string, { width: number; height: number }> = {
   "/screenshots/doctalk-home.png": { width: 1024, height: 525 },
   "/screenshots/doctalk-documents.png": { width: 1024, height: 665 },
   "/screenshots/doctalk-invoice.png": { width: 1024, height: 525 },
+  "/screenshots/cold_email_agent.png": { width: 1024, height: 529 },
+  "/screenshots/akhir_zamaan_pipeline.png": { width: 1024, height: 518 },
+  "/screenshots/instagram_carousel_pipeline.png": { width: 1024, height: 576 },
 };
 
 export const CARD_IMAGE_SIZES =
