@@ -10,6 +10,13 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
+function altForShot(project: Project, src: string, index: number, total: number): string {
+  const specific = project.caseStudy?.screenshotAlts?.[src];
+  if (specific) return specific;
+  if (total === 1) return `${project.title} main screenshot`;
+  return `${project.title} screenshot ${index + 1}`;
+}
+
 function imagesForModal(project: Project): string[] {
   if (project.hideMedia) return [];
   const shots = (project.caseStudy?.screenshots ?? []).filter((src) => src.trim() !== "");
@@ -236,11 +243,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     >
                       <ProjectImage
                         src={src}
-                        alt={
-                          modalImages.length === 1
-                            ? `${project.title} main screenshot`
-                            : `${project.title} screenshot ${index + 1}`
-                        }
+                        alt={altForShot(project, src, index, modalImages.length)}
                         sizes={MODAL_IMAGE_SIZES}
                         className="block h-auto w-full"
                       />
@@ -406,7 +409,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           <div className="max-h-[90dvh] max-w-full" onClick={(event) => event.stopPropagation()}>
             <ProjectImage
               src={zoomedSrc}
-              alt={`${project.title} screenshot full size`}
+              alt={
+                project.caseStudy?.screenshotAlts?.[zoomedSrc] ??
+                `${project.title} screenshot full size`
+              }
               sizes="90vw"
               className="block h-auto max-h-[90dvh] w-auto max-w-full object-contain"
             />

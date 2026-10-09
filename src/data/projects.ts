@@ -16,6 +16,7 @@ export interface Project {
     solution: string;
     outcome?: string;
     screenshots?: string[];
+    screenshotAlts?: Record<string, string>;
   };
   role?: string;
   methodology?: string;
@@ -68,6 +69,10 @@ const baseProjects: Project[] = [
         "/screenshots/reclaim-letter.png",
         "/screenshots/reclaim-history.png",
       ],
+      screenshotAlts: {
+        "/screenshots/reclaim-review.png":
+          "Check the extracted fields against the PDF, then generate or review the letter.",
+      },
     },
     keyDecisions:
       "Reclaim reads page images rather than relying only on text, because fax-style statements often have no usable text layer. The cost is bigger requests, so pages go three at a time and narrow pages fall back to text. A plain parser runs before any AI call on text, so standard tables cost nothing. The worklist is kept in the browser rather than the database, so fewer claim details are stored. The catch is that it doesn't follow you to another device. The model never has the last word: a person ticks \"verified\" before a letter is written, and the code sets the date and the patient name itself.",
