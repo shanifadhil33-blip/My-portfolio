@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Project } from "@/data/projects";
+import ProjectImage, { CARD_IMAGE_SIZES } from "./ProjectImage";
 
 interface ProjectCardProps {
   project: Project;
@@ -9,34 +9,24 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, onClick }: ProjectCardProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
   const canOpen = Boolean(project.caseStudy);
 
   const className = `group flex h-full w-full flex-col overflow-hidden rounded-lg border border-border bg-background text-left transition-colors duration-150 ${
-    canOpen ? "cursor-pointer hover:border-foreground/30" : ""
+    canOpen
+      ? "cursor-pointer active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30"
+      : ""
   }`;
 
   const body = (
     <>
-      {!project.hideMedia && (
-        <div className="relative flex aspect-video shrink-0 items-center justify-center overflow-hidden border-b border-border bg-background">
-          {!isLoaded && (
-            <span className="text-sm text-muted">
-              {project.comingSoon ? "Coming soon" : "Screenshot"}
-            </span>
-          )}
-
-          {project.thumbnail && (
-            <img
-              src={project.thumbnail}
-              alt={project.title}
-              className="absolute inset-0 h-full w-full object-cover"
-              onLoad={() => setIsLoaded(true)}
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-            />
-          )}
+      {!project.hideMedia && project.thumbnail && (
+        <div className="overflow-hidden border-b border-border bg-background">
+          <ProjectImage
+            src={project.thumbnail}
+            alt={`${project.title} screenshot`}
+            sizes={CARD_IMAGE_SIZES}
+            className="block h-auto w-full"
+          />
         </div>
       )}
 
@@ -48,7 +38,7 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
             </span>
           )}
           <h3 className="text-lg font-medium text-foreground">{project.title}</h3>
-          <p className="mt-2 line-clamp-2 text-base leading-relaxed text-muted">{project.brief}</p>
+          <p className="mt-2 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
           {project.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
@@ -75,12 +65,7 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
   }
 
   return (
-    <button
-      id={`project-card-${project.id}`}
-      type="button"
-      onClick={onClick}
-      className={className}
-    >
+    <button id={`project-card-${project.id}`} type="button" onClick={onClick} className={className}>
       {body}
     </button>
   );

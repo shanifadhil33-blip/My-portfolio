@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowDown, Mail } from "lucide-react";
+import { ArrowDown, Mail, X } from "lucide-react";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, ROLE } from "@/lib/site";
 
 const GithubIcon = ({ size = 18 }: { size?: number }) => (
@@ -36,11 +37,18 @@ export default function Hero() {
 
   useEffect(() => {
     if (!isCardOpen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsCardOpen(false);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsCardOpen(false);
     };
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    const closeButton = document.getElementById("profile-card-close");
+    if (closeButton instanceof HTMLElement) closeButton.focus();
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, [isCardOpen]);
 
   return (
@@ -55,11 +63,14 @@ export default function Hero() {
           onClick={() => setIsCardOpen(true)}
           aria-label="Open profile"
         >
-          <div className="h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44">
-            <img
+          <div className="relative h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44">
+            <Image
               src="/adhil-portrait.jpg"
               alt="Adhil Shanif"
-              className="h-full w-full object-cover object-center"
+              fill
+              sizes="176px"
+              priority
+              className="object-cover object-center"
             />
           </div>
         </button>
@@ -106,6 +117,18 @@ export default function Hero() {
             setIsCardOpen(false);
           }}
         >
+          <button
+            id="profile-card-close"
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsCardOpen(false);
+            }}
+            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground"
+            aria-label="Close profile"
+          >
+            <X size={16} />
+          </button>
           <div
             role="dialog"
             aria-modal="true"
@@ -128,11 +151,13 @@ export default function Hero() {
               }
             }}
           >
-            <div className="mb-4 h-20 w-20 overflow-hidden rounded-full border border-border bg-background sm:h-24 sm:w-24">
-              <img
+            <div className="relative mb-4 h-20 w-20 overflow-hidden rounded-full border border-border bg-background sm:h-24 sm:w-24">
+              <Image
                 src="/adhil-portrait.jpg"
                 alt="Adhil Shanif"
-                className="h-full w-full object-cover object-center"
+                fill
+                sizes="96px"
+                className="object-cover object-center"
               />
             </div>
 
@@ -150,10 +175,11 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 className={socialLinkClass}
                 title="LinkedIn"
+                aria-label="LinkedIn"
               >
                 <LinkedinIcon size={18} />
               </a>
-              <a href={`mailto:${EMAIL}`} className={socialLinkClass} title="Email">
+              <a href={`mailto:${EMAIL}`} className={socialLinkClass} title="Email" aria-label="Email">
                 <Mail size={18} />
               </a>
               <a
@@ -162,6 +188,7 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 className={socialLinkClass}
                 title="GitHub"
+                aria-label="GitHub"
               >
                 <GithubIcon size={18} />
               </a>

@@ -12,7 +12,7 @@ export function OgCard() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        backgroundColor: "#030014",
+        backgroundColor: "#0b0b0c",
         padding: "72px 80px",
       }}
     >
@@ -20,7 +20,7 @@ export function OgCard() {
         style={{
           width: 72,
           height: 4,
-          backgroundColor: "#6366f1",
+          backgroundColor: "#c4b59a",
           borderRadius: 999,
           marginBottom: 36,
         }}
@@ -29,7 +29,7 @@ export function OgCard() {
         style={{
           fontSize: 76,
           fontWeight: 700,
-          color: "#f8fafc",
+          color: "#ededed",
           letterSpacing: "-0.03em",
           lineHeight: 1.05,
         }}
@@ -41,7 +41,7 @@ export function OgCard() {
           marginTop: 28,
           fontSize: 34,
           fontWeight: 600,
-          color: "#818cf8",
+          color: "#c4b59a",
           lineHeight: 1.3,
         }}
       >
