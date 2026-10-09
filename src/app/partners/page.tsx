@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BackHome from "@/components/BackHome";
 import { namedClientProjects } from "@/data/clientWork";
 import { mailtoHref, UPWORK_URL } from "@/lib/site";
 
@@ -21,7 +22,8 @@ export default function PartnersPage() {
     <>
       <main className="flex-1 px-5 py-24 sm:px-6 md:py-40">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-balance text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+          <BackHome />
+          <h1 className="mt-6 text-balance text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
             Build partner for agencies
           </h1>
 
@@ -54,16 +56,16 @@ export default function PartnersPage() {
           </ul>
 
           <p className="mt-10 text-base leading-relaxed text-muted">
-            Top Rated on Upwork, 100% Job Success, 5.0 client rating.{" "}
-            <a
-              href={UPWORK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover"
-            >
-              Upwork profile
-            </a>
+            Top Rated on Upwork, 100% Job Success, 5.0 client rating.
           </p>
+          <a
+            href={UPWORK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex min-h-11 items-center text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover"
+          >
+            Upwork profile
+          </a>
 
           <a
             href={mailtoHref("Partnership")}

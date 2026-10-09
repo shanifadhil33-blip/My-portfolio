@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, type KeyboardEvent as ReactKeyboardEvent, useEffect, useId, useRef, useState } from "react";
+import { Check, Loader2 } from "lucide-react";
+import BackHome from "@/components/BackHome";
 import {
   attachmentError,
   BRIEF_FIELD_ORDER,
@@ -14,10 +15,6 @@ import { EMAIL } from "@/lib/site";
 
 function controlClass(invalid: boolean, extra = ""): string {
   return `field mt-2 w-full min-h-11 rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground${invalid ? " is-invalid" : ""}${extra ? ` ${extra}` : ""}`;
-}
-
-function selectClass(invalid: boolean): string {
-  return `field select-field mt-2 w-full min-h-11 cursor-pointer rounded-lg border border-border bg-background py-3 pl-4 text-base text-foreground${invalid ? " is-invalid" : ""}`;
 }
 
 function labelClass(invalid: boolean): string {
@@ -38,6 +35,142 @@ function readBrief(data: FormData) {
     budget: text("budget"),
     hpField: text("hp_field"),
   };
+}
+
+function ChoiceField({
+  id,
+  name,
+  label,
+  optional,
+  placeholder,
+  options,
+  invalid,
+  describedBy,
+  onPicked,
+}: {
+  id: string;
+  name: string;
+  label: string;
+  optional?: boolean;
+  placeholder: string;
+  options: readonly string[];
+  invalid: boolean;
+  describedBy?: string;
+  onPicked: (form: HTMLFormElement) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [dropUp, setDropUp] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const hiddenRef = useRef<HTMLInputElement>(null);
+  const listId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        document.getElementById(id)?.focus();
+      }
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      if (rootRef.current && event.target instanceof Node && !rootRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    const selected = rootRef.current?.querySelector<HTMLElement>('[aria-selected="true"]');
+    const firstOption = rootRef.current?.querySelector<HTMLElement>('[role="option"]');
+    (selected ?? firstOption)?.focus();
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [id, open]);
+
+  function toggle() {
+    if (!open && rootRef.current) {
+      const rect = rootRef.current.getBoundingClientRect();
+      setDropUp(window.innerHeight - rect.bottom < 240 && rect.top > 240);
+    }
+    setOpen((current) => !current);
+  }
+
+  function pick(option: string) {
+    setValue(option);
+    if (hiddenRef.current) hiddenRef.current.value = option;
+    setOpen(false);
+    document.getElementById(id)?.focus();
+    const form = rootRef.current?.closest("form");
+    if (form) onPicked(form);
+  }
+
+  function onListKeyDown(event: ReactKeyboardEvent<HTMLUListElement>) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    event.preventDefault();
+    const buttons = [...event.currentTarget.querySelectorAll("button")];
+    const current = buttons.findIndex((button) => button === document.activeElement);
+    const next = event.key === "ArrowDown" ? current + 1 : current - 1;
+    buttons[Math.min(buttons.length - 1, Math.max(0, next))]?.focus();
+  }
+
+  return (
+    <div ref={rootRef} className="relative">
+      <label htmlFor={id} className={labelClass(invalid)}>
+        {label} {optional ? <span className="font-normal">(optional)</span> : null}
+      </label>
+      <input ref={hiddenRef} type="hidden" name={name} defaultValue="" />
+      <button
+        id={id}
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-describedby={describedBy}
+        onClick={toggle}
+        className={`mt-2 flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border bg-background py-3 pr-2.5 pl-4 text-left text-base ${
+          invalid ? "border-foreground/35" : "border-border"
+        }`}
+      >
+        <span className={`min-w-0 truncate ${value ? "text-foreground" : "text-muted"}`}>
+          {value || placeholder}
+        </span>
+        <svg width="8" height="5" viewBox="0 0 8 5" aria-hidden className="shrink-0">
+          <path fill="currentColor" d="M0 0h8L4 5z" />
+        </svg>
+      </button>
+      {open ? (
+        <ul
+          id={listId}
+          role="listbox"
+          aria-label={label}
+          onKeyDown={onListKeyDown}
+          className={`absolute right-0 left-0 z-30 max-h-60 overflow-auto rounded-lg border border-border bg-background py-1 ${
+            dropUp ? "bottom-full mb-1" : "top-full mt-1"
+          }`}
+        >
+          {options.map((option) => {
+            const selected = value === option;
+            return (
+              <li key={option}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  onClick={() => pick(option)}
+                  className="flex min-h-11 w-full items-center justify-between gap-3 px-4 text-left text-base text-foreground active:bg-foreground/5"
+                >
+                  <span>{option}</span>
+                  {selected ? <Check size={16} aria-hidden /> : <span className="w-4" aria-hidden />}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+    </div>
+  );
 }
 
 function invalidBrief(data: FormData): { error: string; fields: BriefFieldName[] } | null {
@@ -61,15 +194,23 @@ export default function BriefForm() {
   const [errorTick, setErrorTick] = useState(0);
   const attachmentRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
+  const focusField = useRef<BriefFieldName | null>(null);
 
   useEffect(() => {
     if (!errorTick) return;
+    const fieldId = focusField.current;
+    const field = fieldId ? document.getElementById(fieldId) : null;
+    if (field instanceof HTMLElement) {
+      field.focus();
+      return;
+    }
     errorRef.current?.focus();
   }, [errorTick]);
 
   function showInvalid(next: { error: string; fields: BriefFieldName[] }) {
     setInvalidFields(next.fields);
     setError(next.error);
+    focusField.current = next.fields[0] ?? null;
     setErrorTick((tick) => tick + 1);
   }
 
@@ -155,8 +296,9 @@ export default function BriefForm() {
 
   if (sent) {
     return (
-      <div className="mx-auto flex w-full max-w-xl flex-1 items-center">
-        <p className="w-full rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground">
+      <div className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center">
+        <BackHome />
+        <p className="mt-6 w-full rounded-lg border border-border px-5 py-4 text-base leading-relaxed text-foreground">
           Thanks. I&apos;ll reply by email within 24 hours.
         </p>
       </div>
@@ -165,12 +307,7 @@ export default function BriefForm() {
 
   return (
     <div className="mx-auto w-full max-w-xl">
-      <Link
-        href="/"
-        className="inline-flex min-h-11 items-center text-sm text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
-      >
-        Adhil Shanif
-      </Link>
+      <BackHome />
       <h1 className="mt-6 text-balance text-3xl font-medium tracking-tight text-foreground">
         Send a brief
       </h1>
@@ -249,53 +386,29 @@ export default function BriefForm() {
           />
         </div>
 
-        <div>
-          <label htmlFor="timeline" className={labelClass(invalidFields.includes("timeline"))}>
-            Timeline <span className="font-normal">(optional)</span>
-          </label>
-          <select
-            id="timeline"
-            name="timeline"
-            defaultValue=""
-            aria-invalid={invalidFields.includes("timeline") || undefined}
-            aria-describedby={invalidFields.includes("timeline") ? "brief-error" : undefined}
-            onChange={onFieldChange}
-            className={selectClass(invalidFields.includes("timeline"))}
-          >
-            <option value="" disabled>
-              Select a timeline
-            </option>
-            {TIMELINE_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+        <ChoiceField
+          id="timeline"
+          name="timeline"
+          label="Timeline"
+          optional
+          placeholder="Select a timeline"
+          options={TIMELINE_OPTIONS}
+          invalid={invalidFields.includes("timeline")}
+          describedBy={invalidFields.includes("timeline") ? "brief-error" : undefined}
+          onPicked={refreshAfterAttempt}
+        />
 
-        <div>
-          <label htmlFor="budget" className={labelClass(invalidFields.includes("budget"))}>
-            Budget range <span className="font-normal">(optional)</span>
-          </label>
-          <select
-            id="budget"
-            name="budget"
-            defaultValue=""
-            aria-invalid={invalidFields.includes("budget") || undefined}
-            aria-describedby={invalidFields.includes("budget") ? "brief-error" : undefined}
-            onChange={onFieldChange}
-            className={selectClass(invalidFields.includes("budget"))}
-          >
-            <option value="" disabled>
-              Select a budget range
-            </option>
-            {BUDGET_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+        <ChoiceField
+          id="budget"
+          name="budget"
+          label="Budget range"
+          optional
+          placeholder="Select a budget range"
+          options={BUDGET_OPTIONS}
+          invalid={invalidFields.includes("budget")}
+          describedBy={invalidFields.includes("budget") ? "brief-error" : undefined}
+          onPicked={refreshAfterAttempt}
+        />
 
         <div>
           <span id="attachment-label" className="text-sm font-medium text-muted">
@@ -349,10 +462,19 @@ export default function BriefForm() {
         <button
           type="submit"
           disabled={pending}
+          aria-busy={pending}
           aria-describedby={error ? "brief-error" : undefined}
           className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed disabled:opacity-60 sm:w-auto"
         >
-          {pending ? "Sending..." : "Send brief"}
+          <span className="grid">
+            <span
+              className={`col-start-1 row-start-1 inline-flex items-center justify-center gap-2 ${pending ? "" : "invisible"}`}
+            >
+              <Loader2 className="animate-spin" size={16} aria-hidden />
+              Sending...
+            </span>
+            <span className={`col-start-1 row-start-1 ${pending ? "invisible" : ""}`}>Send brief</span>
+          </span>
         </button>
       </form>
     </div>

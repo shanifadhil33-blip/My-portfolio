@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navLinks = [
@@ -21,6 +21,25 @@ function scrollToSection(href: string) {
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      const nav = document.getElementById("navbar");
+      if (nav && event.target instanceof Node && !nav.contains(event.target)) {
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [mobileOpen]);
+
   return (
     <nav id="navbar" className="absolute top-0 right-0 left-0 z-50 bg-transparent">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
@@ -39,7 +58,7 @@ export default function Navbar() {
               onClick={(e) => {
                 if (scrollToSection(link.href)) e.preventDefault();
               }}
-              className="rounded-lg px-4 py-2 text-sm text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
+              className="inline-flex min-h-11 items-center rounded-lg px-4 text-sm text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
             >
               {link.label}
             </a>
@@ -51,7 +70,7 @@ export default function Navbar() {
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
           className="flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70 md:hidden"
-          aria-label="Toggle menu"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
         >
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}

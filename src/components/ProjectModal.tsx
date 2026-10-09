@@ -1,12 +1,20 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { Project } from "@/data/projects";
-import { X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
+import ProjectImage, { MODAL_IMAGE_SIZES } from "./ProjectImage";
 
 interface ProjectModalProps {
   project: Project | null;
   onClose: () => void;
+}
+
+function altForShot(project: Project, src: string, index: number, total: number): string {
+  const specific = project.caseStudy?.screenshotAlts?.[src];
+  if (specific) return specific;
+  if (total === 1) return `${project.title} main screenshot`;
+  return `${project.title} screenshot ${index + 1}`;
 }
 
 function imagesForModal(project: Project): string[] {
@@ -17,42 +25,116 @@ function imagesForModal(project: Project): string[] {
   return [project.thumbnail, ...shots];
 }
 
+function hasTechnicalDetails(project: Project): boolean {
+  return Boolean(
+    (project.techStackDetailed && project.techStackDetailed.length > 0) ||
+      project.keyDecisions ||
+      project.systemOverview ||
+      (project.stages && project.stages.length > 0) ||
+      (project.constraints && project.constraints.length > 0) ||
+      project.maintenanceProfile,
+  );
+}
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, summary, [tabindex]:not([tabindex="-1"])';
+
+function focusableIn(root: ParentNode | null): HTMLElement[] {
+  if (!root) return [];
+  return [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+    (element) => !element.hasAttribute("disabled") && element.tabIndex !== -1,
+  );
+}
+
 const labelClass = "mb-2 text-sm font-medium text-muted";
 const primaryButtonClass =
-  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed";
+  "inline-flex min-h-11 w-full shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed sm:w-auto";
 const secondaryButtonClass =
-  "inline-flex min-h-11 shrink-0 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5";
+  "inline-flex min-h-11 w-full shrink-0 cursor-pointer items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5 sm:w-auto";
+
+const plainSections = [
+  { key: "problem" as const, label: "Who it's for and the problem" },
+  { key: "solution" as const, label: "What it does" },
+  { key: "outcome" as const, label: "What you get" },
+];
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [zoomedSrc, setZoomedSrc] = useState<string | null>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
+  const zoomCloseRef = useRef<HTMLButtonElement>(null);
 
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
   const modalImages = project ? imagesForModal(project) : [];
+  const showTechnical = project ? hasTechnicalDetails(project) : false;
+  const plain = plainSections
+    .map((section) => ({
+      label: section.label,
+      text: project?.caseStudy?.[section.key],
+    }))
+    .filter((section): section is { label: string; text: string } => Boolean(section.text));
 
   const handleClose = useCallback(() => {
     setZoomedSrc(null);
     onClose();
   }, [onClose]);
 
+  const openTechnicalDetails = useCallback(() => {
+    const details = document.getElementById("technical-details");
+    if (!(details instanceof HTMLDetailsElement)) return;
+    details.open = true;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() => {
+      details.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+  }, []);
+
   useEffect(() => {
-    if (project) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!project) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    document.getElementById("project-modal-close")?.focus();
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previous;
+      returnFocus.current?.focus();
     };
   }, [project]);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
+    if (zoomedSrc) zoomCloseRef.current?.focus();
+  }, [zoomedSrc]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (zoomedSrc) {
+          setZoomedSrc(null);
+          return;
+        }
+        if (project) handleClose();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const root = zoomedSrc
+        ? document.getElementById("screenshot-zoom")
+        : document.getElementById("project-modal-content");
+      const nodes = focusableIn(root);
+      if (nodes.length === 0) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [handleClose]);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleClose, project, zoomedSrc]);
 
   return (
     <>
@@ -72,10 +154,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-modal-title"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
             className="relative flex max-h-[90dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-lg border border-border bg-background sm:rounded-lg"
           >
-            <div className="sticky top-0 z-20 flex justify-end p-4 pb-0">
+            <div className="flex justify-end p-4 pb-0">
               <button
                 id="project-modal-close"
                 type="button"
@@ -134,24 +216,19 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                         {project.liveUrlLabel || "Visit Site"}
                       </a>
                     )}
-                    {!hasGithub && !hasLive && project.systemOverview && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          document
-                            .getElementById("technical-details")
-                            ?.scrollIntoView({ behavior: "smooth" });
-                        }}
-                        className={`${primaryButtonClass} cursor-pointer`}
-                      >
+                    {showTechnical && (hasGithub || hasLive) && (
+                      <button type="button" onClick={openTechnicalDetails} className={secondaryButtonClass}>
+                        Technical details
+                      </button>
+                    )}
+                    {showTechnical && !hasGithub && !hasLive && (
+                      <button type="button" onClick={openTechnicalDetails} className={primaryButtonClass}>
                         View Specs
                       </button>
                     )}
                   </div>
                 </div>
-                <p className="mt-3 text-pretty text-base leading-relaxed text-muted">
-                  {project.brief}
-                </p>
+                <p className="mt-3 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
               </div>
 
               {modalImages.length > 0 && (
@@ -161,23 +238,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                       key={src}
                       type="button"
                       onClick={() => setZoomedSrc(src)}
-                      className="relative block aspect-video w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left"
+                      className="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left transition-colors duration-150 active:border-foreground/40 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30"
                       title="Zoom image"
                     >
-                      <span className="flex h-full w-full items-center justify-center text-sm text-muted">
-                        {modalImages.length === 1 ? "Main Screenshot" : "Screenshot"}
-                      </span>
-                      <img
+                      <ProjectImage
                         src={src}
-                        alt={
-                          modalImages.length === 1
-                            ? `${project.title} main screenshot`
-                            : `${project.title} screenshot ${index + 1}`
-                        }
-                        className="absolute inset-0 h-full w-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
+                        alt={altForShot(project, src, index, modalImages.length)}
+                        sizes={MODAL_IMAGE_SIZES}
+                        className="block h-auto w-full"
                       />
                     </button>
                   ))}
@@ -198,133 +266,121 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                     {project.methodology && (
                       <div>
                         <span className="text-sm font-medium text-muted">Methodology</span>
-                        <p className="mt-1 text-base font-medium text-foreground">
-                          {project.methodology}
-                        </p>
+                        <p className="mt-1 text-base font-medium text-foreground">{project.methodology}</p>
                       </div>
                     )}
                   </div>
                 )}
 
-                {[
-                  { label: "Problem", text: project.caseStudy?.problem },
-                  { label: "Solution", text: project.caseStudy?.solution },
-                  { label: "Outcome", text: project.caseStudy?.outcome },
-                ]
-                  .filter((section): section is { label: string; text: string } =>
-                    Boolean(section.text),
-                  )
-                  .map((section) => (
-                    <div key={section.label}>
-                      <h3 className={labelClass}>{section.label}</h3>
-                      <p className="text-pretty text-base leading-relaxed text-muted">
-                        {section.text}
-                      </p>
-                    </div>
-                  ))}
-
-                {project.techStackDetailed && project.techStackDetailed.length > 0 && (
-                  <div>
-                    <h3 className={`${labelClass} mb-3`}>Tech Stack</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {project.techStackDetailed.map((tech) => (
-                        <span
-                          key={tech}
-                          className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
+                {plain.length > 0 && (
+                  <div className="space-y-6">
+                    <h3 className="text-base font-medium text-foreground">In plain words</h3>
+                    {plain.map((section) => (
+                      <div key={section.label}>
+                        <h4 className={labelClass}>{section.label}</h4>
+                        <p className="text-pretty text-base leading-relaxed text-muted">{section.text}</p>
+                      </div>
+                    ))}
                   </div>
                 )}
 
-                {project.keyDecisions && (
-                  <div>
-                    <h3 className={labelClass}>Key Engineering Decisions</h3>
-                    <p className="text-pretty text-base leading-relaxed text-muted">
-                      {project.keyDecisions}
-                    </p>
-                  </div>
-                )}
+                {showTechnical && (
+                  <details id="technical-details" className="hood-panel scroll-mt-4 rounded-lg border border-border">
+                    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left text-base font-medium text-foreground transition-colors duration-150 active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-foreground/5">
+                      <span className="text-pretty">Under the hood: stack, architecture and trade-offs</span>
+                      <ChevronDown className="hood-chevron shrink-0" size={16} aria-hidden />
+                    </summary>
+                    <div className="space-y-6 border-t border-border px-4 py-5">
+                      {project.techStackDetailed && project.techStackDetailed.length > 0 && (
+                        <div>
+                          <h3 className={`${labelClass} mb-3`}>Tech Stack</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {project.techStackDetailed.map((tech) => (
+                              <span
+                                key={tech}
+                                className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                {project.systemOverview && (
-                  <div
-                    id="technical-details"
-                    className="scroll-mt-6 space-y-6 border-t border-border pt-4"
-                  >
-                    <div>
-                      <h3 className={`${labelClass} mb-3`}>System Overview</h3>
-                      <p className="text-pretty text-base leading-relaxed whitespace-pre-line text-muted">
-                        {project.systemOverview}
-                      </p>
-                    </div>
+                      {project.systemOverview && (
+                        <div>
+                          <h3 className={`${labelClass} mb-3`}>System Overview</h3>
+                          <p className="text-pretty text-base leading-relaxed whitespace-pre-line text-muted">
+                            {project.systemOverview}
+                          </p>
+                        </div>
+                      )}
 
-                    {project.stages && project.stages.length > 0 && (
-                      <div className="space-y-4 pt-2">
-                        <h3 className={labelClass}>The 4-Stage Architecture</h3>
+                      {project.stages && project.stages.length > 0 && (
                         <div className="space-y-4">
-                          {project.stages.map((stage) => (
-                            <div
-                              key={stage.title}
-                              className="rounded-lg border border-border p-4 transition-colors duration-150 hover:border-foreground/25"
-                            >
-                              <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                                <h4 className="text-base font-medium text-foreground">
-                                  {stage.title}
-                                </h4>
-                                {stage.engine && (
-                                  <span className="rounded border border-border px-2 py-1 text-xs text-muted">
-                                    {stage.engine}
-                                  </span>
+                          <h3 className={labelClass}>Pipeline</h3>
+                          <div className="space-y-4">
+                            {project.stages.map((stage) => (
+                              <div key={stage.title} className="rounded-lg border border-border p-4">
+                                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                                  <h4 className="text-base font-medium text-foreground">{stage.title}</h4>
+                                  {stage.engine && (
+                                    <span className="rounded border border-border px-2 py-1 text-xs text-muted">
+                                      {stage.engine}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm leading-relaxed text-muted">{stage.description}</p>
+                                {stage.bulletPoints && stage.bulletPoints.length > 0 && (
+                                  <ul className="mt-2.5 space-y-1.5">
+                                    {stage.bulletPoints.map((point, index) => (
+                                      <li key={index} className="text-sm leading-relaxed text-muted">
+                                        {point.startsWith("Constraint: ")
+                                          ? point.substring(12)
+                                          : point.startsWith("Result: ")
+                                            ? point.substring(8)
+                                            : point}
+                                      </li>
+                                    ))}
+                                  </ul>
                                 )}
                               </div>
-                              <p className="text-sm leading-relaxed text-muted">{stage.description}</p>
-                              {stage.bulletPoints && stage.bulletPoints.length > 0 && (
-                                <ul className="mt-2.5 space-y-1.5">
-                                  {stage.bulletPoints.map((pt, index) => (
-                                    <li key={index} className="text-sm leading-relaxed text-muted">
-                                      {pt.startsWith("Constraint: ")
-                                        ? pt.substring(12)
-                                        : pt.startsWith("Result: ")
-                                          ? pt.substring(8)
-                                          : pt}
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {project.constraints && project.constraints.length > 0 && (
-                      <div className="space-y-4 pt-2">
-                        <h3 className={labelClass}>Engineering Constraints & Solutions</h3>
-                        <div className="grid grid-cols-1 gap-3.5">
-                          {project.constraints.map((c) => (
-                            <div
-                              key={c.title}
-                              className="rounded-lg border border-border p-4 transition-colors duration-150 hover:border-foreground/25"
-                            >
-                              <h4 className="mb-1.5 text-sm font-medium text-foreground">{c.title}</h4>
-                              <p className="text-sm leading-relaxed text-muted">{c.description}</p>
-                            </div>
-                          ))}
+                      {project.constraints && project.constraints.length > 0 && (
+                        <div className="space-y-4">
+                          <h3 className={labelClass}>Reliability and safety</h3>
+                          <div className="grid grid-cols-1 gap-3.5">
+                            {project.constraints.map((constraint) => (
+                              <div key={constraint.title} className="rounded-lg border border-border p-4">
+                                <h4 className="mb-1.5 text-sm font-medium text-foreground">{constraint.title}</h4>
+                                <p className="text-sm leading-relaxed text-muted">{constraint.description}</p>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {project.maintenanceProfile && (
-                      <div className="pt-2">
-                        <h3 className={labelClass}>Maintenance Profile</h3>
-                        <p className="rounded-lg border border-border p-3 text-sm leading-relaxed text-muted">
-                          {project.maintenanceProfile}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                      {project.keyDecisions && (
+                        <div>
+                          <h3 className={labelClass}>Key decisions and trade-offs</h3>
+                          <p className="text-pretty text-base leading-relaxed text-muted">{project.keyDecisions}</p>
+                        </div>
+                      )}
+
+                      {project.maintenanceProfile && (
+                        <div>
+                          <h3 className={labelClass}>Maintenance Profile</h3>
+                          <p className="rounded-lg border border-border p-3 text-sm leading-relaxed text-muted">
+                            {project.maintenanceProfile}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </details>
                 )}
               </div>
             </div>
@@ -334,14 +390,33 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
       {project && zoomedSrc && (
         <div
+          id="screenshot-zoom"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${project.title} screenshot`}
           onClick={() => setZoomedSrc(null)}
           className="fixed inset-0 z-[200] flex cursor-zoom-out items-center justify-center bg-black/95 p-4"
         >
-          <img
-            src={zoomedSrc}
-            alt={`${project.title} screenshot full size`}
-            className="max-h-[90dvh] max-w-full object-contain"
-          />
+          <button
+            ref={zoomCloseRef}
+            type="button"
+            onClick={() => setZoomedSrc(null)}
+            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
+            aria-label="Close screenshot"
+          >
+            <X size={16} />
+          </button>
+          <div className="max-h-[90dvh] max-w-full" onClick={(event) => event.stopPropagation()}>
+            <ProjectImage
+              src={zoomedSrc}
+              alt={
+                project.caseStudy?.screenshotAlts?.[zoomedSrc] ??
+                `${project.title} screenshot full size`
+              }
+              sizes="90vw"
+              className="block h-auto max-h-[90dvh] w-auto max-w-full object-contain"
+            />
+          </div>
         </div>
       )}
     </>

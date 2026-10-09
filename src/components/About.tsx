@@ -73,7 +73,7 @@ export default function About() {
               {stats.map((stat) => (
                 <div
                   key={stat}
-                  className={`${cardClass} flex flex-col items-center p-6 text-center transition-colors duration-150 hover:border-foreground/25 lg:items-start lg:text-left`}
+                  className={`${cardClass} flex flex-col items-center p-6 text-center lg:items-start lg:text-left`}
                 >
                   <div className="text-base font-medium leading-snug text-foreground sm:text-lg">
                     {stat}
@@ -101,7 +101,7 @@ export default function About() {
             {capabilities.map((cap) => (
               <div
                 key={cap.title}
-                className={`${cardClass} h-full p-6 transition-colors duration-150 hover:border-foreground/25 sm:p-8`}
+                className={`${cardClass} h-full p-6 sm:p-8`}
               >
                 <h4 className="text-lg font-medium text-foreground">{cap.title}</h4>
                 <p className="mt-2 text-base leading-relaxed text-muted">{cap.description}</p>
