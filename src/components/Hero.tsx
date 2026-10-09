@@ -59,11 +59,11 @@ export default function Hero() {
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <button
           type="button"
-          className="group/portrait cursor-pointer border-0 bg-transparent p-0"
+          className="group/portrait cursor-pointer border-0 bg-transparent p-0 transition-opacity duration-150 active:opacity-80"
           onClick={() => setIsCardOpen(true)}
           aria-label="Open profile"
         >
-          <div className="relative h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44">
+          <div className="relative h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 [@media(hover:hover)_and_(pointer:fine)]:group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44">
             <Image
               src="/adhil-portrait.jpg"
               alt="Adhil Shanif"
@@ -124,7 +124,7 @@ export default function Hero() {
               event.stopPropagation();
               setIsCardOpen(false);
             }}
-            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground"
+            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
             aria-label="Close profile"
           >
             <X size={16} />

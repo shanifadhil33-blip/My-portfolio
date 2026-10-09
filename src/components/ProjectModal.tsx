@@ -231,7 +231,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                       key={src}
                       type="button"
                       onClick={() => setZoomedSrc(src)}
-                      className="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left"
+                      className="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left transition-colors duration-150 active:border-foreground/40 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30"
                       title="Zoom image"
                     >
                       <ProjectImage
@@ -283,7 +283,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
                 {showTechnical && (
                   <details id="technical-details" className="hood-panel scroll-mt-4 rounded-lg border border-border">
-                    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left text-base font-medium text-foreground">
+                    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left text-base font-medium text-foreground transition-colors duration-150 active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-foreground/5">
                       <span className="text-pretty">Under the hood: stack, architecture and trade-offs</span>
                       <ChevronDown className="hood-chevron shrink-0" size={16} aria-hidden />
                     </summary>
@@ -398,7 +398,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             ref={zoomCloseRef}
             type="button"
             onClick={() => setZoomedSrc(null)}
-            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground"
+            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
             aria-label="Close screenshot"
           >
             <X size={16} />
