@@ -7,7 +7,6 @@ export interface Project {
   tags: string[];
   thumbnail?: string;
   hideMedia?: boolean;
-  comingSoon?: boolean;
   githubUrl?: string;
   liveUrl?: string;
   liveUrlLabel?: string;
@@ -321,14 +320,6 @@ const baseProjects: Project[] = [
           "A PDF with several patients keeps only the first one. Reviewers can approve, flag or reject a document, and can't edit a field. The 835 file hasn't been tested against a real clearinghouse or practice-management import. The audit log and payer template tables exist but are unused.",
       },
     ],
-  },
-  {
-    id: "pipeline",
-    title: "Pipeline",
-    comingSoon: true,
-    hideMedia: true,
-    brief: "An automated multi-step data and AI workflow, built for reliability.",
-    tags: [],
   },
   {
     id: "cold-email-agent",

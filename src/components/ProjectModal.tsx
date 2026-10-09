@@ -1,9 +1,16 @@
 "use client";
 
-import { useEffect, useCallback, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useCallback, useRef, useState } from "react";
 import { Project } from "@/data/projects";
 import { ChevronDown, X } from "lucide-react";
 import ProjectImage, { MODAL_IMAGE_SIZES } from "./ProjectImage";
+import {
+  SHEET_MS,
+  bindSheetGesture,
+  playSheetEnter,
+  playSheetExit,
+  prefersReducedMotion,
+} from "./sheetDismiss";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -62,6 +69,16 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [zoomedSrc, setZoomedSrc] = useState<string | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const zoomCloseRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const closingRef = useRef(false);
+  const motionGen = useRef(0);
+  const closeTimer = useRef<number | null>(null);
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
@@ -74,10 +91,26 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     }))
     .filter((section): section is { label: string; text: string } => Boolean(section.text));
 
-  const handleClose = useCallback(() => {
+  const finishClose = useCallback(() => {
     setZoomedSrc(null);
-    onClose();
-  }, [onClose]);
+    onCloseRef.current();
+  }, []);
+
+  const requestClose = useCallback((slide = false) => {
+    if (closingRef.current) return;
+    const sheet = sheetRef.current;
+    const backdrop = backdropRef.current;
+    if (!sheet || !backdrop || prefersReducedMotion()) {
+      closingRef.current = true;
+      finishClose();
+      return;
+    }
+    closingRef.current = true;
+    motionGen.current += 1;
+    sheet.style.pointerEvents = "none";
+    playSheetExit(sheet, backdrop, slide);
+    closeTimer.current = window.setTimeout(finishClose, SHEET_MS);
+  }, [finishClose]);
 
   const openTechnicalDetails = useCallback(() => {
     const details = document.getElementById("technical-details");
@@ -89,12 +122,41 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     });
   }, []);
 
+  useLayoutEffect(() => {
+    closingRef.current = false;
+    if (closeTimer.current != null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    const sheet = sheetRef.current;
+    const backdrop = backdropRef.current;
+    if (!project || !sheet || !backdrop) return;
+    sheet.style.pointerEvents = "";
+    const gen = motionGen.current;
+    playSheetEnter(sheet, backdrop, () => gen === motionGen.current && !closingRef.current);
+  }, [project]);
+
+  useEffect(() => {
+    const sheet = sheetRef.current;
+    const backdrop = backdropRef.current;
+    const scroller = scrollerRef.current;
+    if (!project || zoomedSrc || !sheet || !backdrop || !scroller) return;
+    const gesture = bindSheetGesture(sheet, backdrop, scroller, () => requestClose(true));
+    return () => gesture.destroy();
+  }, [project, requestClose, zoomedSrc]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current != null) window.clearTimeout(closeTimer.current);
+    };
+  }, []);
+
   useEffect(() => {
     if (!project) return;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    document.getElementById("project-modal-close")?.focus();
+    sheetRef.current?.focus({ preventScroll: true });
     return () => {
       document.body.style.overflow = previous;
       returnFocus.current?.focus();
@@ -112,7 +174,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           setZoomedSrc(null);
           return;
         }
-        if (project) handleClose();
+        if (project) requestClose(false);
         return;
       }
       if (event.key !== "Tab") return;
@@ -134,7 +196,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleClose, project, zoomedSrc]);
+  }, [requestClose, project, zoomedSrc]);
 
   return (
     <>
@@ -144,24 +206,30 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-6"
         >
           <div
+            ref={backdropRef}
             className="absolute inset-0 cursor-pointer bg-black/80"
-            onClick={handleClose}
+            onClick={() => requestClose(false)}
             aria-label="Close modal"
           />
 
           <div
+            ref={sheetRef}
             id="project-modal-content"
             role="dialog"
             aria-modal="true"
             aria-labelledby="project-modal-title"
             onClick={(event) => event.stopPropagation()}
-            className="relative flex max-h-[90dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-lg border border-border bg-background sm:rounded-lg"
+            tabIndex={-1}
+            className="relative flex max-h-[90dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-lg border border-border bg-background will-change-transform focus:outline-none focus-visible:outline-none sm:rounded-lg"
           >
-            <div className="flex justify-end p-4 pb-0">
+            <div className="sheet-handle" data-sheet-grab="" aria-hidden="true">
+              <span className="h-1 w-9 rounded-full bg-foreground/30" />
+            </div>
+            <div data-sheet-header="" className="flex justify-end px-4 pt-1 pb-0 sm:pt-4">
               <button
                 id="project-modal-close"
                 type="button"
-                onClick={handleClose}
+                onClick={() => requestClose(false)}
                 className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
                 aria-label="Close modal"
               >
@@ -169,7 +237,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               </button>
             </div>
 
-            <div className="scrollbar-none flex-1 overflow-y-auto">
+            <div ref={scrollerRef} className="scrollbar-none flex-1 touch-pan-y overflow-y-auto overscroll-y-contain">
               <div className="px-5 pt-2 pb-0 sm:px-6">
                 {project.tags.length > 0 && (
                   <div className="mb-3 flex flex-wrap gap-1.5">
@@ -182,11 +250,6 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                       </span>
                     ))}
                   </div>
-                )}
-                {project.comingSoon && (
-                  <span className="mb-3 inline-block rounded-md border border-border px-2 py-1 text-xs text-muted">
-                    Coming soon
-                  </span>
                 )}
                 <div className="mt-2 flex flex-col items-start gap-3 sm:flex-row sm:justify-between">
                   <h2
