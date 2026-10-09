@@ -32,11 +32,6 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
 
       <div className="flex flex-grow flex-col justify-between p-5 sm:p-6">
         <div>
-          {project.comingSoon && (
-            <span className="mb-3 inline-block rounded-md border border-border px-2 py-1 text-xs text-muted">
-              Coming soon
-            </span>
-          )}
           <h3 className="text-lg font-medium text-foreground">{project.title}</h3>
           <p className="mt-2 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
           {project.tags.length > 0 && (

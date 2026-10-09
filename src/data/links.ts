@@ -12,13 +12,4 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
     liveUrl: "https://doctalk-ten.vercel.app",
     githubUrl: "https://github.com/shanifadhil33-blip/doctalk",
   },
-  "cold-email-agent": {
-    githubUrl: "https://github.com/shanifadhil33-blip/reclaim-outreach-agent",
-  },
-  "youtube-automation": {
-    githubUrl: "https://github.com/shanifadhil33-blip/akhir-zamaan",
-  },
-  "instagram-carousel": {
-    // Only explanation and AI images for this project
-  }
 };
