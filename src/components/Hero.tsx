@@ -85,7 +85,7 @@ export default function Hero() {
           <p className="mt-4 text-lg font-medium text-muted sm:text-xl">{ROLE}</p>
 
           <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
-            Internal tools, SaaS platforms and AI-powered systems, built end to end and handed over working.
+            Internal tools, SaaS platforms and AI systems, built end to end and handed over working.
           </p>
 
           <div className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">

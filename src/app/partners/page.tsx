@@ -6,7 +6,7 @@ import { mailtoHref, UPWORK_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Build partner for agencies | Adhil Shanif",
   description:
-    "I work with agencies as a referral or co-delivery partner on custom software and AI projects.",
+    "I work with agencies as a referral partner or a delivery partner on custom software and AI projects.",
   robots: {
     index: false,
     follow: false,
@@ -29,13 +29,13 @@ export default function PartnersPage() {
 
           <div className="mt-8 space-y-5 text-base leading-relaxed text-muted">
             <p>
-              I work with agencies as a referral or co-delivery partner on custom software and AI projects. I stay in direct written contact with the end client, and the agency keeps its client relationship and its margin.
+              I work with agencies as a referral partner or a delivery partner on custom software and AI projects. I stay in direct written contact with the end client, and the agency keeps its client relationship and its margin.
             </p>
             <p>
-              What I take on: internal tools, multi-tenant SaaS platforms, AI systems and integrations.
+              What I take on: internal tools, multi tenant SaaS platforms, AI systems and integrations.
             </p>
             <p>
-              How it works: fixed scope, fixed price, milestone-based, written communication.
+              How it works: fixed scope, fixed price, paid by milestone, written communication.
             </p>
           </div>
 

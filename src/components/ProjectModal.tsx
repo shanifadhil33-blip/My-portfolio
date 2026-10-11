@@ -350,7 +350,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 {showTechnical && (
                   <details id="technical-details" className="hood-panel scroll-mt-4 rounded-lg border border-border">
                     <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left text-base font-medium text-foreground transition-colors duration-150 active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-foreground/5">
-                      <span className="text-pretty">Under the hood: stack, architecture and trade-offs</span>
+                      <span className="text-pretty">Under the hood: stack, architecture and tradeoffs</span>
                       <ChevronDown className="hood-chevron shrink-0" size={16} aria-hidden />
                     </summary>
                     <div className="space-y-6 border-t border-border px-4 py-5">
@@ -429,7 +429,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
                       {project.keyDecisions && (
                         <div>
-                          <h3 className={labelClass}>Key decisions and trade-offs</h3>
+                          <h3 className={labelClass}>Key decisions and tradeoffs</h3>
                           <p className="text-pretty text-base leading-relaxed text-muted">{project.keyDecisions}</p>
                         </div>
                       )}

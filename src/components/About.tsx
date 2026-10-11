@@ -28,17 +28,17 @@ const secondaryStack = [
 const capabilities = [
   {
     title: "Internal tools and dashboards",
-    description: "Role-based access, approvals, reporting, admin panels.",
+    description: "Access by role, approvals, reporting, admin panels.",
   },
   {
-    title: "Multi-user SaaS platforms",
+    title: "SaaS platforms for many users",
     description:
-      "Tenant-separated data, row-level security, user roles, configuration-driven workflows.",
+      "Each client's data kept separate, row level security, user roles, workflows set by configuration.",
   },
   {
     title: "AI systems",
     description:
-      "Multi-step LLM pipelines, structured extraction from documents, human approval steps, validation so output stays accurate.",
+      "Step by step LLM pipelines, structured extraction from documents, human approval steps, validation so output stays accurate.",
   },
   {
     title: "Automation and integrations",
@@ -61,10 +61,10 @@ export default function About() {
         <div className="mb-24 grid grid-cols-1 items-start gap-12 lg:mb-32 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
             <p className="mb-6 text-pretty text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
-              I design and build custom software for businesses that need something off-the-shelf tools can&apos;t do.
+              I design and build custom software for businesses that need something ready made tools can&apos;t do.
             </p>
             <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-              That usually means internal tools, multi-user SaaS platforms and AI systems that have to work reliably with real data. I own the whole build: database design, backend, frontend, AI integration and deployment. I work in fixed-price milestones and communicate in writing, so every decision is documented.
+              That usually means internal tools, SaaS platforms for many users and AI systems that have to work reliably with real data. I own the whole build: database design, backend, frontend, AI integration and deployment. I work in fixed price milestones and communicate in writing, so every decision is documented.
             </p>
           </div>
 
