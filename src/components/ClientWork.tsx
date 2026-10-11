@@ -44,7 +44,7 @@ export default function ClientWork() {
     <section id="client-work" className="relative px-5 py-24 sm:px-6 md:py-40">
       <div className="mx-auto max-w-6xl">
         <h2 className="text-balance text-2xl font-medium tracking-tight text-foreground">
-          Client work
+          Client projects
         </h2>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
           Details are anonymised to respect client confidentiality.
