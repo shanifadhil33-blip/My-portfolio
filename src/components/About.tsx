@@ -71,14 +71,18 @@ export default function About() {
           <div className="w-full lg:col-span-5">
             <div className="grid grid-cols-1 gap-4">
               {stats.map((stat) => (
-                <div
+                <a
                   key={stat}
-                  className={`${cardClass} flex flex-col items-center p-6 text-center lg:items-start lg:text-left`}
+                  href={UPWORK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${stat}, open my Upwork profile`}
+                  className={`${cardClass} flex flex-col items-center p-6 text-center outline-none transition-[border-color,transform,background-color] duration-150 [-webkit-tap-highlight-color:transparent] hover:border-foreground/25 focus-visible:border-foreground/40 active:scale-[0.99] active:bg-foreground/[0.03] lg:items-start lg:text-left`}
                 >
                   <div className="text-base font-medium leading-snug text-foreground sm:text-lg">
                     {stat}
                   </div>
-                </div>
+                </a>
               ))}
             </div>
             <a
