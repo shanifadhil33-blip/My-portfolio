@@ -47,7 +47,7 @@ const baseProjects: Project[] = [
       "Next.js 16 (App Router)",
       "TypeScript",
       "Tailwind CSS and shadcn/ui",
-      "Supabase (Postgres, Google sign-in, RLS)",
+      "Supabase (Postgres, Google sign in, RLS)",
       "pdf.js",
       "Gemini API",
       "Groq",
@@ -61,7 +61,7 @@ const baseProjects: Project[] = [
       solution:
         "You upload the statement. Reclaim reads it and lists only the refused items. Each one shows the amount and the reason the insurer gave. Click one and you can check the details against the original page and fix anything that's wrong. Then you paste in your notes, and Reclaim writes a first draft of the appeal letter. You can edit it, copy it, or download it as a Word file. Letters are saved to your account, so you can come back to them or download several at once.",
       outcome:
-        "You don't read every page yourself. You start from a short list and a draft letter instead of a blank page. A person still checks the details before any letter is written, and nothing is sent for you. The same approach fits any business that receives documents and has to answer some of them, such as refund requests, supplier disputes or warranty claims. You can try it with four made-up claims and no account. This is a portfolio project, and it uses made-up data only.",
+        "You don't read every page yourself. You start from a short list and a draft letter instead of a blank page. A person still checks the details before any letter is written, and nothing is sent for you. The same approach fits any business that receives documents and has to answer some of them, such as refund requests, supplier disputes or warranty claims. You can try it with four fictional claims and no account. This is a portfolio project, and it uses fictional data only.",
       screenshots: [
         "/screenshots/reclaim-worklist.png",
         "/screenshots/reclaim-review.png",
@@ -74,9 +74,9 @@ const baseProjects: Project[] = [
       },
     },
     keyDecisions:
-      "Reclaim reads page images rather than relying only on text, because fax-style statements often have no usable text layer. The cost is bigger requests, so pages go three at a time and narrow pages fall back to text. A plain parser runs before any AI call on text, so standard tables cost nothing. The worklist is kept in the browser rather than the database, so fewer claim details are stored. The catch is that it doesn't follow you to another device. The model never has the last word: a person ticks \"verified\" before a letter is written, and the code sets the date and the patient name itself.",
+      "Reclaim reads page images rather than relying only on text, because fax style statements often have no usable text layer. The cost is bigger requests, so pages go three at a time and narrow pages fall back to text. A plain parser runs before any AI call on text, so standard tables cost nothing. The worklist is kept in the browser rather than the database, so fewer claim details are stored. The catch is that it doesn't follow you to another device. The model never has the last word: a person ticks \"verified\" before a letter is written, and the code sets the date and the patient name itself.",
     systemOverview:
-      "The PDF never leaves the browser as a file. pdf.js renders each page to a JPEG at least 1200 px wide. Pages go to the server three at a time, which keeps each request under Vercel's 4.5 MB body limit. Narrow, fax-style pages are sent as their text layer instead. If the image pass finds no denials, the client tries the text layer.\n\nOn the server, text input first goes through a plain parser for standard claim tables. The AI is called only when that parser finds nothing. Every AI call asks for JSON (Gemini's JSON response type, or response_format: json_object on Groq and on the OpenRouter models that support it). The reply is parsed, field names are normalised, money and dates are formatted, and duplicate lines are removed.\n\nLetters come from a separate route. It prompts the model with the checked fields and the pasted notes only. The code then sets the letter date and the patient name itself, so the model can't change them.",
+      "The PDF never leaves the browser as a file. pdf.js renders each page to a JPEG at least 1200 px wide. Pages go to the server three at a time, which keeps each request under Vercel's 4.5 MB body limit. Narrow, fax style pages are sent as their text layer instead. If the image pass finds no denials, the client tries the text layer.\n\nOn the server, text input first goes through a plain parser for standard claim tables. The AI is called only when that parser finds nothing. Every AI call asks for JSON (Gemini's JSON response type, or response_format: json_object on Groq and on the OpenRouter models that support it). The reply is parsed, field names are normalised, money and dates are formatted, and duplicate lines are removed.\n\nLetters come from a separate route. It prompts the model with the checked fields and the pasted notes only. The code then sets the letter date and the patient name itself, so the model can't change them.",
     stages: [
       {
         title: "1. Render",
@@ -112,7 +112,7 @@ const baseProjects: Project[] = [
       {
         title: "Health check",
         description:
-          "GET /api/ai-health is for signed-in users only. It pings the first model of each configured provider, or all of them with ?all=1, and returns ok or not plus the HTTP status for each model. It never returns keys.",
+          "GET /api/ai-health works only for users who are signed in. It pings the first model of each configured provider, or all of them with ?all=1, and returns ok or not plus the HTTP status for each model. It never returns keys.",
       },
       {
         title: "No raw provider errors",
@@ -120,9 +120,9 @@ const baseProjects: Project[] = [
           "Error bodies from providers are thrown away on the server, and only the status code is logged. Users see plain messages such as \"busy, try again in a few seconds\" or \"that model took too long and was skipped\".",
       },
       {
-        title: "Per-user data",
+        title: "Data kept per user",
         description:
-          "Letters live in a Postgres table with row-level security (auth.uid() = user_id), and every server query also filters on the user id. The worklist of denied lines stays in the browser's local storage, tagged with the user id. It's cleared when a different account signs in or the user signs out.",
+          "Letters live in a Postgres table with row level security (auth.uid() = user_id), and every server query also filters on the user id. The worklist of denied lines stays in the browser's local storage, tagged with the user id. It's cleared when a different account signs in or the user signs out.",
       },
       {
         title: "Recycle bin",
@@ -174,7 +174,7 @@ const baseProjects: Project[] = [
         title: "1. Upload and check",
         engine: "Vercel Blob",
         description:
-          "A signed-in upload goes to a private Blob store. The server issues an upload token only after a session check, and only once a document slot is reserved. It keeps the file only if the bytes start with the PDF signature.",
+          "An upload from a signed in account goes to a private Blob store. The server issues an upload token only after a session check, and only once a document slot is reserved. It keeps the file only if the bytes start with the PDF signature.",
       },
       {
         title: "2. Chunk and embed",
@@ -209,12 +209,12 @@ const baseProjects: Project[] = [
       {
         title: "Atomic limits",
         description:
-          "A signed-in account can keep 5 documents. The public demo allows 20 questions per network each UTC day. Both counters increment in one database statement, so two requests at once can't both pass the cap.",
+          "Each signed in account can keep 5 documents. The public demo allows 20 questions per network each UTC day. Both counters increment in one database statement, so two requests at once can't both pass the cap.",
       },
       {
         title: "Demo limit",
         description:
-          "A provider 429 or 402, or the signed-out daily cap, returns \"Demo limit reached, try again later.\"",
+          "A provider 429 or 402, or the daily cap for signed out visitors, returns \"Demo limit reached, try again later.\"",
       },
     ],
   },
@@ -233,7 +233,7 @@ const baseProjects: Project[] = [
       "TypeScript",
       "Tailwind CSS and shadcn/ui",
       "TanStack Table",
-      "Supabase (Postgres, Google sign-in, private Storage, RLS)",
+      "Supabase (Postgres, Google sign in, private Storage, RLS)",
       "pdf.js",
       "Gemini API",
       "Groq",
@@ -246,7 +246,7 @@ const baseProjects: Project[] = [
       solution:
         "You drop in the whole stack at once. EOB Reader reads each PDF and fills in a draft: who paid, for which patient, and every treatment line with its amounts. A person looks at each draft next to the original PDF and approves it, flags it to look at later, or rejects it. Only the approved ones go into the download. That's a spreadsheet file (CSV) laid out the way Dentrix, Eaglesoft or Open Dental expect, or the standard electronic payment file those programs can import. If a PDF is a scan or a photo, it's skipped with a clear message rather than a guess.",
       outcome:
-        "The typing is done for you, and a person still has the final say before anything goes into the office's system. The same setup fits any pile of PDFs that has to end up in a spreadsheet or another program, such as invoices, bank statements or supplier price lists. You can try a made-up batch without an account. This is a portfolio project, and it uses made-up data only.",
+        "The typing is done for you, and a person still has the final say before anything goes into the office's system. The same setup fits any pile of PDFs that has to end up in a spreadsheet or another program, such as invoices, bank statements or supplier price lists. You can try a fictional batch without an account. This is a portfolio project, and it uses fictional data only.",
       screenshots: [
         "/screenshots/eob-reader-review.png",
         "/screenshots/eob-reader-dashboard.png",
@@ -256,7 +256,7 @@ const baseProjects: Project[] = [
     keyDecisions:
       "Text only, with no OCR. A scan is turned away with a plain message rather than read badly, and that limit is stated up front. Nothing is exported until a person approves it, because a model can misread a number. That matters even more for the 835. Its builder adds a CO-45 or OA-23 adjustment when a line doesn't balance, so a balanced file doesn't prove the extraction was right, and the human check comes before export for that reason. Free providers go first and the paid fallback goes last. A small health route shows which provider is failing without opening server logs.",
     systemOverview:
-      "This app is text only. There's no image or OCR path. The server reads each PDF's text layer with pdf.js. If no page has text, the file is reported as scanned, skipped, and not stored. Text pulled in the browser is used only if the server can't parse the file. Up to 5 files are processed at a time.\n\nEach PDF is stored in a private Supabase Storage bucket under that user's practice folder. Its draft is saved as one extraction row plus line-item rows. The review page opens the original through a signed URL that lasts one hour.\n\nThe extraction prompt asks for one JSON object covering the payer, patient, claim and check, plus every line with its code, amounts, adjustment and remark codes, and confidence scores. Gemini is asked through its JSON response type, with a 4,000-token output cap. Groq uses a max_tokens ceiling sized to fit its free tier of 8,000 tokens a minute. OpenRouter's Gemini models use response_format: json_object. The reply is parsed and normalised (field aliases, money strings turned into numbers).",
+      "This app is text only. There's no image or OCR path. The server reads each PDF's text layer with pdf.js. If no page has text, the file is reported as scanned, skipped, and not stored. Text pulled in the browser is used only if the server can't parse the file. Up to 5 files are processed at a time.\n\nEach PDF is stored in a private Supabase Storage bucket under that user's practice folder. Its draft is saved as one extraction row plus line item rows. The review page opens the original through a signed URL that lasts one hour.\n\nThe extraction prompt asks for one JSON object covering the payer, patient, claim and check, plus every line with its code, amounts, adjustment and remark codes, and confidence scores. Gemini is asked through its JSON response type, with an output cap of 4,000 tokens. Groq uses a max_tokens ceiling sized to fit its free tier of 8,000 tokens a minute. OpenRouter's Gemini models use response_format: json_object. The reply is parsed and normalised (field aliases, money strings turned into numbers).",
     stages: [
       {
         title: "1. Batch upload",
@@ -292,7 +292,7 @@ const baseProjects: Project[] = [
       {
         title: "Health check",
         description:
-          "GET /api/ai-health is for signed-in users only. By default it pings one model per provider, or every model with ?all=1. It returns the status for each model plus an error snippet of up to 200 characters, with keys and bearer tokens removed.",
+          "GET /api/ai-health works only for users who are signed in. By default it pings one model per provider, or every model with ?all=1. It returns the status for each model plus an error snippet of up to 200 characters, with keys and bearer tokens removed.",
       },
       {
         title: "No raw provider errors",
@@ -300,9 +300,9 @@ const baseProjects: Project[] = [
           "Provider error text is redacted the same way before it's logged. Upload results show only the plain \"busy\" message.",
       },
       {
-        title: "Per-user data",
+        title: "Data kept per user",
         description:
-          "Row-level security on practices, batches, extractions and line items limits each user to their own practice's rows. Storage policies limit reads, uploads and deletes to that practice's folder.",
+          "Row level security on practices, batches, extractions and line items limits each user to their own practice's rows. Storage policies limit reads, uploads and deletes to that practice's folder.",
       },
       {
         title: "Balance check on the 835",
@@ -317,7 +317,7 @@ const baseProjects: Project[] = [
       {
         title: "Known limits",
         description:
-          "A PDF with several patients keeps only the first one. Reviewers can approve, flag or reject a document, and can't edit a field. The 835 file hasn't been tested against a real clearinghouse or practice-management import. The audit log and payer template tables exist but are unused.",
+          "A PDF with several patients keeps only the first one. Reviewers can approve, flag or reject a document, and can't edit a field. The 835 file hasn't been tested against a real clearinghouse or practice management import. The audit log and payer template tables exist but are unused.",
       },
     ],
   },
@@ -340,14 +340,14 @@ const baseProjects: Project[] = [
     ],
     caseStudy: {
       problem:
-        "Personalized cold email does not scale by hand. Someone has to throttle sends, log who was contacted, and honor opt-outs.",
+        "Personalized cold email does not scale by hand. Someone has to throttle sends, log who was contacted, and honor every request to unsubscribe.",
       solution:
         "I built a Python agent that reads leads from a CSV, skips anyone already contacted or opted out, and fills a template opener from the lead's role and company. No model is in the loop. Subject lines rotate from a stable hash of the email address. GitHub Actions runs a short job on a schedule, MailerSend sends the message, and the day stops at 30 emails.",
       outcome:
         "A working prototype. It sends on a schedule and stops at 30 emails per day.",
     },
     keyDecisions:
-      "I kept the opener as a template, with no model in the loop, so the text stays consistent and does not invent details. Each run is a short GitHub Actions job that sends up to 2 emails, saves state, and exits. The hard cap is 30 emails per day. Lesson: keep all prospect data out of version control and in environment-level storage.",
+      "I kept the opener as a template, with no model in the loop, so the text stays consistent and does not invent details. Each run is a short GitHub Actions job that sends up to 2 emails, saves state, and exits. The hard cap is 30 emails per day. Lesson: keep all prospect data out of version control and in each environment's own storage.",
     systemOverview:
       "The pipeline starts from a lead export. A GitHub Actions job runs the agent on a weekday schedule. The Python runner checks each lead against SQLite so it does not contact the same person twice, fills the email, sends it through the MailerSend API, and writes the updated state back so the next run continues from there.",
     stages: [
@@ -355,7 +355,7 @@ const baseProjects: Project[] = [
         title: "1. Lead ingestion and deduplication",
         engine: "Python / SQLite",
         description:
-          "Loads leads from a CSV. The agent skips anyone already emailed, still pending, or on the opt-out list.",
+          "Loads leads from a CSV. The agent skips anyone already emailed, still pending, or on the unsubscribe list.",
       },
       {
         title: "2. Stable variant rotation",
@@ -367,7 +367,7 @@ const baseProjects: Project[] = [
         title: "3. Personalization and assembly",
         engine: "Template",
         description:
-          "Fills an opener from the prospect's job title and company name, then adds a plain-text body and an opt-out link.",
+          "Fills an opener from the prospect's job title and company name, then adds a plain text body and an unsubscribe link.",
       },
       {
         title: "4. Send",
@@ -384,9 +384,9 @@ const baseProjects: Project[] = [
     ],
     constraints: [
       {
-        title: "Opt-out",
+        title: "Unsubscribe",
         description:
-          "A suppression list in SQLite blocks future sends. Outgoing email includes an opt-out link.",
+          "A suppression list in SQLite blocks future sends. Outgoing email includes an unsubscribe link.",
       },
       {
         title: "Daily cap",
@@ -395,13 +395,13 @@ const baseProjects: Project[] = [
       },
     ],
     maintenanceProfile:
-      "Upload a new leads CSV when the queue is empty, and process opt-out requests.",
+      "Upload a new leads CSV when the queue is empty, and process unsubscribe requests.",
   },
   {
     id: "youtube-automation",
     title: "YouTube Automation Pipeline",
     brief:
-      "Automates script, voice and video generation for long-form documentary videos, with a manual upload step.",
+      "Automates script, voice and video generation for long documentary videos, with a manual upload step.",
     tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
     thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
     role: "Solo engineer",
@@ -417,16 +417,16 @@ const baseProjects: Project[] = [
       "Kokoro-82M (local ONNX)",
       "faster-whisper",
       "FFmpeg",
-      "Cloudflare R2 (S3-compatible)",
+      "Cloudflare R2 (S3 compatible)",
       "Telegram Bot API",
     ],
     caseStudy: {
       problem:
-        "A long-form video means research, a script, images, a voiceover and an edit. Doing each of those by hand limits how often a video can go out.",
+        "A long video means research, a script, images, a voiceover and an edit. Doing each of those by hand limits how often a video can go out.",
       solution:
         "The pipeline automates script, voice and video generation. On a schedule it researches a topic, writes a documentary script, generates images, renders a voiceover with subtitles, and assembles the file with FFmpeg. The finished video is sent to Telegram. Upload to YouTube is a manual step.",
       outcome:
-        "It produces a complete documentary video on a twice-weekly schedule. Putting it on YouTube is still done by hand.",
+        "It produces two complete documentary videos a week. Putting it on YouTube is still done by hand.",
     },
     keyDecisions:
       "I run the job on ephemeral GitHub Actions runners instead of a rented server. Runners have no disk that survives the job and no GPU, so models are downloaded on each boot, and the job has to finish inside the runner time limit. I cap the video at 150 images and use cloud text to speech instead of rendering the voice on the runner CPU.",
@@ -528,7 +528,7 @@ const baseProjects: Project[] = [
         title: "4. Queue and publish",
         engine: "Cloudflare Workers, R2 and Make.com",
         description:
-          "JPEGs and a queue.json file go to R2. A Worker on a twice-daily cron reads the queue and calls Make.com, which posts through the Instagram Graph API.",
+          "JPEGs and a queue.json file go to R2. A Worker on a cron that runs twice a day reads the queue and calls Make.com, which posts through the Instagram Graph API.",
       },
     ],
     constraints: [

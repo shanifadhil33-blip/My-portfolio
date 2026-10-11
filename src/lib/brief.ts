@@ -4,15 +4,15 @@ export const MAX_ATTACHMENT_BYTES = 4 * 1024 * 1024;
 
 export const TIMELINE_OPTIONS = [
   "under 1 month",
-  "1-3 months",
+  "1 to 3 months",
   "3+ months",
   "not sure",
 ] as const;
 
 export const BUDGET_OPTIONS = [
   "under US $1,000",
-  "US $1,000-3,000",
-  "US $3,000-10,000",
+  "US $1,000 to 3,000",
+  "US $3,000 to 10,000",
   "US $10,000+",
   "not sure",
 ] as const;

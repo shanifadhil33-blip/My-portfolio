@@ -1,5 +1,5 @@
 const points = [
-  "Fixed-price milestones. You fund a milestone, I deliver it, you approve it.",
+  "Fixed price milestones. You fund a milestone, I deliver it, you approve it.",
   "Written communication only, so every decision is on record.",
   "You own the code, the accounts and the infrastructure from day one.",
   "Pricing is set by scope, after I understand what you need.",

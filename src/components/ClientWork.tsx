@@ -28,7 +28,7 @@ const reviews = [
   {
     quote:
       "He successfully designed and built the foundations and administration system for a complex multi-site recommendation platform, taking it from the initial architecture through to a working, versioned publishing system. He is highly capable, thoughtful and exceptionally thorough. He does not simply implement instructions mechanically; he understands the wider commercial objective, identifies potential problems early and proposes sensible, well-reasoned solutions. He takes genuine ownership of the outcome, tests carefully and frequently goes beyond the immediate specification to ensure that the underlying system is secure, scalable and maintainable.",
-    attribution: "Client, multi-site recommendation platform (Upwork)",
+    attribution: "Client, multi site recommendation platform (Upwork)",
   },
   {
     quote:
