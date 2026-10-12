@@ -2,8 +2,8 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 
-/** Only these Google accounts can open /inbox. */
-export const INBOX_OWNERS = ["shanifadhil33@gmail.com", "shanifadhil022@gmail.com"];
+/** Only this Google account can open /inbox. Checked on every request, server side. */
+export const INBOX_OWNERS = ["shanifadhil33@gmail.com"];
 export const PASS_URL = "https://groundwork-portal.vercel.app/api/inbox-pass";
 const COOKIE = "inbox_session";
 
