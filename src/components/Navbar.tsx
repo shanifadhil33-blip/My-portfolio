@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
 import InboxButton from "./InboxButton";
 
 const navLinks = [
@@ -33,17 +32,23 @@ export default function Navbar() {
         setMobileOpen(false);
       }
     };
+    // Lock page scroll while the menu is open, without moving the page.
+    // iOS ignores overflow on html for touch, so pin the body in place and restore the spot on close.
+    const body = document.body, y = window.scrollY, prev = body.style.cssText;
+    body.style.cssText += `;position:fixed;top:-${y}px;left:0;right:0;overflow:hidden`;
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("pointerdown", onPointerDown);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown);
+      body.style.cssText = prev;
+      window.scrollTo(0, y);
     };
   }, [mobileOpen]);
 
   return (
-    <nav id="navbar" className="absolute top-0 right-0 left-0 z-50 bg-transparent">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
+    <nav id="navbar" data-open={mobileOpen} className="nav-bar absolute top-0 right-0 left-0 z-50">
+      <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
         <a
           href="#"
           className="inline-flex min-h-11 min-w-11 items-center text-lg font-medium tracking-tight text-foreground transition-opacity duration-150 hover:opacity-80 active:opacity-70"
@@ -75,14 +80,15 @@ export default function Navbar() {
           className="flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70 md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
         >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          <span className="burger" aria-hidden="true"><span /><span /><span /></span>
         </button>
         </div>
       </div>
 
-      {mobileOpen && (
-        <div className="border-t border-border bg-background md:hidden">
+      {/* Always mounted so it can grow down from under the bar and back. */}
+      <div id="mobile-menu" className="mobile-panel md:hidden" aria-hidden={!mobileOpen} inert={!mobileOpen}>
           <div className="flex flex-col px-5 py-2">
             {navLinks.map((link) => (
               <a
@@ -98,8 +104,7 @@ export default function Navbar() {
               </a>
             ))}
           </div>
-        </div>
-      )}
+      </div>
     </nav>
   );
 }
