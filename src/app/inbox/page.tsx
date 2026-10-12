@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { inboxOwner, PASS_URL } from "@/lib/inbox/auth";
+import { inboxOwner } from "@/lib/inbox/auth";
 import { sql } from "@/lib/inbox/db";
 import BackHome from "@/components/BackHome";
 import NoAccess from "@/components/NoAccess";
+import InboxSignIn from "@/components/InboxSignIn";
 
 export const metadata: Metadata = { title: "Inbox", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
@@ -12,10 +12,7 @@ type Row = { id: string; created_at: string; app: string; page: string; role: st
 
 export default async function InboxPage({ searchParams }: { searchParams: Promise<{ denied?: string }> }) {
   const owner = await inboxOwner();
-  if (!owner) {
-    if ((await searchParams).denied) return <NoAccess />;
-    redirect(PASS_URL);
-  }
+  if (!owner) return (await searchParams).denied ? <NoAccess /> : <InboxSignIn />;
   const rows = (await sql()`SELECT id, created_at, app, page, role, device, message, screenshot IS NOT NULL AS has_shot, read_at
     FROM feedback ORDER BY created_at DESC LIMIT 200`) as Row[];
   const unread = rows.filter(r => !r.read_at).length;
