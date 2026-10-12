@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import InboxButton from "./InboxButton";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -65,6 +66,8 @@ export default function Navbar() {
           ))}
         </div>
 
+        <div className="flex items-center gap-1">
+        <InboxButton />
         <button
           id="mobile-menu-toggle"
           type="button"
@@ -75,6 +78,7 @@ export default function Navbar() {
         >
           {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
+        </div>
       </div>
 
       {mobileOpen && (
