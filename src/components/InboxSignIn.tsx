@@ -14,6 +14,7 @@ export default function InboxSignIn() {
         Sign in with Google
       </button></form>
       <Link href="/" className="mt-3 inline-flex min-h-11 items-center px-4 text-sm text-muted hover:text-foreground">Go home</Link>
+      <Link href="/privacy" className="inline-flex min-h-11 items-center px-4 text-sm text-muted hover:text-foreground">Privacy</Link>
     </main>
   );
 }

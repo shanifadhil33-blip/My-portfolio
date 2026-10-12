@@ -459,6 +459,8 @@ export default function BriefForm() {
           </p>
         ) : null}
 
+        <p className="text-sm text-muted">Your brief is emailed to Adhil and not kept on this site. <a href="/privacy" className="underline underline-offset-4 hover:text-foreground">Privacy</a></p>
+
         <button
           type="submit"
           disabled={pending}

@@ -53,7 +53,7 @@ export default function Contact() {
 
         <div className="mt-20 border-t border-border pt-8 md:mt-28">
           <p className="text-sm text-muted">
-            © {new Date().getFullYear()} Adhil Shanif. Built with Next.js.
+            © {new Date().getFullYear()} Adhil Shanif. Built with Next.js. <a href="/privacy" className="underline underline-offset-4 hover:text-foreground">Privacy</a>
           </p>
         </div>
       </div>
