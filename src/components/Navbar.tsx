@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InboxButton from "./InboxButton";
 
 const navLinks = [
@@ -20,6 +20,8 @@ function scrollToSection(href: string) {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  // A link tapped in the phone menu waits here until the menu has closed and the page is unpinned.
+  const pending = useRef<string | null>(null);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -42,7 +44,11 @@ export default function Navbar() {
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown);
       body.style.cssText = prev;
-      window.scrollTo(0, y);
+      // Put the page back where it was at once, then glide to the tapped section.
+      window.scrollTo({ top: y, behavior: "instant" });
+      const href = pending.current;
+      pending.current = null;
+      if (href) requestAnimationFrame(() => scrollToSection(href));
     };
   }, [mobileOpen]);
 
@@ -89,16 +95,22 @@ export default function Navbar() {
 
       {/* Always mounted so it can grow down from under the bar and back. */}
       <div id="mobile-menu" className="mobile-panel md:hidden" aria-hidden={!mobileOpen} inert={!mobileOpen}>
-          <div className="flex flex-col px-5 py-2">
+          <div className="menu-rows">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => {
+                  if (!document.querySelector(link.href)) { setMobileOpen(false); return; }
+                  e.preventDefault();
+                  pending.current = link.href;
                   setMobileOpen(false);
-                  if (scrollToSection(link.href)) e.preventDefault();
                 }}
-                className="flex min-h-11 items-center px-3 text-base text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
+                className="menu-row"
+                onPointerDown={(e) => e.currentTarget.setAttribute("data-pressed", "")}
+                onPointerUp={(e) => e.currentTarget.removeAttribute("data-pressed")}
+                onPointerLeave={(e) => e.currentTarget.removeAttribute("data-pressed")}
+                onPointerCancel={(e) => e.currentTarget.removeAttribute("data-pressed")}
               >
                 {link.label}
               </a>
