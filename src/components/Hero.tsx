@@ -54,7 +54,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 sm:px-6"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center px-5 pt-24 pb-8 sm:px-6 [@media(max-height:560px)]:pt-[5.5rem]"
     >
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center">
         <button
@@ -63,22 +63,22 @@ export default function Hero() {
           onClick={() => setIsCardOpen(true)}
           aria-label="Open profile"
         >
-          <div className="relative h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 [@media(hover:hover)_and_(pointer:fine)]:group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44">
+          <div className="relative h-40 w-40 overflow-hidden rounded-full border border-border bg-background transition-colors duration-150 [@media(hover:hover)_and_(pointer:fine)]:group-hover/portrait:border-foreground/30 sm:h-44 sm:w-44 [@media(min-height:561px)_and_(max-height:760px)]:h-32 [@media(min-height:561px)_and_(max-height:760px)]:w-32 [@media(max-height:560px)]:h-28 [@media(max-height:560px)]:w-28">
             <Image
               src="/adhil-portrait.jpg"
               alt="Adhil Shanif"
               fill
               sizes="176px"
               priority
-              className="object-cover object-center"
+              className="object-cover object-center brightness-[0.85] contrast-[0.94]"
             />
           </div>
         </button>
 
-        <div className="mt-8 flex flex-col items-center text-center">
-          <p className="mb-6 text-sm text-muted">Dubai, UAE</p>
+        <div className="mt-8 flex flex-col items-center text-center [@media(min-height:561px)_and_(max-height:760px)]:mt-6 [@media(max-height:560px)]:mt-5">
+          <p className="mb-6 text-sm text-muted [@media(min-height:561px)_and_(max-height:760px)]:mb-4 [@media(max-height:560px)]:mb-3">Dubai, UAE</p>
 
-          <h1 className="text-balance text-[clamp(2.75rem,6vw,4.5rem)] font-medium leading-[1.05] tracking-tight text-foreground">
+          <h1 className="text-balance text-[clamp(2.75rem,6vw,4.5rem)] font-medium leading-[1.05] tracking-tight text-foreground [@media(max-height:560px)]:text-5xl">
             Adhil Shanif
           </h1>
 
@@ -88,7 +88,7 @@ export default function Hero() {
             Internal tools, SaaS platforms and AI systems, built end to end and handed over working.
           </p>
 
-          <div className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
+          <div className="mt-10 flex w-full max-w-sm [@media(min-height:561px)_and_(max-height:760px)]:mt-8 [@media(max-height:560px)]:mt-6 flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
             <Link
               href="/brief"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed"
@@ -157,7 +157,7 @@ export default function Hero() {
                 alt="Adhil Shanif"
                 fill
                 sizes="96px"
-                className="object-cover object-center"
+                className="object-cover object-center brightness-[0.85] contrast-[0.94]"
               />
             </div>
 
