@@ -1,6 +1,9 @@
 import Image from "next/image";
 
 const SCREENSHOT_SIZE: Record<string, { width: number; height: number }> = {
+  "/screenshots/cleaning-estimator-desktop.png": { width: 2880, height: 1800 },
+  "/screenshots/cleaning-estimator-phone-en.png": { width: 780, height: 1688 },
+  "/screenshots/cleaning-estimator-phone-ar.png": { width: 780, height: 1688 },
   "/screenshots/reclaim-worklist.png": { width: 2880, height: 1800 },
   "/screenshots/reclaim-review.png": { width: 2880, height: 1800 },
   "/screenshots/reclaim-letter.png": { width: 2880, height: 1800 },

@@ -219,6 +219,70 @@ const baseProjects: Project[] = [
     ],
   },
   {
+    id: "cleaning-estimator",
+    title: "Cleaning Price Estimator",
+    liveUrlLabel: "Visit Web Application",
+    brief:
+      "For home cleaning companies that want customers to get a price on their phone and book on WhatsApp. This portfolio demo updates the estimate as they choose their home and extras.",
+    tags: ["Home cleaning", "Instant pricing", "Next.js"],
+    thumbnail: "/screenshots/cleaning-estimator-desktop.png",
+    techStackDetailed: ["Next.js", "TypeScript", "Vercel"],
+    caseStudy: {
+      problem:
+        "This is for home cleaning companies that want customers to see a price and book on WhatsApp from their phone. Customers can see the crew, hours and materials in their estimate before they book.",
+      solution:
+        "Customers pick a studio, apartment, townhouse, villa or penthouse, then choose the size, floors, rooms and extras. A 3D house model rebuilds live as they choose. The price updates instantly and shows the crew, hours, materials and weekly saving. They can then book on WhatsApp with a reference code. The estimator supports English, Arabic, Urdu and Hindi, with right to left layouts.",
+      outcome:
+        "Customers get an instant price and a way to book on WhatsApp. Each company has one settings file for pricing, so a tailored version for another company is a small settings change. This is a portfolio demo, and the WhatsApp number is a placeholder.",
+      screenshots: [
+        "/screenshots/cleaning-estimator-desktop.png",
+        "/screenshots/cleaning-estimator-phone-en.png",
+        "/screenshots/cleaning-estimator-phone-ar.png",
+      ],
+      screenshotAlts: {
+        "/screenshots/cleaning-estimator-desktop.png":
+          "Cleaning Price Estimator on desktop in English with a 3D house model and price estimate.",
+        "/screenshots/cleaning-estimator-phone-en.png":
+          "Cleaning Price Estimator on a phone in English.",
+        "/screenshots/cleaning-estimator-phone-ar.png":
+          "Cleaning Price Estimator on a phone in Arabic with a right to left layout.",
+      },
+    },
+    keyDecisions:
+      "Pricing comes from one settings file per company. A tailored version for another company needs only a small settings change. The estimator is made for phones first and supports English, Arabic, Urdu and Hindi with right to left layouts.",
+    systemOverview:
+      "Home choices rebuild the 3D house model live and update the price instantly. The estimate shows the crew, hours, materials and weekly saving. Customers book on WhatsApp with a reference code.",
+    stages: [
+      {
+        title: "1. Choose the home",
+        description:
+          "Pick the home type, size, floors, rooms and extras. The 3D house model rebuilds live as the choices change.",
+      },
+      {
+        title: "2. See the price",
+        description:
+          "The estimate updates instantly with the crew, hours, materials and weekly saving.",
+      },
+      {
+        title: "3. Book on WhatsApp",
+        description:
+          "Book on WhatsApp with a reference code. The portfolio demo uses a placeholder number.",
+      },
+    ],
+    constraints: [
+      {
+        title: "Portfolio demo",
+        description:
+          "The WhatsApp number is a placeholder.",
+      },
+      {
+        title: "Phone and desktop checks",
+        description:
+          "Tested with automated phone checks at widths of 360 and 390 pixels in English, Arabic, Urdu and Hindi, plus desktop checks.",
+      },
+    ],
+  },
+  {
     id: "eob-reader",
     title: "EOB Reader",
     liveUrlLabel: "Visit Web Application",

@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useCallback, useRef, useState } from "react";
 import { Project } from "@/data/projects";
 import { ChevronDown, X } from "lucide-react";
-import ProjectImage, { MODAL_IMAGE_SIZES } from "./ProjectImage";
+import ProjectImage, { MODAL_IMAGE_SIZES, screenshotSize } from "./ProjectImage";
 import {
   SHEET_MS,
   bindSheetGesture,
@@ -308,7 +308,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                         src={src}
                         alt={altForShot(project, src, index, modalImages.length)}
                         sizes={MODAL_IMAGE_SIZES}
-                        className="block h-auto w-full"
+                        className={
+                          screenshotSize(src).height > screenshotSize(src).width
+                            ? "mx-auto block h-auto max-h-[70dvh] w-auto max-w-full object-contain"
+                            : "block h-auto w-full"
+                        }
                       />
                     </button>
                   ))}
