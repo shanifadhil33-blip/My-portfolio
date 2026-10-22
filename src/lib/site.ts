@@ -8,6 +8,8 @@ export const UPWORK_URL =
 export const LINKEDIN_URL =
   "https://www.linkedin.com/in/adhil-shanif-83a233358?utm_source=share_via&utm_content=profile&utm_medium=member_android";
 
+export const WHATSAPP_URL = "https://wa.me/971506884500";
+
 export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
 export const PAGE_TITLE =

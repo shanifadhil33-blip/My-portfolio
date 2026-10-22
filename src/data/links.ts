@@ -13,7 +13,7 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
     githubUrl: "https://github.com/shanifadhil33-blip/doctalk",
   },
   "cleaning-estimator": {
-    liveUrl: "https://saafi-cleaning-estimator.vercel.app",
+    liveUrl: "https://cleaning-price-estimate.vercel.app",
   },
   "cold-email-agent": {
     githubUrl: "https://github.com/shanifadhil33-blip/reclaim-outreach-agent",
