@@ -15,6 +15,9 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
   "cleaning-estimator": {
     liveUrl: "https://cleaning-price-estimate.vercel.app",
   },
+  "gleam": {
+    liveUrl: "https://exterior-cleaning-quote.pages.dev",
+  },
   "cold-email-agent": {
     githubUrl: "https://github.com/shanifadhil33-blip/reclaim-outreach-agent",
   },
