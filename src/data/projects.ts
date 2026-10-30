@@ -11,8 +11,8 @@ export interface Project {
   liveUrl?: string;
   liveUrlLabel?: string;
   caseStudy?: {
-    problem: string;
-    solution: string;
+    problem?: string;
+    solution?: string;
     outcome?: string;
     screenshots?: string[];
     screenshotAlts?: Record<string, string>;
@@ -281,6 +281,22 @@ const baseProjects: Project[] = [
           "Tested with automated phone checks at widths of 360 and 390 pixels in English, Arabic, Urdu and Hindi, plus desktop checks.",
       },
     ],
+  },
+  {
+    id: "gleam",
+    title: "Gleam",
+    liveUrlLabel: "Visit Web Application",
+    brief:
+      "Customers tap parts of a 3D house to pick exterior cleaning services, and the price builds as they tap. 10% off for 3 or more services, a Book here button, 7 markets, Arabic right to left, hosted free on Cloudflare Pages and built with Three.js.",
+    tags: ["Exterior cleaning", "Three.js", "Cloudflare Pages"],
+    thumbnail: "/screenshots/gleam-desktop.png",
+    caseStudy: {
+      screenshots: ["/screenshots/gleam-desktop.png"],
+      screenshotAlts: {
+        "/screenshots/gleam-desktop.png":
+          "Gleam on desktop with a 3D house and a price estimate.",
+      },
+    },
   },
   {
     id: "eob-reader",
