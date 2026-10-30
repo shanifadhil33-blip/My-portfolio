@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useCallback, useRef, useState } from "react
 import { Project } from "@/data/projects";
 import { ChevronDown, X } from "lucide-react";
 import ProjectImage, { MODAL_IMAGE_SIZES, screenshotSize } from "./ProjectImage";
+import ProjectVideo from "./ProjectVideo";
 import {
   SHEET_MS,
   bindSheetGesture,
@@ -27,6 +28,7 @@ function altForShot(project: Project, src: string, index: number, total: number)
 function imagesForModal(project: Project): string[] {
   if (project.hideMedia) return [];
   const shots = (project.caseStudy?.screenshots ?? []).filter((src) => src.trim() !== "");
+  if ((project.caseStudy?.videos?.length ?? 0) > 0) return shots;
   if (!project.thumbnail) return shots;
   if (shots.includes(project.thumbnail)) return shots;
   return [project.thumbnail, ...shots];
@@ -44,7 +46,7 @@ function hasTechnicalDetails(project: Project): boolean {
 }
 
 const FOCUSABLE =
-  'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, summary, [tabindex]:not([tabindex="-1"])';
+  'a[href], button:not([disabled]), textarea, input:not([type="hidden"]), select, summary, video[controls], [tabindex]:not([tabindex="-1"])';
 
 function focusableIn(root: ParentNode | null): HTMLElement[] {
   if (!root) return [];
@@ -83,6 +85,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
   const modalImages = project ? imagesForModal(project) : [];
+  const modalVideos = project?.hideMedia ? [] : (project?.caseStudy?.videos ?? []);
   const showTechnical = project ? hasTechnicalDetails(project) : false;
   const plain = plainSections
     .map((section) => ({
@@ -294,8 +297,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <p className="mt-3 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
               </div>
 
-              {modalImages.length > 0 && (
+              {(modalVideos.length > 0 || modalImages.length > 0) && (
                 <div className="mx-5 mt-6 space-y-4 sm:mx-6">
+                  {modalVideos.map((video) => (
+                    <ProjectVideo key={video.src} video={video} />
+                  ))}
                   {modalImages.map((src, index) => (
                     <button
                       key={src}

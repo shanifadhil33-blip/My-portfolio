@@ -64,7 +64,7 @@ export function playSheetExit(
   backdrop.style.opacity = "0";
 }
 
-const INTERACTIVE = "button, a, input, textarea, select, summary, label";
+const INTERACTIVE = "button, a, input, textarea, select, summary, label, video";
 
 export function canStartSheetDrag(target: EventTarget | null, scroller: HTMLElement | null): boolean {
   if (!(target instanceof Element)) return false;
