@@ -1,11 +1,20 @@
 import { projectLinks } from "./links";
 
+export interface ProjectVideo {
+  src: string;
+  poster: string;
+  width: number;
+  height: number;
+  alt: string;
+}
+
 export interface Project {
   id: string;
   title: string;
   brief: string;
   tags: string[];
   thumbnail?: string;
+  thumbnailAlt?: string;
   hideMedia?: boolean;
   githubUrl?: string;
   liveUrl?: string;
@@ -16,6 +25,7 @@ export interface Project {
     outcome?: string;
     screenshots?: string[];
     screenshotAlts?: Record<string, string>;
+    videos?: ProjectVideo[];
   };
   role?: string;
   methodology?: string;
@@ -290,11 +300,49 @@ const baseProjects: Project[] = [
       "Customers tap parts of a 3D house to pick exterior cleaning services, and the price builds as they tap. 10% off for 3 or more services, a Book here button, 7 markets, Arabic right to left, hosted free on Cloudflare Pages and built with Three.js.",
     tags: ["Exterior cleaning", "Three.js", "Cloudflare Pages"],
     thumbnail: "/screenshots/gleam-desktop.png",
+    thumbnailAlt:
+      "Gleam on desktop in the UK, with a 3D house, three services selected, and an estimate of 828 pounds.",
     caseStudy: {
-      screenshots: ["/screenshots/gleam-desktop.png"],
+      videos: [
+        {
+          src: "/videos/gleam-desktop-uk.mp4",
+          poster: "/screenshots/gleam-desktop-poster.webp",
+          width: 1920,
+          height: 1200,
+          alt: "Laptop demo of Gleam in the UK. The house rotates, exterior cleaning is picked, and the estimate builds to 828 pounds before the request is sent.",
+        },
+        {
+          src: "/videos/gleam-phone-uk.mp4",
+          poster: "/screenshots/gleam-phone-poster.webp",
+          width: 780,
+          height: 1688,
+          alt: "Phone demo of Gleam in the UK. Parts of the house are tapped, three services earn a bundle saving, and the request is sent.",
+        },
+      ],
+      screenshots: [
+        "/screenshots/gleam-phone-hero.webp",
+        "/screenshots/gleam-phone-services.webp",
+        "/screenshots/gleam-phone-summary.webp",
+        "/screenshots/gleam-phone-sent.webp",
+        "/screenshots/gleam-phone-arabic.webp",
+        "/screenshots/gleam-phone-dark.webp",
+        "/screenshots/gleam-desktop-us.webp",
+      ],
       screenshotAlts: {
-        "/screenshots/gleam-desktop.png":
-          "Gleam on desktop with a 3D house and a price estimate.",
+        "/screenshots/gleam-phone-hero.webp":
+          "Gleam on a phone in the UK, with a semi detached house and the line your price, before anyone visits.",
+        "/screenshots/gleam-phone-services.webp":
+          "Gleam on a phone in the UK, with walls soft wash selected and a 10 percent bundle saving on three services.",
+        "/screenshots/gleam-phone-summary.webp":
+          "Gleam on a phone showing a sample booking summary for windows and gutters, with an estimate of 120 pounds.",
+        "/screenshots/gleam-phone-sent.webp":
+          "Gleam on a phone after the request is sent, confirming the name, number, and chosen services.",
+        "/screenshots/gleam-phone-arabic.webp":
+          "Gleam on a phone in Saudi Arabia in Arabic, with a right to left layout and prices in riyals.",
+        "/screenshots/gleam-phone-dark.webp":
+          "Gleam on a phone in dark mode in the UK, with a semi detached house.",
+        "/screenshots/gleam-desktop-us.webp":
+          "Gleam on desktop in the United States, with a 3D house and exterior cleaning prices in dollars.",
       },
     },
   },

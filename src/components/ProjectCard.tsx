@@ -23,7 +23,7 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
         <div className="overflow-hidden border-b border-border bg-background">
           <ProjectImage
             src={project.thumbnail}
-            alt={`${project.title} screenshot`}
+            alt={project.thumbnailAlt ?? `${project.title} screenshot`}
             sizes={CARD_IMAGE_SIZES}
             className="block h-auto w-full"
           />
