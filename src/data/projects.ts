@@ -297,11 +297,11 @@ const baseProjects: Project[] = [
     title: "Gleam",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "Customers tap parts of a 3D house to pick exterior cleaning services, and the price builds as they tap. 10% off for 3 or more services, a Book here button, 7 markets, Arabic right to left, hosted free on Cloudflare Pages and built with Three.js.",
+      "Tap any part of a 3D house and the big live total updates, with a Book this price button and a bundle saving. 7 markets, including Arabic right to left, and light and dark mode.",
     tags: ["Exterior cleaning", "Three.js", "Cloudflare Pages"],
-    thumbnail: "/screenshots/gleam-desktop.png",
+    thumbnail: "/screenshots/gleam-desktop.webp",
     thumbnailAlt:
-      "Gleam on desktop in the UK, with a 3D house, three services selected, and an estimate of 828 pounds.",
+      "Gleam on desktop in the UK, with a 3D house, a live total, and a Book this price button.",
     caseStudy: {
       videos: [
         {
@@ -309,40 +309,40 @@ const baseProjects: Project[] = [
           poster: "/screenshots/gleam-desktop-poster.webp",
           width: 1920,
           height: 1200,
-          alt: "Laptop demo of Gleam in the UK. The house rotates, exterior cleaning is picked, and the estimate builds to 828 pounds before the request is sent.",
+          alt: "Laptop demo of Gleam in the UK. Parts of the house are picked, the live total builds, and the request is sent.",
         },
         {
           src: "/videos/gleam-phone-uk.mp4",
           poster: "/screenshots/gleam-phone-poster.webp",
           width: 780,
           height: 1688,
-          alt: "Phone demo of Gleam in the UK. Parts of the house are tapped, three services earn a bundle saving, and the request is sent.",
+          alt: "Phone demo of Gleam in the UK. Parts of the house are tapped, a bundle saving applies, and the request is sent.",
         },
       ],
       screenshots: [
+        "/screenshots/gleam-desktop.webp",
         "/screenshots/gleam-phone-hero.webp",
         "/screenshots/gleam-phone-services.webp",
         "/screenshots/gleam-phone-summary.webp",
         "/screenshots/gleam-phone-sent.webp",
         "/screenshots/gleam-phone-arabic.webp",
         "/screenshots/gleam-phone-dark.webp",
-        "/screenshots/gleam-desktop-us.webp",
       ],
       screenshotAlts: {
+        "/screenshots/gleam-desktop.webp":
+          "Gleam on desktop in the UK, with a 3D house, a live total, and a Book this price button.",
         "/screenshots/gleam-phone-hero.webp":
-          "Gleam on a phone in the UK, with a semi detached house and the line your price, before anyone visits.",
+          "Gleam on a phone in the UK, with a live total and a Book this price button.",
         "/screenshots/gleam-phone-services.webp":
-          "Gleam on a phone in the UK, with walls soft wash selected and a 10 percent bundle saving on three services.",
+          "Gleam on a phone in the UK, with services selected and a bundle saving.",
         "/screenshots/gleam-phone-summary.webp":
-          "Gleam on a phone showing a sample booking summary for windows and gutters, with an estimate of 120 pounds.",
+          "Gleam on a phone showing a sample booking summary with a bundle saving.",
         "/screenshots/gleam-phone-sent.webp":
           "Gleam on a phone after the request is sent, confirming the name, number, and chosen services.",
         "/screenshots/gleam-phone-arabic.webp":
-          "Gleam on a phone in Saudi Arabia in Arabic, with a right to left layout and prices in riyals.",
+          "Gleam on a phone in Saudi Arabia in Arabic, with a right to left layout and a live total in riyals.",
         "/screenshots/gleam-phone-dark.webp":
-          "Gleam on a phone in dark mode in the UK, with a semi detached house.",
-        "/screenshots/gleam-desktop-us.webp":
-          "Gleam on desktop in the United States, with a 3D house and exterior cleaning prices in dollars.",
+          "Gleam on a phone in dark mode in the UK, with a 3D house and a Book this price button.",
       },
     },
   },
