@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import InboxButton from "./InboxButton";
 
 const navLinks = [
+  { label: "How I work", href: "#how-i-work" },
+  { label: "Proof", href: "#proof" },
   { label: "About", href: "#about" },
-  { label: "Work", href: "#client-work" },
-  { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
 

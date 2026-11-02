@@ -76,34 +76,34 @@ export default function Hero() {
         </button>
 
         <div className="mt-8 flex flex-col items-center text-center [@media(min-height:561px)_and_(max-height:760px)]:mt-6 [@media(max-height:560px)]:mt-5">
-          <p className="mb-6 text-sm text-muted [@media(min-height:561px)_and_(max-height:760px)]:mb-4 [@media(max-height:560px)]:mb-3">Dubai, UAE</p>
+          <p className="mb-6 text-sm font-medium text-muted [@media(min-height:561px)_and_(max-height:760px)]:mb-4 [@media(max-height:560px)]:mb-3">{ROLE}</p>
 
-          <h1 className="text-balance text-[clamp(2.75rem,6vw,4.5rem)] font-medium leading-[1.05] tracking-tight text-foreground [@media(max-height:560px)]:text-5xl">
-            Adhil Shanif
+          <h1 className="max-w-3xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] font-medium leading-[1.08] tracking-tight text-foreground [@media(max-height:560px)]:text-4xl">
+            I find what&apos;s slowing your business down, and build AI that fixes it.
           </h1>
 
-          <p className="mt-4 text-lg font-medium text-muted sm:text-xl">{ROLE}</p>
-
-          <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
-            Internal tools, SaaS platforms and AI systems, built end to end and handed over working.
+          <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
+            Connected to the tools you already use, kept secure, with a person approving what matters, and measured by results.
           </p>
 
           <div className="mt-10 flex w-full max-w-sm [@media(min-height:561px)_and_(max-height:760px)]:mt-8 [@media(max-height:560px)]:mt-6 flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
-            <Link
-              href="/brief"
+            <a
+              href="#proof"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-base font-medium text-background transition-colors duration-150 hover:bg-accent-hover active:bg-accent-pressed"
             >
-              <Mail size={16} aria-hidden />
-              Send a brief
-            </Link>
-            <a
-              href="#client-work"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
-            >
-              View work
+              See the work
               <ArrowDown size={16} aria-hidden />
             </a>
+            <Link
+              href="/brief"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border px-5 text-base font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
+            >
+              <Mail size={16} aria-hidden />
+              Start a project
+            </Link>
           </div>
+
+          <p className="mt-6 text-sm text-muted">Fixed scope. You own everything I build.</p>
         </div>
       </div>
 
@@ -165,7 +165,7 @@ export default function Hero() {
             <p className="mb-3 max-w-[240px] text-sm leading-snug text-muted">{ROLE}</p>
 
             <p className="mb-6 max-w-[280px] text-sm leading-relaxed text-muted">
-              I design and build internal tools, SaaS platforms and AI systems, and hand them over working.
+              Fixed scope. You own everything I build.
             </p>
 
             <div className="flex items-center gap-3">

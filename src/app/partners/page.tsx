@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import BackHome from "@/components/BackHome";
-import { namedClientProjects } from "@/data/clientWork";
 import { mailtoHref, UPWORK_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -38,22 +37,6 @@ export default function PartnersPage() {
               How it works: fixed scope, fixed price, paid by milestone, written communication.
             </p>
           </div>
-
-          <ul className="mt-10 space-y-3">
-            {namedClientProjects.map((project) => (
-              <li
-                key={project.id}
-                className="rounded-lg border border-border px-5 py-4"
-              >
-                <p className="text-base font-medium text-foreground">
-                  {project.title}
-                </p>
-                <p className="mt-1.5 text-base leading-relaxed text-muted">
-                  {project.brief}
-                </p>
-              </li>
-            ))}
-          </ul>
 
           <p className="mt-10 text-base leading-relaxed text-muted">
             Top Rated on Upwork, 100% Job Success, 5.0 client rating.

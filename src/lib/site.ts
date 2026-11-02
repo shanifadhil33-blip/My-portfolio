@@ -13,12 +13,12 @@ export const WHATSAPP_URL = "https://wa.me/971506884500";
 export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
 export const PAGE_TITLE =
-  "Adhil Shanif | Custom Software & AI Systems Engineer";
+  "Adhil Shanif | Forward Deployed AI Engineer";
 
 export const PAGE_DESCRIPTION =
-  "I build internal tools, SaaS platforms and AI systems end to end, and hand them over working. Based in Dubai.";
+  "I find what's slowing your business down, and build AI that fixes it. Fixed scope. You own everything I build.";
 
-export const ROLE = "Custom Software & AI Systems Engineer";
+export const ROLE = "Forward Deployed AI Engineer";
 
 export function mailtoHref(subject: string): string {
   return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;

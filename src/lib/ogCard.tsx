@@ -1,7 +1,7 @@
 import { ROLE } from "@/lib/site";
 
 export const ogSize = { width: 1200, height: 630 };
-export const ogAlt = "Adhil Shanif | Custom Software & AI Systems Engineer";
+export const ogAlt = "Adhil Shanif | Forward Deployed AI Engineer";
 
 export function OgCard() {
   return (
