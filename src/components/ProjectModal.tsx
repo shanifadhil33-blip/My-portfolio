@@ -84,7 +84,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
-  const heroSrc = project && !project.hideMedia && project.thumbnail ? project.thumbnail : null;
+  const heroSrc =
+    project && !project.hideMedia && project.thumbnail?.startsWith("/screenshots/heroes/")
+      ? project.thumbnail
+      : null;
   const modalImages = project ? imagesForModal(project).filter((src) => src !== heroSrc) : [];
   const modalVideos = project?.hideMedia ? [] : (project?.caseStudy?.videos ?? []);
   const showTechnical = project ? hasTechnicalDetails(project) : false;

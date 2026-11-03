@@ -149,9 +149,7 @@ const baseProjects: Project[] = [
     brief:
       "Ask a PDF a question and get an answer that cites the page it came from, with the PDF opened on that page.",
     tags: ["Next.js", "pgvector", "Citations"],
-    thumbnail: "/screenshots/heroes/doctalk.webp",
-    thumbnailAlt:
-      "DocTalk on a light background, with a cited answer in a browser window and on a phone.",
+    thumbnail: "/screenshots/doctalk-home.png",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
@@ -305,9 +303,9 @@ const baseProjects: Project[] = [
     brief:
       "Tap any part of a 3D house and the big live total updates, with a Book this price button and a bundle saving. 7 markets, including Arabic right to left, and light and dark mode.",
     tags: ["Exterior cleaning", "Three.js", "Cloudflare Pages"],
-    thumbnail: "/screenshots/heroes/gleam.webp",
+    thumbnail: "/screenshots/gleam-desktop.webp",
     thumbnailAlt:
-      "Gleam on a light background, with the live total in a browser window and on a phone.",
+      "Gleam on desktop in the UK, with a 3D house, a live total, and a Book this price button.",
     caseStudy: {
       videos: [
         {
@@ -463,9 +461,7 @@ const baseProjects: Project[] = [
     brief:
       "A working prototype that sends personalized cold email on a schedule, with a hard cap of 30 emails per day.",
     tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],
-    thumbnail: "/screenshots/heroes/cold-email-agent.webp",
-    thumbnailAlt:
-      "Cold email agent on a light background, with the project files in a browser window and on a phone.",
+    thumbnail: "/screenshots/cold_email_agent.png",
     role: "Solo engineer",
     methodology: "Scheduled automation",
     techStackDetailed: [
@@ -477,7 +473,6 @@ const baseProjects: Project[] = [
       "hashlib (MD5 variant rotation)",
     ],
     caseStudy: {
-      screenshots: ["/screenshots/cold_email_agent.png"],
       problem:
         "Personalized cold email does not scale by hand. Someone has to throttle sends, log who was contacted, and honor every request to unsubscribe.",
       solution:
@@ -542,9 +537,7 @@ const baseProjects: Project[] = [
     brief:
       "Automates script, voice and video generation for long documentary videos, with a manual upload step.",
     tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
-    thumbnail: "/screenshots/heroes/youtube-automation.webp",
-    thumbnailAlt:
-      "Video pipeline on a light background, with a finished run in a browser window and on a phone.",
+    thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
     role: "Solo engineer",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
@@ -562,7 +555,6 @@ const baseProjects: Project[] = [
       "Telegram Bot API",
     ],
     caseStudy: {
-      screenshots: ["/screenshots/akhir_zamaan_pipeline.png"],
       problem:
         "A long video means research, a script, images, a voiceover and an edit. Doing each of those by hand limits how often a video can go out.",
       solution:
@@ -625,9 +617,7 @@ const baseProjects: Project[] = [
     brief:
       "Takes a YouTube transcript and builds Instagram carousel slides (copy, images and type), then publishes them on a schedule.",
     tags: ["LLM APIs", "Image generation", "Automation", "Instagram API"],
-    thumbnail: "/screenshots/heroes/instagram-carousel.webp",
-    thumbnailAlt:
-      "Carousel pipeline on a light background, with the slide path in a browser window and on a phone.",
+    thumbnail: "/screenshots/instagram_carousel_pipeline.png",
     role: "Solo engineer",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
@@ -640,7 +630,6 @@ const baseProjects: Project[] = [
       "Instagram Graph API",
     ],
     caseStudy: {
-      screenshots: ["/screenshots/instagram_carousel_pipeline.png"],
       problem:
         "Turning a long video into an Instagram carousel means pulling out the points, writing each slide, making images and posting them.",
       solution:
