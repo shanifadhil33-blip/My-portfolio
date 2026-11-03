@@ -11,21 +11,21 @@ interface ProjectCardProps {
 export default function ProjectCard({ project, onClick }: ProjectCardProps) {
   const canOpen = Boolean(project.caseStudy);
 
-  const className = `group flex h-full w-full flex-col overflow-hidden rounded-lg border border-border bg-background text-left transition-colors duration-150 ${
+  const className = `group flex h-full w-full flex-col overflow-hidden rounded-xl border border-border bg-background text-left shadow-[0_16px_40px_-18px_rgba(0,0,0,0.65)] transition duration-200 ${
     canOpen
-      ? "cursor-pointer active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30"
+      ? "cursor-pointer active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[0_22px_50px_-16px_rgba(0,0,0,0.8)]"
       : ""
   }`;
 
   const body = (
     <>
       {!project.hideMedia && project.thumbnail && (
-        <div className="overflow-hidden border-b border-border bg-background">
+        <div className="aspect-[16/10] overflow-hidden border-b border-border bg-[#f6f5f3]">
           <ProjectImage
             src={project.thumbnail}
             alt={project.thumbnailAlt ?? `${project.title} screenshot`}
             sizes={CARD_IMAGE_SIZES}
-            className="block h-auto w-full"
+            className="block h-full w-full object-cover"
           />
         </div>
       )}
