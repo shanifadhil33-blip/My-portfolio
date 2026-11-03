@@ -10,6 +10,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project, onClick }: ProjectCardProps) {
   const canOpen = Boolean(project.caseStudy);
+  const isHero = Boolean(project.thumbnail?.startsWith("/screenshots/heroes/"));
 
   const className = `group flex h-full w-full flex-col overflow-hidden rounded-xl border border-border bg-background text-left shadow-[0_16px_40px_-18px_rgba(0,0,0,0.65)] transition duration-200 ${
     canOpen
@@ -20,12 +21,18 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
   const body = (
     <>
       {!project.hideMedia && project.thumbnail && (
-        <div className="aspect-[16/10] overflow-hidden border-b border-border bg-[#f6f5f3]">
+        <div
+          className={
+            isHero
+              ? "aspect-[16/10] overflow-hidden border-b border-border bg-[#f6f5f3]"
+              : "overflow-hidden border-b border-border bg-background"
+          }
+        >
           <ProjectImage
             src={project.thumbnail}
             alt={project.thumbnailAlt ?? `${project.title} screenshot`}
             sizes={CARD_IMAGE_SIZES}
-            className="block h-full w-full object-cover"
+            className={isHero ? "block h-full w-full object-cover" : "block h-auto w-full"}
           />
         </div>
       )}
