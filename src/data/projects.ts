@@ -52,7 +52,7 @@ const baseProjects: Project[] = [
     tags: ["Document AI", "Letter drafting", "Next.js"],
     thumbnail: "/screenshots/heroes/reclaim.webp",
     thumbnailAlt:
-      "Reclaim on a light background, with the denial worklist in a browser window and the demo on a phone.",
+      "Reclaim on a soft blue background, with the denial list in an angled browser window and the drafted letter overlapping it.",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
@@ -357,7 +357,7 @@ const baseProjects: Project[] = [
     tags: ["Batch extraction", "Human review", "CSV export"],
     thumbnail: "/screenshots/heroes/eob-reader.webp",
     thumbnailAlt:
-      "EOB Reader on a light background, with a sample claim in a browser window and on a phone.",
+      "EOB Reader on a soft green background, with a straight browser window and a zoomed card of the extracted amounts.",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
