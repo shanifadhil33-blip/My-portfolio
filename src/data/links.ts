@@ -26,5 +26,8 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
   },
   "instagram-carousel": {
     // Only explanation and AI images for this project
-  }
+  },
+  "groundwork": {
+    liveUrl: "https://groundwork-portal.vercel.app",
+  },
 };
