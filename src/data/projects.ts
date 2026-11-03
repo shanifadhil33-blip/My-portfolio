@@ -50,7 +50,9 @@ const baseProjects: Project[] = [
     brief:
       "AI reads an insurance PDF, pulls out only the denied claims with their amounts, and drafts an appeal letter you can edit and copy.",
     tags: ["Document AI", "Letter drafting", "Next.js"],
-    thumbnail: "/screenshots/reclaim-worklist.png",
+    thumbnail: "/screenshots/heroes/reclaim.webp",
+    thumbnailAlt:
+      "Reclaim on a light background, with the denial worklist in a browser window and the demo on a phone.",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
@@ -147,7 +149,9 @@ const baseProjects: Project[] = [
     brief:
       "Ask a PDF a question and get an answer that cites the page it came from, with the PDF opened on that page.",
     tags: ["Next.js", "pgvector", "Citations"],
-    thumbnail: "/screenshots/doctalk-home.png",
+    thumbnail: "/screenshots/heroes/doctalk.webp",
+    thumbnailAlt:
+      "DocTalk on a light background, with a cited answer in a browser window and on a phone.",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
@@ -235,7 +239,9 @@ const baseProjects: Project[] = [
     brief:
       "For home cleaning companies that want customers to get a price on their phone and book on WhatsApp. This portfolio demo updates the estimate as they choose their home and extras.",
     tags: ["Home cleaning", "Instant pricing", "Next.js"],
-    thumbnail: "/screenshots/cleaning-estimator-desktop.png",
+    thumbnail: "/screenshots/heroes/cleaning-estimator.webp",
+    thumbnailAlt:
+      "Cleaning Price Estimator on a light background, with the live price in a browser window and on a phone.",
     techStackDetailed: ["Next.js", "TypeScript", "Vercel"],
     caseStudy: {
       problem:
@@ -299,9 +305,9 @@ const baseProjects: Project[] = [
     brief:
       "Tap any part of a 3D house and the big live total updates, with a Book this price button and a bundle saving. 7 markets, including Arabic right to left, and light and dark mode.",
     tags: ["Exterior cleaning", "Three.js", "Cloudflare Pages"],
-    thumbnail: "/screenshots/gleam-desktop.webp",
+    thumbnail: "/screenshots/heroes/gleam.webp",
     thumbnailAlt:
-      "Gleam on desktop in the UK, with a 3D house, a live total, and a Book this price button.",
+      "Gleam on a light background, with the live total in a browser window and on a phone.",
     caseStudy: {
       videos: [
         {
@@ -353,7 +359,9 @@ const baseProjects: Project[] = [
     brief:
       "Upload a batch of insurance PDFs. AI pulls out every line item, a person approves each document, and approved rows export as a CSV.",
     tags: ["Batch extraction", "Human review", "CSV export"],
-    thumbnail: "/screenshots/eob-reader-review.png",
+    thumbnail: "/screenshots/heroes/eob-reader.webp",
+    thumbnailAlt:
+      "EOB Reader on a light background, with a sample claim in a browser window and on a phone.",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
@@ -455,7 +463,9 @@ const baseProjects: Project[] = [
     brief:
       "A working prototype that sends personalized cold email on a schedule, with a hard cap of 30 emails per day.",
     tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],
-    thumbnail: "/screenshots/cold_email_agent.png",
+    thumbnail: "/screenshots/heroes/cold-email-agent.webp",
+    thumbnailAlt:
+      "Cold email agent on a light background, with the project files in a browser window and on a phone.",
     role: "Solo engineer",
     methodology: "Scheduled automation",
     techStackDetailed: [
@@ -467,6 +477,7 @@ const baseProjects: Project[] = [
       "hashlib (MD5 variant rotation)",
     ],
     caseStudy: {
+      screenshots: ["/screenshots/cold_email_agent.png"],
       problem:
         "Personalized cold email does not scale by hand. Someone has to throttle sends, log who was contacted, and honor every request to unsubscribe.",
       solution:
@@ -531,7 +542,9 @@ const baseProjects: Project[] = [
     brief:
       "Automates script, voice and video generation for long documentary videos, with a manual upload step.",
     tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
-    thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
+    thumbnail: "/screenshots/heroes/youtube-automation.webp",
+    thumbnailAlt:
+      "Video pipeline on a light background, with a finished run in a browser window and on a phone.",
     role: "Solo engineer",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
@@ -549,6 +562,7 @@ const baseProjects: Project[] = [
       "Telegram Bot API",
     ],
     caseStudy: {
+      screenshots: ["/screenshots/akhir_zamaan_pipeline.png"],
       problem:
         "A long video means research, a script, images, a voiceover and an edit. Doing each of those by hand limits how often a video can go out.",
       solution:
@@ -611,7 +625,9 @@ const baseProjects: Project[] = [
     brief:
       "Takes a YouTube transcript and builds Instagram carousel slides (copy, images and type), then publishes them on a schedule.",
     tags: ["LLM APIs", "Image generation", "Automation", "Instagram API"],
-    thumbnail: "/screenshots/instagram_carousel_pipeline.png",
+    thumbnail: "/screenshots/heroes/instagram-carousel.webp",
+    thumbnailAlt:
+      "Carousel pipeline on a light background, with the slide path in a browser window and on a phone.",
     role: "Solo engineer",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
@@ -624,6 +640,7 @@ const baseProjects: Project[] = [
       "Instagram Graph API",
     ],
     caseStudy: {
+      screenshots: ["/screenshots/instagram_carousel_pipeline.png"],
       problem:
         "Turning a long video into an Instagram carousel means pulling out the points, writing each slide, making images and posting them.",
       solution:
@@ -691,9 +708,9 @@ const baseProjects: Project[] = [
     brief:
       "For small maintenance, plumbing and HVAC companies. It plans the day, flags late jobs, and closes a job from a spoken note, in 22 languages.",
     tags: ["Maintenance", "22 languages", "Spoken notes"],
-    thumbnail: "/screenshots/groundwork-desktop-home.png",
+    thumbnail: "/screenshots/heroes/groundwork.webp",
     thumbnailAlt:
-      "Groundwork on desktop for the owner, with today's jobs, late jobs, and a plan to approve.",
+      "Groundwork on a light background, with the owner day in a browser window and the same day on a phone.",
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: ["Next.js", "Vercel"],
@@ -784,7 +801,12 @@ const baseProjects: Project[] = [
   },
 ];
 
-export const projects: Project[] = baseProjects.map((project) => ({
+const orderedProjects = [
+  ...baseProjects.filter((project) => project.id === "groundwork"),
+  ...baseProjects.filter((project) => project.id !== "groundwork"),
+];
+
+export const projects: Project[] = orderedProjects.map((project) => ({
   ...project,
   liveUrl: projectLinks[project.id]?.liveUrl || project.liveUrl,
   githubUrl: projectLinks[project.id]?.githubUrl || project.githubUrl,

@@ -84,7 +84,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   const hasGithub = !!(project?.githubUrl && project.githubUrl.trim() !== "");
   const hasLive = !!(project?.liveUrl && project.liveUrl.trim() !== "");
-  const modalImages = project ? imagesForModal(project) : [];
+  const heroSrc = project && !project.hideMedia && project.thumbnail ? project.thumbnail : null;
+  const modalImages = project ? imagesForModal(project).filter((src) => src !== heroSrc) : [];
   const modalVideos = project?.hideMedia ? [] : (project?.caseStudy?.videos ?? []);
   const showTechnical = project ? hasTechnicalDetails(project) : false;
   const plain = plainSections
@@ -297,8 +298,23 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <p className="mt-3 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
               </div>
 
-              {(modalVideos.length > 0 || modalImages.length > 0) && (
+              {(heroSrc || modalVideos.length > 0 || modalImages.length > 0) && (
                 <div className="mx-5 mt-6 space-y-4 sm:mx-6">
+                  {heroSrc && project && (
+                    <button
+                      type="button"
+                      onClick={() => setZoomedSrc(heroSrc)}
+                      className="block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-background text-left transition-colors duration-150 active:border-foreground/40 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30"
+                      title="Zoom image"
+                    >
+                      <ProjectImage
+                        src={heroSrc}
+                        alt={project.thumbnailAlt ?? `${project.title} main screenshot`}
+                        sizes={MODAL_IMAGE_SIZES}
+                        className="block h-auto w-full"
+                      />
+                    </button>
+                  )}
                   {modalVideos.map((video) => (
                     <ProjectVideo key={video.src} video={video} />
                   ))}
