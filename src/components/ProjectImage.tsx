@@ -24,6 +24,14 @@ const SCREENSHOT_SIZE: Record<string, { width: number; height: number }> = {
   "/screenshots/cold_email_agent.png": { width: 1024, height: 529 },
   "/screenshots/akhir_zamaan_pipeline.png": { width: 1024, height: 518 },
   "/screenshots/instagram_carousel_pipeline.png": { width: 1024, height: 576 },
+  "/screenshots/groundwork-desktop-home.png": { width: 2880, height: 1800 },
+  "/screenshots/groundwork-desktop-schedule.png": { width: 2880, height: 1800 },
+  "/screenshots/groundwork-desktop-documents.png": { width: 2880, height: 1800 },
+  "/screenshots/groundwork-desktop-report.png": { width: 2880, height: 1800 },
+  "/screenshots/groundwork-phone-client.png": { width: 780, height: 1688 },
+  "/screenshots/groundwork-phone-report.png": { width: 780, height: 1688 },
+  "/screenshots/groundwork-phone-chat.png": { width: 780, height: 1688 },
+  "/screenshots/groundwork-phone-arabic.png": { width: 780, height: 1688 },
 };
 
 export const CARD_IMAGE_SIZES =

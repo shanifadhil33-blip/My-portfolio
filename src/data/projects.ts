@@ -684,6 +684,104 @@ const baseProjects: Project[] = [
     maintenanceProfile:
       "Paste a new transcript when you want another batch. Queued posts publish on the schedule.",
   },
+  {
+    id: "groundwork",
+    title: "Groundwork",
+    liveUrlLabel: "Visit Web Application",
+    brief:
+      "For small maintenance, plumbing and HVAC companies. It plans the day, flags late jobs, and closes a job from a spoken note, in 22 languages.",
+    tags: ["Maintenance", "22 languages", "Spoken notes"],
+    thumbnail: "/screenshots/groundwork-desktop-home.png",
+    thumbnailAlt:
+      "Groundwork on desktop for the owner, with today's jobs, late jobs, and a plan to approve.",
+    role: "Solo engineer",
+    methodology: "End to end",
+    techStackDetailed: ["Next.js", "Vercel"],
+    caseStudy: {
+      problem:
+        "This is for small maintenance, plumbing and HVAC companies in the Gulf. The day's work is scattered across WhatsApp chats, paper notes and phone calls. A late job is easy to miss, and a day off is easy to double book. When the work is finished, the note often just says done, even when the fix will not last or a part is still missing.",
+      solution:
+        "Groundwork puts the company in one place. The owner, the admin, the supervisor, the technician and the client each open their own screen. It lays out the day, marks late jobs, counts each person's jobs, and keeps days off on the plan. A technician closes a job from a spoken note and says how it ended: fixed, a temporary fix, waiting on a part, or not fixable. Documents show when they run out. Clients follow their own requests. A practice chat, in the style of WhatsApp, answers questions about the work. It runs in 22 languages, including right to left.",
+      outcome:
+        "You can try the whole company with one click. Open the live app, tap Try the demo, and pick a person. Each visit gets its own practice jobs, separate from real accounts, and they clear after 6 hours. This is a portfolio project, and it uses practice data only.",
+      screenshots: [
+        "/screenshots/groundwork-desktop-home.png",
+        "/screenshots/groundwork-desktop-schedule.png",
+        "/screenshots/groundwork-desktop-documents.png",
+        "/screenshots/groundwork-desktop-report.png",
+        "/screenshots/groundwork-phone-report.png",
+        "/screenshots/groundwork-phone-client.png",
+        "/screenshots/groundwork-phone-chat.png",
+        "/screenshots/groundwork-phone-arabic.png",
+      ],
+      screenshotAlts: {
+        "/screenshots/groundwork-desktop-home.png":
+          "Groundwork on desktop for the owner, with today's jobs, late jobs, and a plan to approve.",
+        "/screenshots/groundwork-desktop-schedule.png":
+          "Groundwork week plan on desktop, with a technician marked on leave and jobs across the week.",
+        "/screenshots/groundwork-desktop-documents.png":
+          "Groundwork documents on desktop, with permits and certificates that are expired or close to expiry.",
+        "/screenshots/groundwork-desktop-report.png":
+          "Groundwork job report on desktop, with a spoken note and the choices fixed, temporary fix, needs a part, and can't be fixed.",
+        "/screenshots/groundwork-phone-report.png":
+          "Groundwork on a phone, where a technician speaks or types what he found before closing the job.",
+        "/screenshots/groundwork-phone-client.png":
+          "Groundwork on a phone for the client, with maintenance requests and jobs that need a time confirmed.",
+        "/screenshots/groundwork-phone-chat.png":
+          "Groundwork practice chat on a phone, with the assistant listing late jobs from the sample company.",
+        "/screenshots/groundwork-phone-arabic.png":
+          "Groundwork on a phone in Arabic, with a right to left layout, today's jobs, and late work.",
+      },
+    },
+    keyDecisions:
+      "The day plan is a proposal. Nothing is saved until the owner says yes. The job report does not choose an outcome. The technician says what happened, in his own language, and then picks fixed, a temporary fix, needs a part, or can't be fixed. A practice visit gets its own copy of the company, and that copy clears after 6 hours, so a judge can try it without touching a real account.",
+    systemOverview:
+      "Each role opens a different home. The owner sees the day, the late jobs, prices waiting on the client, and a plan he can approve. The technician sees only his own jobs, speaks or types a note, and files the report. The client sees only his own requests and can confirm a time. The practice chat answers from the sample jobs and says plainly that it is not connected to WhatsApp. Choosing Arabic switches that person's screens to a right to left layout. The app is a Next.js site on Vercel.",
+    stages: [
+      {
+        title: "1. Requests come in",
+        description:
+          "Clients send a request, or the office adds one. It lands in one list instead of a chat thread.",
+      },
+      {
+        title: "2. The day is planned",
+        description:
+          "Open jobs are placed against the people who are in, their trade, and their days off. Nothing is saved until someone approves the plan.",
+      },
+      {
+        title: "3. The job is closed in words",
+        description:
+          "The technician speaks or types what he found and what he did, then picks how it ended. The report stays on the job.",
+      },
+      {
+        title: "4. The client sees the result",
+        description:
+          "The client follows his own requests from open to done, including work that is waiting on a part.",
+      },
+    ],
+    constraints: [
+      {
+        title: "Practice copy",
+        description:
+          "Each visitor gets a private copy of the sample company. It expires after 6 hours and is then cleared. Real accounts never see that data.",
+      },
+      {
+        title: "The person decides",
+        description:
+          "A plan, a lesson, and a job outcome wait for a yes. The report does not pick how the job ended.",
+      },
+      {
+        title: "Languages",
+        description:
+          "The screens run in 22 languages. Arabic, Urdu and the other right to left languages flip the layout. Voice is marked ready in English and still early in the other languages.",
+      },
+      {
+        title: "Practice chat",
+        description:
+          "The chat uses the sample company and is not connected to WhatsApp.",
+      },
+    ],
+  },
 ];
 
 export const projects: Project[] = baseProjects.map((project) => ({
