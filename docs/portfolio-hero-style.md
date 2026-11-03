@@ -1,8 +1,8 @@
 # Portfolio hero style
 
-Use this when a project is a software app with real screens. Groundwork, Reclaim, EOB Reader, and Cleaning Price Estimator already use it. Nazeer and Soldline should use it once each one has a live app and demo data.
+Use this when a project is a software app with real screens. Groundwork, Reclaim, and EOB Reader already use it. Nazeer and Soldline should use it once each one has a live app and demo data.
 
-Gleam, DocTalk, Autonomous Cold Email Agent, YouTube Automation Pipeline, and Automated Instagram Carousel Pipeline keep the images they already have. Do not replace those with this frame.
+Gleam, DocTalk, Cleaning Price Estimator, Autonomous Cold Email Agent, YouTube Automation Pipeline, and Automated Instagram Carousel Pipeline keep the images they already have. Do not replace those with this frame.
 
 The client recommendation project has no public screens, so it stays without a picture.
 

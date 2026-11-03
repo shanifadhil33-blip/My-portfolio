@@ -237,9 +237,7 @@ const baseProjects: Project[] = [
     brief:
       "For home cleaning companies that want customers to get a price on their phone and book on WhatsApp. This portfolio demo updates the estimate as they choose their home and extras.",
     tags: ["Home cleaning", "Instant pricing", "Next.js"],
-    thumbnail: "/screenshots/heroes/cleaning-estimator.webp",
-    thumbnailAlt:
-      "Cleaning Price Estimator on a light background, with the live price in a browser window and on a phone.",
+    thumbnail: "/screenshots/cleaning-estimator-desktop.png",
     techStackDetailed: ["Next.js", "TypeScript", "Vercel"],
     caseStudy: {
       problem:
