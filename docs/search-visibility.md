@@ -25,9 +25,16 @@ References: [OpenAI crawlers](https://developers.openai.com/api/docs/bots) · [A
 ### Deliberately not done
 
 - **No `llms.txt`.** No major search engine documents using it for ranking or citation.
-- **No IndexNow.** The site has a handful of pages that change rarely. Bing Webmaster Tools reads the sitemap, which is enough. Reconsider if the site grows to many frequently updated pages.
 - **No analytics added.** The privacy page promises no tracking cookies. Vercel Web Analytics is cookieless and free on Hobby if you want visit and referrer data; enabling it needs a privacy page update.
 - **No FAQ blocks, hidden text or location pages.**
+
+### IndexNow (Bing and other IndexNow engines)
+
+- Key file: `public/78ab3c46c2ec6085ecd61af795b773db.txt` (public by design).
+- Submit the sitemap URLs after a real content change, not on a schedule:
+  `GET https://adhilshanif.vercel.app/api/indexnow?token=<private token>`
+- The route stores only a SHA-256 hash of the token. The token itself is kept outside the repository.
+- Google does not use IndexNow; it reads the sitemap through Search Console.
 
 ## Account-owner steps
 
