@@ -19,10 +19,10 @@ export const metadata: Metadata = {
 };
 
 const points = [
-  "A complete application, or one engineering workstream on a client project.",
-  "Work inside your codebase, tools and delivery process, alongside your team.",
-  "Behind your brand when that suits the client. The client relationship stays yours.",
-  "Fixed scope and price per milestone, with written updates you can forward.",
+  "Portals, dashboards, web apps, integrations and AI features your clients ask for.",
+  "Behind your brand: you stay the face of the project and I build underneath it.",
+  "Or refer it to me: I scope and deliver it, and referral terms are agreed up front.",
+  "Fixed scope and price per milestone, with written updates you can send as your own.",
 ];
 
 export default function PartnersPage() {
@@ -34,7 +34,7 @@ export default function PartnersPage() {
           Technical delivery for agencies and consultants.
         </h1>
         <p className="mt-6 text-pretty text-lg leading-relaxed text-muted">
-          Need engineering capacity for a client project? I can take ownership of specific technical work or complete application development, working with your existing requirements, codebase and delivery process.
+          For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don&apos;t build in house. I build it, behind your brand or by referral, with written updates and fixed milestones.
         </p>
 
         <ul className="mt-10 space-y-3">
