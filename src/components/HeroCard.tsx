@@ -2,115 +2,172 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Mail, RotateCcw } from "lucide-react";
-import { EMAIL, GITHUB_URL, LINKEDIN_URL, ROLE, UPWORK_URL, WHATSAPP_URL } from "@/lib/site";
+import { Mail, MoveHorizontal } from "lucide-react";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, UPWORK_URL, WHATSAPP_URL } from "@/lib/site";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "./ui";
 
+const EDGE_LAYERS = 10; // 1px rings that give the coin a visible rim while it turns
+const DEG_PER_PX = 0.55;
+
 const iconLink =
-  "flex h-12 w-12 items-center justify-center rounded-full border border-border text-foreground transition-colors duration-150 hover:border-foreground/40 hover:bg-foreground/5 active:bg-foreground/10";
+  "flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors duration-150 hover:border-white/40 hover:bg-white/10 active:bg-white/15";
 
-/** Portrait card that leans toward the pointer and turns over to show contact links. */
+/**
+ * A round portrait that turns like a coin. Swipe or drag sideways to spin it, tap to flip.
+ * The back carries the contact links. Vertical swipes still scroll the page.
+ */
 export default function HeroCard() {
-  const [flipped, setFlipped] = useState(false);
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const flipBackRef = useRef<HTMLButtonElement>(null);
-  const frontRef = useRef<HTMLButtonElement>(null);
-  const firstRender = useRef(true);
+  const coinRef = useRef<HTMLDivElement>(null);
+  const angle = useRef(0);
+  const drag = useRef<{ x: number; y: number; start: number; t: number; lastX: number; lastT: number; active: boolean; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
+  const [showingBack, setShowingBack] = useState(false);
+  const [hinted, setHinted] = useState(false);
 
+  const apply = (deg: number, animate: boolean) => {
+    const el = coinRef.current;
+    if (!el) return;
+    el.style.transition = animate ? "transform 650ms cubic-bezier(.2,.8,.2,1)" : "none";
+    el.style.transform = `rotateY(${deg}deg)`;
+  };
+
+  const settle = (target: number) => {
+    angle.current = target;
+    apply(target, true);
+    setShowingBack(Math.abs(Math.round(target / 180)) % 2 === 1);
+  };
+
+  const flip = () => settle(Math.round(angle.current / 180) * 180 + 180);
+
+  // A small nudge on first view so people see the card turns.
   useEffect(() => {
-    if (firstRender.current) { firstRender.current = false; return; }
-    (flipped ? flipBackRef : frontRef).current?.focus({ preventScroll: true });
-  }, [flipped]);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t1 = setTimeout(() => { if (!drag.current && angle.current === 0) apply(-28, true); }, 1400);
+    const t2 = setTimeout(() => { if (!drag.current && angle.current === 0) apply(0, true); setHinted(true); }, 2100);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
 
-  function onMove(event: React.PointerEvent<HTMLDivElement>) {
-    if (event.pointerType !== "mouse") return;
-    const el = sceneRef.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const r = el.getBoundingClientRect();
-    const x = (event.clientX - r.left) / r.width - 0.5;
-    const y = (event.clientY - r.top) / r.height - 0.5;
-    el.dataset.moving = "true";
-    el.style.setProperty("--ry", `${(x * 12).toFixed(2)}deg`);
-    el.style.setProperty("--rx", `${(-y * 10).toFixed(2)}deg`);
+  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    if (e.button !== 0) return;
+    const now = performance.now();
+    drag.current = { x: e.clientX, y: e.clientY, start: angle.current, t: now, lastX: e.clientX, lastT: now, active: false, moved: false };
   }
 
-  function onLeave() {
-    const el = sceneRef.current;
-    if (!el) return;
-    el.dataset.moving = "false";
-    el.style.setProperty("--ry", "0deg");
-    el.style.setProperty("--rx", "0deg");
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const d = drag.current;
+    if (!d) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    if (!d.active) {
+      // Decide the gesture: sideways spins the coin, vertical is left to the page scroll.
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      if (Math.abs(dy) > Math.abs(dx)) { drag.current = null; return; }
+      d.active = true;
+      d.moved = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    d.lastX = e.clientX;
+    d.lastT = performance.now();
+    angle.current = d.start + dx * DEG_PER_PX;
+    apply(angle.current, false);
+  }
+
+  function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
+    const d = drag.current;
+    drag.current = null;
+    if (!d || !d.active) return;
+    suppressClick.current = true;
+    setTimeout(() => (suppressClick.current = false), 0);
+    const dt = Math.max(1, performance.now() - d.lastT);
+    const velocity = ((e.clientX - d.lastX) / dt) * DEG_PER_PX * 120; // a flick carries the spin further
+    const projected = angle.current + velocity;
+    let target = Math.round(projected / 180) * 180;
+    // Any deliberate swipe turns the card at least once.
+    if (target === Math.round(d.start / 180) * 180 && Math.abs(angle.current - d.start) > 25) {
+      target += angle.current > d.start ? 180 : -180;
+    }
+    settle(target);
+  }
+
+  function onClickCapture(e: React.MouseEvent) {
+    if (suppressClick.current) { e.preventDefault(); e.stopPropagation(); }
   }
 
   return (
-    <div ref={sceneRef} className="tilt mx-auto w-full max-w-[22rem]" onPointerMove={onMove} onPointerLeave={onLeave}>
-      <div className="tilt-inner">
-        <div className="flip aspect-[4/5]" data-flipped={flipped}>
+    <div className="mx-auto flex w-full max-w-[22rem] flex-col items-center">
+      <div
+        className="coin-scene relative aspect-square w-[min(22rem,82vw)] select-none"
+        style={{ touchAction: "pan-y" }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={() => { drag.current = null; settle(Math.round(angle.current / 180) * 180); }}
+        onClickCapture={onClickCapture}
+      >
+        <div aria-hidden className="absolute inset-[-14%] rounded-full bg-[radial-gradient(closest-side,rgba(56,189,248,0.18),transparent)]" />
+        <div ref={coinRef} className="coin relative h-full w-full">
+          {/* Rim */}
+          {Array.from({ length: EDGE_LAYERS }, (_, i) => (
+            <div
+              key={i}
+              aria-hidden
+              className="absolute inset-0 rounded-full bg-[#0f1b26]"
+              style={{ transform: `translateZ(${i - EDGE_LAYERS / 2 + 0.5}px)`, boxShadow: "inset 0 0 0 1px rgba(56,189,248,0.35)" }}
+            />
+          ))}
+
           {/* Front */}
           <button
-            ref={frontRef}
             type="button"
-            onClick={() => setFlipped(true)}
-            inert={flipped}
-            aria-label="Turn the card over for contact links"
-            className="face absolute inset-0 overflow-hidden rounded-[28px] border border-white/10 bg-surface text-left shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)]"
+            onClick={flip}
+            inert={showingBack}
+            aria-label="Flip the card for contact links"
+            className="coin-face absolute inset-0 overflow-hidden rounded-full border border-white/15 bg-surface shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)]"
+            style={{ transform: `translateZ(${EDGE_LAYERS / 2}px)` }}
           >
             <Image
               src="/adhil-portrait.jpg"
               alt="Portrait of Adhil Shanif"
               fill
               priority
-              sizes="(max-width: 640px) 80vw, 352px"
-              className="object-cover object-top"
+              draggable={false}
+              sizes="(max-width: 640px) 82vw, 352px"
+              className="pointer-events-none object-cover object-[50%_22%]"
             />
-            <span className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#05070a] via-[#05070a]/70 to-transparent" aria-hidden />
-            <span className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-3">
-              <span>
-                <span className="block text-xl font-semibold tracking-tight text-white">Adhil Shanif</span>
-                <span className="mt-0.5 block text-sm text-white/70">Software engineer · Dubai</span>
-              </span>
-              <span className="flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-white/20 bg-black/30 px-3 text-xs text-white/85">
-                <RotateCcw size={13} aria-hidden /> Contact
-              </span>
-            </span>
+            <span aria-hidden className="absolute inset-0 rounded-full shadow-[inset_0_0_0_6px_rgba(5,7,10,0.35),inset_0_-60px_80px_-40px_rgba(5,7,10,0.7)]" />
           </button>
 
           {/* Back */}
           <div
-            inert={!flipped}
-            className="face face-back flex flex-col justify-between overflow-hidden rounded-[28px] border border-white/10 bg-surface p-6 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.9)]"
+            inert={!showingBack}
+            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full border border-sky-400/40 bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-8 text-center text-white"
+            style={{ transform: `rotateY(180deg) translateZ(${EDGE_LAYERS / 2}px)` }}
           >
-            <div>
-              <p className="font-mono text-xs tracking-[0.18em] text-accent uppercase">Get in touch</p>
-              <p className="mt-4 text-2xl font-semibold tracking-tight text-foreground">Adhil Shanif</p>
-              <p className="mt-1 text-sm text-muted">{ROLE}, Dubai</p>
-              <p className="mt-5 text-pretty text-base leading-relaxed text-muted">
-                Agencies, founders and businesses. I reply by email within 24 hours.
-              </p>
+            <p className="font-mono text-[11px] tracking-[0.2em] text-sky-300 uppercase">Get in touch</p>
+            <p className="mt-2 text-xl font-semibold tracking-tight">Adhil Shanif</p>
+            <p className="mt-1 text-xs text-white/60">Replies within 24 hours</p>
+            <div className="mt-5 grid grid-cols-4 gap-2.5">
+              <a href={`mailto:${EMAIL}`} className={iconLink} aria-label="Email" title="Email"><Mail size={17} aria-hidden /></a>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="LinkedIn" title="LinkedIn"><LinkedinIcon size={17} /></a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="WhatsApp" title="WhatsApp"><WhatsappIcon size={17} /></a>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="GitHub" title="GitHub"><GithubIcon size={17} /></a>
             </div>
-            <div>
-              <div className="grid grid-cols-4 gap-3">
-                <a href={`mailto:${EMAIL}`} className={iconLink} aria-label="Email" title="Email"><Mail size={18} aria-hidden /></a>
-                <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="LinkedIn" title="LinkedIn"><LinkedinIcon /></a>
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="WhatsApp" title="WhatsApp"><WhatsappIcon /></a>
-                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="GitHub" title="GitHub"><GithubIcon /></a>
-              </div>
-              <div className="mt-5 flex items-center justify-between gap-3 border-t border-border pt-4">
-                <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm text-accent underline-offset-4 hover:underline">
-                  Top Rated on Upwork
-                </a>
-                <button
-                  ref={flipBackRef}
-                  type="button"
-                  onClick={() => setFlipped(false)}
-                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm text-muted hover:text-foreground"
-                >
-                  <RotateCcw size={14} aria-hidden /> Back
-                </button>
-              </div>
-            </div>
+            <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-11 items-center text-xs text-sky-300 underline-offset-4 hover:underline">
+              Top Rated on Upwork
+            </a>
+            <button type="button" onClick={flip} className="absolute bottom-[9%] min-h-11 px-4 text-xs text-white/55 hover:text-white">
+              Turn back
+            </button>
           </div>
         </div>
+      </div>
+
+      <div className="mt-6 text-center">
+        <p className="text-lg font-semibold tracking-tight text-foreground">Adhil Shanif</p>
+        <p className="mt-0.5 text-sm text-muted">Software engineer · Dubai</p>
+        <p className={`mt-3 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs text-muted transition-opacity duration-500 ${hinted ? "opacity-100" : "opacity-70"}`}>
+          <MoveHorizontal size={13} aria-hidden /> Swipe or tap to flip
+        </p>
       </div>
     </div>
   );
