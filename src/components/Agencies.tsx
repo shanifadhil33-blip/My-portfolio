@@ -2,17 +2,17 @@ import AgencyStack from "./AgencyStack";
 import { PillLink, SectionHead } from "./ui";
 
 const handoffs = [
-  { title: "Complete builds", detail: "A scoped application taken from your spec to a deployed, working product." },
-  { title: "Backend, APIs & databases", detail: "Data models, business logic, migrations and the APIs your frontend depends on." },
-  { title: "The difficult feature", detail: "The piece your team does not have the time or the depth for this sprint." },
-  { title: "AI features & agents", detail: "Document extraction, retrieval, agents with human approval, added to an existing product." },
-  { title: "Security & production issues", detail: "Access control reviews, tenant isolation fixes and debugging live problems." },
-  { title: "Overflow & maintenance", detail: "Extra capacity on a running project, or looking after it once it has launched." },
+  { title: "Client portals & dashboards", detail: "Logins, roles and the screens your client's customers or staff use every day." },
+  { title: "Custom web applications", detail: "A complete build from your designs, taken to a deployed, working product." },
+  { title: "Integrations", detail: "Connecting the tools your client already pays for: payments, CRMs, booking and email." },
+  { title: "AI features", detail: "Document extraction and assistants on the client's own data, with a person approving the output." },
+  { title: "Fixing what's already there", detail: "Production problems, security issues, or an app someone else left half done." },
+  { title: "Looking after it after launch", detail: "Hosting, monitoring and updates, so you don't need an engineer on call." },
 ];
 
 const working = [
-  "Your process, your tools, your codebase",
-  "Written updates you can forward to the client",
+  "Built from your designs and brief",
+  "Written updates you can forward or send as your own",
   "Fixed scope and price per milestone",
   "Your client relationship stays yours",
 ];
@@ -26,7 +26,7 @@ export default function Agencies() {
           n="01"
           label="Agency partnerships"
           title="Technical delivery for agencies and consultants."
-          lead="Need engineering capacity for a client project? I can take ownership of specific technical work or complete application development, working with your existing requirements, codebase and delivery process."
+          lead="For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don't build in house. I build it, behind your brand or by referral, with written updates and fixed milestones."
         />
 
         <div className="mt-16 md:mt-20">

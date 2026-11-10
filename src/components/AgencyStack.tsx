@@ -7,16 +7,16 @@ import LayerCardModal, { type CardOwner, type Rect } from "./LayerCardModal";
 
 const modes: { id: Mode; title: string; detail: string }[] = [
   {
-    id: "alongside",
-    title: "Alongside your team",
-    detail:
-      "Your designers and developers keep their parts. I take the engineering pieces you hand over and work inside your codebase, tools and review process.",
-  },
-  {
     id: "whitelabel",
     title: "Behind your brand",
     detail:
-      "Your agency stays the face of the project. I deliver the engineering underneath, and the client relationship stays yours.",
+      "You sell the project and stay the face of it. I build the software underneath, under your name, and the client relationship stays yours.",
+  },
+  {
+    id: "referral",
+    title: "Refer it to me",
+    detail:
+      "A client asks for something outside what you do. Introduce them, I scope and deliver it, and you stay in the loop. Referral terms are agreed up front.",
   },
 ];
 
@@ -27,7 +27,7 @@ const PULL_OPEN = 56; // px of upward drag that lifts a layer out as a card
 type Slab = { card: LayerCard; owner: CardOwner };
 
 export default function AgencyStack() {
-  const [mode, setMode] = useState<Mode>("alongside");
+  const [mode, setMode] = useState<Mode>("whitelabel");
   const [selected, setSelected] = useState<string>("backend");
   const [openId, setOpenId] = useState<string | null>(null);
   const [from, setFrom] = useState<Rect | null>(null);
@@ -39,7 +39,7 @@ export default function AgencyStack() {
   const touched = useRef(false);
 
   const slabs: Slab[] = [
-    ...engineeringLayers.map((l) => ({ card: l, owner: (mode === "alongside" && l.agencyKeeps ? "agency" : "mine") as CardOwner })),
+    ...engineeringLayers.map((l) => ({ card: l, owner: "mine" as CardOwner })),
     { card: agencyLayer[mode], owner: "brand" as CardOwner },
   ];
   // Card order when stepping: whole build, then the stack from top to bottom.

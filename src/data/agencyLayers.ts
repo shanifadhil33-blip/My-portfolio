@@ -1,7 +1,7 @@
 // Content for the agency layer stack. Each layer opens as a two-sided card.
 // Proof lines reference only work shown elsewhere on the site.
 
-export type Mode = "alongside" | "whitelabel";
+export type Mode = "whitelabel" | "referral";
 
 export type LayerCard = {
   id: string;
@@ -13,8 +13,8 @@ export type LayerCard = {
   proof: string;
 };
 
-/** Engineering layers, bottom to top. `agencyKeeps` marks layers an agency usually keeps when working alongside. */
-export const engineeringLayers: (LayerCard & { agencyKeeps?: boolean })[] = [
+/** Engineering layers, bottom to top. All of them are delivered by me in both modes. */
+export const engineeringLayers: LayerCard[] = [
   {
     id: "deploy",
     label: "Deployment & operations",
@@ -108,7 +108,7 @@ export const engineeringLayers: (LayerCard & { agencyKeeps?: boolean })[] = [
   {
     id: "frontend",
     label: "Frontend",
-    summary: "Screens, dashboards and admin panels, built from your designer's files.",
+    summary: "Screens, dashboards and admin panels, built from your design files.",
     take: [
       "Pages and components from Figma or your design system",
       "Dashboards, admin panels and forms with validation",
@@ -116,49 +116,48 @@ export const engineeringLayers: (LayerCard & { agencyKeeps?: boolean })[] = [
       "Loading, empty and error states, not just the happy path",
     ],
     how: [
-      "Your designer stays the source of truth for the look",
-      "Built inside your component library",
-      "Or keep frontend in house and I build what sits under it",
+      "Your designs stay the source of truth for the look",
+      "Built to match them on phone and desktop",
+      "You review it on a preview link before it goes live",
     ],
     get: ["Pull requests against your repo", "Screens tested on real devices"],
     proof: "Groundwork and the cleaning price estimator: role-based screens and Arabic right to left layouts.",
-    agencyKeeps: true,
   },
 ];
 
 export const agencyLayer: Record<Mode, LayerCard> = {
-  alongside: {
-    id: "top",
-    label: "Your agency team",
-    summary: "Design, client contact and project management stay with your team.",
-    take: [
-      "You own the client relationship",
-      "You set priorities, I report into your process",
-      "Your designers and PMs stay the source of truth",
-    ],
-    how: [
-      "You share the scope or give me access to the codebase",
-      "I reply in writing with questions and a milestone plan",
-      "Fixed price per milestone, funded before work starts",
-    ],
-    get: ["Written updates you can forward to the client", "Code in your repo from day one"],
-    proof: "Repeat work from the same client after the first engagement closed at 5 stars.",
-  },
   whitelabel: {
     id: "top",
     label: "Your brand",
-    summary: "The client sees your agency only. I work underneath, under your name.",
+    summary: "You sell the project and stay the face of it. I build the software underneath, under your name.",
     take: [
       "I work in your tools and under your name",
       "No contact with your client unless you want it",
       "Your relationship and your margin stay yours",
     ],
     how: [
-      "You share the scope or give me access to the codebase",
-      "I reply in writing with questions and a milestone plan",
-      "Fixed price per milestone, funded before work starts",
+      "You share the brief and the designs",
+      "I reply in writing with questions, a scope and a fixed price",
+      "Milestones are funded before work starts",
     ],
-    get: ["Updates written so you can send them as your own", "Code and accounts in your name"],
+    get: ["Updates written so you can send them as your own", "Code and accounts in your client's name"],
+    proof: "Repeat work from the same client after the first engagement closed at 5 stars.",
+  },
+  referral: {
+    id: "top",
+    label: "Your client",
+    summary: "A client asks for something outside what you do. You introduce them, I scope and deliver it.",
+    take: [
+      "You introduce the client and the need",
+      "I scope it in writing and quote a fixed price",
+      "Referral terms are agreed before any work starts",
+    ],
+    how: [
+      "Nothing starts until the client approves the written scope",
+      "I work with the client directly, in writing",
+      "You decide how closely you want to be kept in the loop",
+    ],
+    get: ["A client you didn't have to turn away", "Copies of the updates, if you want them"],
     proof: "Repeat work from the same client after the first engagement closed at 5 stars.",
   },
 };
