@@ -62,7 +62,7 @@ export default function PartnersPage() {
           rel="noopener noreferrer"
           className="mt-6 inline-flex min-h-11 items-center text-accent underline underline-offset-4 hover:text-accent-hover"
         >
-          Top Rated on Upwork — verified reviews
+          Top Rated on Upwork: verified reviews
         </a>
 
         <div className="mt-10">

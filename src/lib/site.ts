@@ -20,9 +20,9 @@ export const ROLE = "Independent Software Engineer";
 export const HEADLINE = "The engineer behind the build.";
 
 export const SUBHEADLINE =
-  "Independent software engineer for agencies, founders and businesses — from a single backend task to complete, production-ready products.";
+  "Independent software engineer for agencies, founders and businesses. From a single backend task to complete, production-ready products.";
 
-export const PAGE_TITLE = "Adhil Shanif — Software Engineer & Technical Delivery Partner";
+export const PAGE_TITLE = "Adhil Shanif | Software Engineer & Technical Delivery Partner";
 
 export const PAGE_DESCRIPTION =
   "Independent software engineer in Dubai building custom software, backends, APIs, integrations and AI systems for agencies, founders and businesses.";
