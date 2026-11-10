@@ -11,7 +11,7 @@ export const UPWORK_URL =
 
 export const LINKEDIN_URL = "https://www.linkedin.com/in/adhil-shanif-83a233358";
 
-export const WHATSAPP_URL = "https://wa.me/971506884500";
+export const WHATSAPP_URL = "https://wa.me/971504874729";
 
 export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
