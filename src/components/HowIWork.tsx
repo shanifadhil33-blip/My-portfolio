@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { engagementTerms, qualitySteps, TESTING_LINE } from "@/data/services";
+import { commitments, engagementTerms, qualitySteps, TESTING_LINE } from "@/data/services";
 import Lifecycle from "./Lifecycle";
 import { SectionHead } from "./ui";
 
@@ -80,14 +80,19 @@ export default function HowIWork() {
           </div>
         </div>
 
-        <aside aria-labelledby="tools-title" className="mt-20 rounded-3xl border border-border bg-surface p-7 sm:p-9 md:mt-24">
+        <aside aria-labelledby="hold-title" className="mt-20 rounded-3xl border border-border bg-surface p-7 sm:p-9 md:mt-24">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-10">
-            <h3 id="tools-title" className="text-xl font-semibold leading-snug tracking-tight text-foreground md:col-span-4">
-              Modern tools. Hands-on engineering.
+            <h3 id="hold-title" className="text-2xl font-semibold leading-snug tracking-tight text-foreground md:col-span-4">
+              What you can hold me to
             </h3>
-            <p className="text-pretty text-base leading-relaxed text-muted md:col-span-8">
-              I use AI coding agents to speed up implementation, code analysis, testing and iteration. The engineering decisions, project direction, reviews and final verification stay my responsibility. I work directly on the system, inspect important changes and test the software myself before delivery.
-            </p>
+            <ul className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 md:col-span-8">
+              {commitments.map((c, i) => (
+                <li key={c} className="flex gap-4">
+                  <span className="font-mono text-sm text-accent">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-pretty text-base leading-relaxed text-foreground">{c}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </aside>
 
