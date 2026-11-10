@@ -6,6 +6,8 @@ import type { LayerCard } from "@/data/agencyLayers";
 
 export type CardOwner = "mine" | "agency" | "brand" | "whole";
 export type Rect = { x: number; y: number; w: number; h: number };
+/** How the layer sat in the stack when it was picked up: its tilt, spin and real (unprojected) width. */
+export type Pose = { tilt: number; spin: number; size: number };
 
 const OWNER_LABEL: Record<CardOwner, string> = {
   mine: "Delivered by me",
@@ -33,6 +35,7 @@ export default function LayerCardModal({
   index,
   total,
   from,
+  pose,
   onClose,
   onStep,
 }: {
@@ -41,10 +44,13 @@ export default function LayerCardModal({
   index: number;
   total: number;
   from: Rect | null;
+  pose: Pose | null;
   onClose: () => void;
   onStep: (dir: -1 | 1) => void;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const liftRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const angle = useRef(0);
@@ -55,24 +61,35 @@ export default function LayerCardModal({
   const leaving = useRef(false);
   const reduce = useRef(false);
 
-  // Fly in from the slab.
+  /** The transform that puts the card back where the layer lay in the stack: same spot, tilt, spin and size. */
+  const inStack = (el: HTMLElement): string | null => {
+    if (!from || !pose) return null;
+    const r = el.getBoundingClientRect();
+    const dx = from.x + from.w / 2 - (r.left + r.width / 2);
+    const dy = from.y + from.h / 2 - (r.top + r.height / 2);
+    const scale = Math.max(0.2, pose.size / r.width);
+    return `translate(${dx}px, ${dy}px) rotateX(${pose.tilt}deg) rotateZ(${pose.spin}deg) scale(${scale})`;
+  };
+
+  // Pick up: the card starts lying in the stack and rises to face the viewer.
   useLayoutEffect(() => {
     reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const el = wrapRef.current;
-    if (!el) return;
-    if (!from || reduce.current) {
-      el.style.opacity = "1";
-      return;
-    }
-    const to = el.getBoundingClientRect();
-    el.style.transformOrigin = "0 0";
-    el.style.transition = "none";
-    el.style.opacity = "0.4";
-    el.style.transform = `translate(${from.x - to.left}px, ${from.y - to.top}px) scale(${from.w / to.width}, ${from.h / to.height})`;
-    void el.offsetWidth;
-    el.style.transition = "transform 560ms cubic-bezier(.2,.8,.2,1), opacity 320ms ease";
-    el.style.transform = "none";
-    el.style.opacity = "1";
+    const wrap = wrapRef.current;
+    const lift = liftRef.current;
+    const bd = backdropRef.current;
+    if (bd) { bd.style.opacity = "0"; void bd.offsetWidth; bd.style.transition = "opacity 360ms ease"; bd.style.opacity = "1"; }
+    if (!wrap || !lift) return;
+    const start = reduce.current ? null : inStack(lift);
+    if (!start) { wrap.style.opacity = "1"; return; }
+    wrap.style.opacity = "1";
+    wrap.dataset.lifting = "true";
+    lift.style.transition = "none";
+    lift.style.transform = start;
+    void lift.offsetWidth;
+    lift.style.transition = "transform 760ms cubic-bezier(.16,.9,.24,1.04)";
+    lift.style.transform = "none";
+    const t = setTimeout(() => { delete wrap.dataset.lifting; }, 520);
+    return () => clearTimeout(t);
     // Only on first open; stepping between layers keeps the card in place.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -106,14 +123,19 @@ export default function LayerCardModal({
   function close() {
     if (leaving.current) return;
     leaving.current = true;
-    const el = wrapRef.current;
-    if (!el || !from || reduce.current) { onClose(); return; }
-    const now = el.getBoundingClientRect();
-    el.style.transformOrigin = "0 0";
-    el.style.transition = "transform 460ms cubic-bezier(.4,0,.2,1), opacity 380ms ease 80ms";
-    el.style.transform = `translate(${from.x - now.left}px, ${from.y - now.top}px) scale(${from.w / now.width}, ${from.h / now.height})`;
-    el.style.opacity = "0";
-    setTimeout(onClose, 470);
+    const wrap = wrapRef.current;
+    const lift = liftRef.current;
+    const bd = backdropRef.current;
+    if (bd) { bd.style.transition = "opacity 420ms ease 120ms"; bd.style.opacity = "0"; }
+    const end = !reduce.current && lift ? inStack(lift) : null;
+    if (!wrap || !lift || !end) { onClose(); return; }
+    // Put it back: the card lies down into its place in the stack.
+    wrap.dataset.lifting = "true";
+    if (innerRef.current) { innerRef.current.style.transition = "transform 300ms ease"; innerRef.current.style.transform = `rotateY(${Math.round(angle.current / 360) * 360}deg)`; }
+    lift.style.transition = "transform 560ms cubic-bezier(.5,0,.75,.2), opacity 200ms ease 380ms";
+    lift.style.transform = end;
+    lift.style.opacity = "0";
+    setTimeout(onClose, 580);
   }
 
   const turnTo = (deg: number, animate: boolean) => {
@@ -170,18 +192,19 @@ export default function LayerCardModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#05070a]/92 p-4"
-      onClick={(e) => { if (e.target === e.currentTarget) close(); }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 [perspective:1300px]"
+      onClick={(e) => { if (e.target === e.currentTarget || e.target === backdropRef.current) close(); }}
     >
+      <div ref={backdropRef} className="absolute inset-0 bg-[#05070a]/92" style={{ opacity: 0 }} />
       <div
         ref={wrapRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative w-[min(26rem,100%)]"
+        className="lift-wrap relative w-[min(24rem,100%)] [transform-style:preserve-3d]"
         style={{ opacity: 0 }}
       >
-        <div className="mb-3 flex items-center justify-between text-white">
+        <div className="lift-chrome mb-3 flex items-center justify-between text-white">
           <span className="font-mono text-xs tracking-[0.16em] text-white/70 uppercase">
             {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
@@ -196,6 +219,7 @@ export default function LayerCardModal({
           </button>
         </div>
 
+        <div ref={liftRef} className="[transform-style:preserve-3d]">
         <div
           className="card3d select-none"
           style={{ touchAction: "pan-y" }}
@@ -257,8 +281,9 @@ export default function LayerCardModal({
             </section>
           </div>
         </div>
+        </div>
 
-        <div className="mt-4 flex items-center justify-between gap-3">
+        <div className="lift-chrome mt-4 flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => onStep(-1)}

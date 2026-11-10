@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUp, Move3d, RotateCcw } from "lucide-react";
 import { agencyLayer, engineeringLayers, wholeBuild, type LayerCard, type Mode } from "@/data/agencyLayers";
-import LayerCardModal, { type CardOwner, type Rect } from "./LayerCardModal";
+import LayerCardModal, { type CardOwner, type Pose, type Rect } from "./LayerCardModal";
 
 const modes: { id: Mode; title: string; detail: string }[] = [
   {
@@ -31,6 +31,7 @@ export default function AgencyStack() {
   const [selected, setSelected] = useState<string>("backend");
   const [openId, setOpenId] = useState<string | null>(null);
   const [from, setFrom] = useState<Rect | null>(null);
+  const [pose, setPose] = useState<Pose | null>(null);
   const [open, setOpen] = useState(false);
   const sceneRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
@@ -81,10 +82,13 @@ export default function AgencyStack() {
     return { x: r.left, y: r.top, w: Math.max(40, r.width), h: Math.max(40, r.height) };
   };
 
+  const poseNow = (): Pose => ({ tilt: view.current.tilt, spin: view.current.spin, size: stackRef.current?.offsetWidth ?? 160 });
+
   const openCard = (id: string) => {
     touched.current = true;
     if (id !== "whole") setSelected(id);
     setFrom(rectOf(id));
+    setPose(poseNow());
     setOpenId(id);
   };
 
@@ -96,7 +100,8 @@ export default function AgencyStack() {
     const ids = [wholeBuild.id, "top", ...[...engineeringLayers].reverse().map((l) => l.id)];
     const next = ids[(ids.indexOf(cur) + dir + ids.length) % ids.length];
     if (next !== "whole") setSelected(next);
-    setFrom(rectOf(next)); // closing flies back to the layer now on screen
+    setFrom(rectOf(next)); // closing puts the card back where this layer sits
+    setPose(poseNow());
     setOpenId(next);
     // rectOf only reads the DOM.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,7 +211,7 @@ export default function AgencyStack() {
 
         <div
           ref={sceneRef}
-          className="slab-scene relative mx-auto aspect-square w-full max-w-[32rem] cursor-grab select-none active:cursor-grabbing"
+          className="slab-scene relative mx-auto aspect-[4/5] w-full max-w-[32rem] cursor-grab select-none active:cursor-grabbing sm:aspect-square"
           data-open={open}
           style={{ touchAction: "pan-y" }}
           onPointerDown={onPointerDown}
@@ -215,8 +220,9 @@ export default function AgencyStack() {
           onPointerCancel={cancelGesture}
           aria-hidden
         >
-          <div className="absolute inset-0 flex items-center justify-center pt-[30%]">
-            <div ref={stackRef} className="slab-stack relative aspect-square w-[50%]">
+          {/* Positioned with margins, not a transform, so the stack keeps the scene's perspective. */}
+          <div className="absolute top-[66%] left-1/2 -mt-[22%] -ml-[22%] aspect-square w-[44%]">
+            <div ref={stackRef} className="slab-stack relative h-full w-full">
               <div className="slab-shadow" />
               {slabs.map((s, i) => (
                 <div
@@ -297,6 +303,7 @@ export default function AgencyStack() {
           index={deck.findIndex((s) => s.card.id === openSlab.card.id)}
           total={deck.length}
           from={from}
+          pose={pose}
           onStep={step}
           onClose={() => { setOpenId(null); setFrom(null); }}
         />

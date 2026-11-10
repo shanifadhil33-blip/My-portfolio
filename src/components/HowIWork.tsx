@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { commitments, engagementTerms, qualitySteps, TESTING_LINE } from "@/data/services";
 import Lifecycle from "./Lifecycle";
 import { SectionHead } from "./ui";
@@ -63,9 +61,6 @@ export default function HowIWork() {
           <Lifecycle />
         </div>
 
-        <Link href="/services" className="mt-10 inline-flex min-h-11 items-center gap-2 text-base text-accent underline-offset-4 hover:underline">
-          What each stage includes <ArrowRight size={16} aria-hidden />
-        </Link>
 
         <div className="mt-24 grid grid-cols-1 gap-12 md:mt-28 lg:grid-cols-12">
           <div className="lg:col-span-4">
