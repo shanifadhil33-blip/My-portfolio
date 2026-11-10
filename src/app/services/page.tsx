@@ -37,32 +37,40 @@ export default function ServicesPage() {
     <>
       <JsonLd data={servicesGraph(DESCRIPTION)} />
       <main id="main" className="flex-1">
-        <section className="zone-dark glow px-5 pt-10 pb-24 sm:px-6 md:pb-32">
+        <section className="zone-light px-5 pt-8 pb-14 sm:px-6 md:pb-20">
           <div className="mx-auto max-w-6xl">
-            <nav aria-label="Breadcrumb">
+            <nav aria-label="Breadcrumb" className="rise">
               <ol className="flex min-h-11 items-center gap-2 text-sm text-muted">
                 <li><Link href="/" className="hover:text-foreground">Home</Link></li>
                 <li aria-hidden>/</li>
                 <li aria-current="page" className="text-foreground">Services</li>
               </ol>
             </nav>
-            <div className="mt-14 max-w-4xl md:mt-20">
-              <p className="font-mono text-xs tracking-[0.18em] text-accent uppercase">Software development services</p>
-              <h1 className="mt-8 text-balance text-[clamp(2.6rem,6.4vw,5rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-foreground">
-                Complete software development, from first idea to continued improvement.
-              </h1>
-              <p className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-muted sm:text-xl">
-                I&apos;m Adhil Shanif, an independent software engineer in Dubai. I take on a single engineering responsibility or a full application build, for agencies, founders and businesses. This page lists what that can include at each stage.
-              </p>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <PillLink href="/brief">Discuss a project</PillLink>
-                <GhostLink href="/brief?type=agency">Discuss an agency partnership</GhostLink>
+            <div className="mt-8 grid grid-cols-1 gap-8 md:mt-12 lg:grid-cols-12 lg:items-end">
+              <div className="rise lg:col-span-7" style={{ "--d": 1 } as React.CSSProperties}>
+                <h1 className="text-balance text-[clamp(2.2rem,5vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-foreground">
+                  Software development services
+                </h1>
+                <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted">
+                  Everything a project can include, stage by stage. Most projects use only part of it, and the deliverables are agreed before work starts.
+                </p>
               </div>
+              <nav aria-label="Stages" className="rise lg:col-span-5" style={{ "--d": 2 } as React.CSSProperties}>
+                <ul className="flex flex-wrap gap-2 lg:justify-end">
+                  {stages.map((st) => (
+                    <li key={st.number}>
+                      <a href={`#stage-${st.number}`} className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-surface px-3.5 text-sm text-foreground hover:border-foreground/30">
+                        <span className="font-mono text-xs text-accent">{st.number}</span> {st.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
           </div>
         </section>
 
-        <section aria-labelledby="who-title" className="zone-light px-5 py-20 sm:px-6 md:py-28">
+        <section aria-labelledby="who-title" className="zone-dark px-5 py-20 sm:px-6 md:py-28">
           <div className="mx-auto max-w-6xl">
             <h2 id="who-title" className="text-3xl font-semibold tracking-tight text-foreground">Who these services are for</h2>
             <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -81,7 +89,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section aria-labelledby="stages-title" className="zone-dark px-5 py-20 sm:px-6 md:py-28">
+        <section aria-labelledby="stages-title" className="zone-light px-5 py-20 sm:px-6 md:py-28">
           <div className="mx-auto max-w-6xl">
             <h2 id="stages-title" className="max-w-3xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               What each stage of a project can include
@@ -92,7 +100,7 @@ export default function ServicesPage() {
 
             <ol className="mt-14 divide-y divide-border border-y border-border">
               {stages.map((stage) => (
-                <li key={stage.number} id={`stage-${stage.number}`} className="grid grid-cols-1 gap-6 py-10 lg:grid-cols-12 lg:gap-10">
+                <li key={stage.number} id={`stage-${stage.number}`} className="scroll-mt-6 grid grid-cols-1 gap-6 py-10 lg:grid-cols-12 lg:gap-10">
                   <div className="lg:col-span-4">
                     <span className="font-mono text-sm text-accent">{stage.number}</span>
                     <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{stage.title}</h3>
@@ -124,7 +132,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section aria-labelledby="evidence-title" className="zone-light px-5 py-20 sm:px-6 md:py-28">
+        <section aria-labelledby="evidence-title" className="zone-dark px-5 py-20 sm:px-6 md:py-28">
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-16 lg:grid-cols-2">
             <div>
               <h2 id="evidence-title" className="text-3xl font-semibold tracking-tight text-foreground">Delivered work behind these services</h2>
@@ -156,7 +164,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="zone-dark glow px-5 py-20 sm:px-6 md:py-28">
+        <section className="zone-light px-5 py-20 sm:px-6 md:py-28">
           <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
               <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Tell me what you need built.</h2>

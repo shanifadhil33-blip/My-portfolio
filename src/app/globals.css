@@ -238,8 +238,8 @@ button:disabled {
 
 /* ---------- 3D: hero coin ---------- */
 .coin-scene { perspective: 1100px; }
-.coin { transform-style: preserve-3d; will-change: transform; }
-.coin-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.coin { transform-style: preserve-3d; }
+.coin-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; isolation: isolate; -webkit-mask-image: -webkit-radial-gradient(white, black); }
 .face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .face-back { position: absolute; inset: 0; transform: rotateY(180deg); }
 
@@ -253,9 +253,9 @@ button:disabled {
 /* ---------- 3D: agency layer stack ----------
    Each layer is a slab with a top face and four sides, so it has real thickness. */
 .slab-scene { perspective: 1500px; perspective-origin: 50% 25%; }
-.slab-stack { transform-style: preserve-3d; --gap: 8px; --t: 14px; --r: 12px; --part: 0px; --lift: 0px; }
-/* Open: layers spread out, and the stack parts above the selected layer so it can be seen. */
-.slab-scene[data-open="true"] .slab-stack { --gap: 28px; --part: 56px; --lift: 16px; }
+.slab-stack { transform-style: preserve-3d; --gap: 10px; --t: 22px; --r: 14px; --part: 0px; --lift: 0px; }
+/* Open: every block has clear air above it, and the stack parts a little above the selected block. */
+.slab-scene[data-open="true"] .slab-stack { --gap: 48px; --part: 36px; --lift: 10px; }
 .slab {
   position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
   --press: 0px; --pull: 0px;
@@ -265,7 +265,7 @@ button:disabled {
 .slab[data-pressed="true"] { --press: 12px; }
 .slab[data-dragging="true"] { transition: none; }
 /* Lifted out: the slab rises and fades while the card flies in. */
-.slab[data-out="true"] { --pull: 260px; opacity: 0; }
+.slab[data-out="true"] { --pull: 120px; opacity: 0; transition: transform 500ms cubic-bezier(.2,.8,.2,1), opacity 140ms ease; }
 @media (hover: hover) and (pointer: fine) { .slab:hover { --press: 10px; } }
 .slab-top, .slab-side { position: absolute; pointer-events: auto; cursor: pointer; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .slab-top { touch-action: none; }
@@ -279,8 +279,8 @@ button:disabled {
 .slab-back { left: 0; right: 0; top: 0; height: var(--t); transform-origin: top; transform: rotateX(90deg); border-radius: var(--r) var(--r) 0 0; }
 .slab-right { top: 0; bottom: 0; right: 0; width: var(--t); transform-origin: right; transform: rotateY(90deg); border-radius: 0 var(--r) var(--r) 0; }
 .slab-left { top: 0; bottom: 0; left: 0; width: var(--t); transform-origin: left; transform: rotateY(-90deg); border-radius: var(--r) 0 0 var(--r); }
-.slab-label { font-size: 14px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
-@media (max-width: 640px) { .slab-stack { --t: 10px; --r: 10px; } .slab-scene[data-open="true"] .slab-stack { --gap: 21px; --part: 44px; --lift: 12px; } .slab-label { font-size: 11px; } .slab-top { padding: 10px; } }
+.slab-label { font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+@media (max-width: 640px) { .slab-stack { --t: 15px; --r: 11px; } .slab-scene[data-open="true"] .slab-stack { --gap: 34px; --part: 26px; --lift: 8px; } .slab-label { font-size: 12px; } .slab-top { padding: 10px; } }
 
 .slab-mine .slab-top { background: linear-gradient(135deg, #7dd3fc, #38bdf8 45%, #0ea5e9); color: #04121c; }
 .slab-mine .slab-front, .slab-mine .slab-back { background: #0284c7; }
@@ -300,6 +300,8 @@ button:disabled {
 }
 
 /* ---------- Layer card (lifted out of the stack) ---------- */
+.lift-chrome { transition: opacity 260ms ease; }
+.lift-wrap[data-lifting="true"] .lift-chrome { opacity: 0; }
 .card3d { perspective: 1400px; cursor: grab; }
 .card3d:active { cursor: grabbing; }
 .card3d-inner { display: grid; transform-style: preserve-3d; will-change: transform; }

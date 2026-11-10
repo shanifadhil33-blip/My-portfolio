@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { audiences } from "@/data/services";
 import FlipCard from "./FlipCard";
-import ScopeBuilder from "./ScopeBuilder";
-import { SectionHead } from "./ui";
+import BuildGrid from "./BuildGrid";
+import { PillLink, SectionHead } from "./ui";
 
 export default function WhatIBuild() {
   return (
@@ -18,7 +18,10 @@ export default function WhatIBuild() {
         />
 
         <div className="mt-14 md:mt-16">
-          <ScopeBuilder />
+          <BuildGrid />
+        </div>
+        <div className="mt-8">
+          <PillLink href="/brief">Send a brief</PillLink>
         </div>
 
         <h3 className="mt-24 text-2xl font-semibold tracking-tight text-foreground md:mt-28">Who I work with</h3>

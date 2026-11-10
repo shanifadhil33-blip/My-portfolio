@@ -6,7 +6,6 @@ import { Mail, MoveHorizontal } from "lucide-react";
 import { EMAIL, GITHUB_URL, LINKEDIN_URL, UPWORK_URL, WHATSAPP_URL } from "@/lib/site";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "./ui";
 
-const EDGE_LAYERS = 10; // 1px rings that give the coin a visible rim while it turns
 const DEG_PER_PX = 0.55;
 
 const iconLink =
@@ -94,9 +93,9 @@ export default function HeroCard() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[22rem] flex-col items-center">
+    <div className="mx-auto flex w-full max-w-[20rem] flex-col items-center">
       <div
-        className="coin-scene relative aspect-square w-[min(22rem,82vw)] select-none"
+        className="coin-scene relative aspect-square w-[min(15rem,62vw)] select-none sm:w-[17rem] lg:w-[20rem]"
         style={{ touchAction: "pan-y" }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -106,24 +105,14 @@ export default function HeroCard() {
       >
         <div aria-hidden className="absolute inset-[-14%] rounded-full bg-[radial-gradient(closest-side,rgba(56,189,248,0.18),transparent)]" />
         <div ref={coinRef} className="coin relative h-full w-full">
-          {/* Rim */}
-          {Array.from({ length: EDGE_LAYERS }, (_, i) => (
-            <div
-              key={i}
-              aria-hidden
-              className="absolute inset-0 rounded-full bg-[#0f1b26]"
-              style={{ transform: `translateZ(${i - EDGE_LAYERS / 2 + 0.5}px)`, boxShadow: "inset 0 0 0 1px rgba(56,189,248,0.35)" }}
-            />
-          ))}
-
           {/* Front */}
           <button
             type="button"
             onClick={flip}
             inert={showingBack}
             aria-label="Flip the card for contact links"
-            className="coin-face absolute inset-0 overflow-hidden rounded-full border border-white/15 bg-surface shadow-[0_40px_80px_-30px_rgba(0,0,0,0.95)]"
-            style={{ transform: `translateZ(${EDGE_LAYERS / 2}px)` }}
+            className="coin-face absolute inset-0 overflow-hidden rounded-full bg-surface shadow-[0_0_0_2px_rgba(56,189,248,0.45),0_30px_70px_-30px_rgba(0,0,0,0.95)]"
+            style={{ transform: "translateZ(1px)" }}
           >
             <Image
               src="/adhil-portrait.jpg"
@@ -131,8 +120,8 @@ export default function HeroCard() {
               fill
               priority
               draggable={false}
-              sizes="(max-width: 640px) 82vw, 352px"
-              className="pointer-events-none object-cover object-[50%_22%]"
+              sizes="(max-width: 640px) 62vw, 320px"
+              className="pointer-events-none rounded-full object-cover object-[50%_22%]"
             />
             <span aria-hidden className="absolute inset-0 rounded-full shadow-[inset_0_0_0_6px_rgba(5,7,10,0.35),inset_0_-60px_80px_-40px_rgba(5,7,10,0.7)]" />
           </button>
@@ -140,24 +129,21 @@ export default function HeroCard() {
           {/* Back */}
           <div
             inert={!showingBack}
-            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full border border-sky-400/40 bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-8 text-center text-white"
-            style={{ transform: `rotateY(180deg) translateZ(${EDGE_LAYERS / 2}px)` }}
+            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-6 text-center text-white shadow-[0_0_0_2px_rgba(56,189,248,0.45)]"
+            style={{ transform: "rotateY(180deg) translateZ(1px)" }}
           >
             <p className="font-mono text-[11px] tracking-[0.2em] text-sky-300 uppercase">Get in touch</p>
-            <p className="mt-2 text-xl font-semibold tracking-tight">Adhil Shanif</p>
-            <p className="mt-1 text-xs text-white/60">Replies within 24 hours</p>
-            <div className="mt-5 grid grid-cols-4 gap-2.5">
+            <p className="mt-1.5 text-lg font-semibold tracking-tight">Adhil Shanif</p>
+            <p className="mt-0.5 text-xs text-white/60">Replies within 24 hours</p>
+            <div className="mt-3 grid grid-cols-4 gap-1.5 sm:gap-2.5">
               <a href={`mailto:${EMAIL}`} className={iconLink} aria-label="Email" title="Email"><Mail size={17} aria-hidden /></a>
               <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="LinkedIn" title="LinkedIn"><LinkedinIcon size={17} /></a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="WhatsApp" title="WhatsApp"><WhatsappIcon size={17} /></a>
               <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="GitHub" title="GitHub"><GithubIcon size={17} /></a>
             </div>
-            <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-11 items-center text-xs text-sky-300 underline-offset-4 hover:underline">
+            <a href={UPWORK_URL} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex min-h-11 items-center text-xs text-sky-300 underline-offset-4 hover:underline">
               Top Rated on Upwork
             </a>
-            <button type="button" onClick={flip} className="absolute bottom-[9%] min-h-11 px-4 text-xs text-white/55 hover:text-white">
-              Turn back
-            </button>
           </div>
         </div>
       </div>
