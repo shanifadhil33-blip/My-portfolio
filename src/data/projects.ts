@@ -28,6 +28,8 @@ export interface Project {
     videos?: ProjectVideo[];
   };
   role?: string;
+  /** Short list of what I was responsible for, shown on the card. */
+  owned?: string;
   methodology?: string;
   techStackDetailed?: string[];
   keyDecisions?: string;
@@ -455,7 +457,7 @@ const baseProjects: Project[] = [
   },
   {
     id: "cold-email-agent",
-    title: "Autonomous Cold Email Agent",
+    title: "Cold Email Agent",
     brief:
       "A working prototype that sends personalized cold email on a schedule, with a hard cap of 30 emails per day.",
     tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],

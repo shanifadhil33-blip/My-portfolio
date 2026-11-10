@@ -1,154 +1,74 @@
+import { techLayers } from "@/data/services";
 import { UPWORK_URL } from "@/lib/site";
+import { SectionHead } from "./ui";
 
-const stats = [
-  "Top Rated on Upwork",
-  "100% Job Success Score",
-  "5.0 client rating",
+// Facts that stay true: no counts or ratings that drift.
+const facts = [
+  { big: "End to end", small: "Database, backend, frontend, AI and deployment in one pair of hands." },
+  { big: "Multi-tenant", small: "SaaS delivered for a client with isolation enforced in the database." },
+  { big: "In writing", small: "Decisions, progress and handover notes are written down and easy to forward." },
+  { big: "You own it", small: "Code, accounts and infrastructure belong to the client from day one." },
 ];
-
-const coreStack = [
-  "Next.js",
-  "TypeScript",
-  "Python",
-  "FastAPI",
-  "Supabase (Postgres)",
-  "OpenAI",
-  "Claude",
-  "Gemini",
-];
-
-const secondaryStack = [
-  "Vercel",
-  "Render",
-  "Docker",
-  "GitHub Actions",
-  "Cloudflare",
-];
-
-const capabilities = [
-  {
-    title: "Internal tools and dashboards",
-    description: "Access by role, approvals, reporting, admin panels.",
-  },
-  {
-    title: "SaaS platforms for many users",
-    description:
-      "Each client's data kept separate, row level security, user roles, workflows set by configuration.",
-  },
-  {
-    title: "AI systems",
-    description:
-      "Step by step LLM pipelines, structured extraction from documents, human approval steps, validation so output stays accurate.",
-  },
-  {
-    title: "Automation and integrations",
-    description: "Scheduled jobs, webhooks, syncing data between systems.",
-  },
-];
-
-const cardClass = "rounded-lg border border-border bg-background";
 
 export default function About() {
   return (
-    <section id="about" className="relative px-5 py-24 sm:px-6 md:py-40">
-      <div className="relative z-10 mx-auto max-w-5xl">
-        <div className="mb-16 flex flex-col items-center text-center md:mb-20">
-          <h2 className="text-balance text-2xl font-medium tracking-tight text-foreground">
-            About
-          </h2>
-        </div>
+    <section id="about" aria-labelledby="about-title" className="zone-light relative px-5 py-24 sm:px-6 md:py-36">
+      <div className="mx-auto max-w-6xl">
+        <SectionHead
+          id="about-title"
+          n="05"
+          label="About"
+          title="Adhil Shanif, independent software engineer."
+        />
 
-        <div className="mb-24 grid grid-cols-1 items-start gap-12 lg:mb-32 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <p className="mb-6 text-pretty text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
-              I design and build custom software for businesses that need something ready made tools can&apos;t do.
+        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="space-y-5 text-pretty text-lg leading-relaxed text-muted lg:col-span-7">
+            <p className="text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
+              I take responsibility for technical work, from a single backend task to a complete product.
             </p>
-            <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-              That usually means internal tools, SaaS platforms for many users and AI systems that have to work reliably with real data. I own the whole build: database design, backend, frontend, AI integration and deployment. I work in fixed price milestones and communicate in writing, so every decision is documented.
+            <p>
+              I&apos;m based in Dubai and work remotely with agencies, founders and businesses. Some projects start from an idea, some from a specification, and some from an existing codebase with problems to solve. I work across the stack — data models, backend, interfaces, integrations, AI features and deployment — and I stay involved after launch when a system needs looking after.
             </p>
-          </div>
-
-          <div className="w-full lg:col-span-5">
-            <div className="grid grid-cols-1 gap-4">
-              {stats.map((stat) => (
-                <a
-                  key={stat}
-                  href={UPWORK_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${stat}, open my Upwork profile`}
-                  className={`${cardClass} flex flex-col items-center p-6 text-center outline-none transition-[border-color,transform,background-color] duration-150 [-webkit-tap-highlight-color:transparent] hover:border-foreground/25 focus-visible:border-foreground/40 active:scale-[0.99] active:bg-foreground/[0.03] lg:items-start lg:text-left`}
-                >
-                  <div className="text-base font-medium leading-snug text-foreground sm:text-lg">
-                    {stat}
-                  </div>
-                </a>
-              ))}
-            </div>
+            <p>
+              Most software problems are data problems. I start with the database and the rules, then build the screens on top, so the system stays correct as it grows.
+            </p>
             <a
               href={UPWORK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-11 items-center text-sm text-accent underline underline-offset-4 transition-colors duration-150 hover:text-accent-hover active:opacity-80"
+              className="inline-flex min-h-11 items-center text-base text-accent underline underline-offset-4 hover:text-accent-hover"
             >
-              Verified on Upwork
+              Top Rated on Upwork — see verified reviews
             </a>
           </div>
+
+          <dl className="divide-y divide-border border-y border-border lg:col-span-5">
+            {facts.map((f) => (
+              <div key={f.big} className="py-6">
+                <dt className="text-3xl font-semibold tracking-tight text-foreground">{f.big}</dt>
+                <dd className="mt-2 text-base leading-relaxed text-muted">{f.small}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        <div className="mb-24 lg:mb-32">
-          <h3 className="mb-10 text-center text-xl font-medium tracking-tight text-foreground lg:text-left">
-            What I build
-          </h3>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {capabilities.map((cap) => (
-              <div
-                key={cap.title}
-                className={`${cardClass} h-full p-6 sm:p-8`}
-              >
-                <h4 className="text-lg font-medium text-foreground">{cap.title}</h4>
-                <p className="mt-2 text-base leading-relaxed text-muted">{cap.description}</p>
+        <div className="mt-24 md:mt-28">
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">Technology follows the problem.</h3>
+          <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
+            I work across the software stack and adapt to the technologies, architecture and requirements of each project. These are the tools in work I have shipped. When a project needs unfamiliar or specialist technology, I assess feasibility, risks and the right delivery approach before committing.
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {techLayers.map((group) => (
+              <div key={group.layer} className="rounded-2xl border border-border bg-surface p-5">
+                <h4 className="font-mono text-xs tracking-[0.16em] text-accent uppercase">{group.layer}</h4>
+                <ul className="mt-4 space-y-1.5 text-base text-foreground">
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="mb-24 lg:mb-32">
-          <h3 className="mb-10 text-center text-xl font-medium tracking-tight text-foreground lg:text-left">
-            Stack
-          </h3>
-
-          <div className={`${cardClass} p-6 sm:p-8`}>
-            <p className="mb-4 text-sm font-medium text-muted">Core</p>
-            <div className="flex flex-wrap gap-2.5">
-              {coreStack.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-            <p className="mb-4 mt-6 text-sm font-medium text-muted">Secondary</p>
-            <p className="text-base leading-relaxed text-muted">
-              {secondaryStack.join(", ")}
-            </p>
-          </div>
-
-          <div className={`${cardClass} mt-6 px-5 py-4 text-center`}>
-            <p className="text-base text-muted">
-              I pick up whatever a project actually requires.
-            </p>
-          </div>
-        </div>
-
-        <div className={`${cardClass} p-8 sm:p-10`}>
-          <p className="text-sm font-medium text-muted">Engineering approach</p>
-          <blockquote className="mt-4 text-pretty text-base font-medium leading-relaxed text-foreground sm:text-lg">
-            Most software problems are data problems. I start with the database and the rules, then build the screens on top, so the system stays correct as it grows.
-          </blockquote>
         </div>
       </div>
     </section>

@@ -1,24 +1,57 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0b0b0c;
-  --foreground: #ededed;
-  --muted: #9c9c9f;
-  --border: #2c2c2e;
-  --accent: #c4b59a;
-  --accent-hover: #d4c7b0;
-  --accent-pressed: color-mix(in srgb, var(--accent) 86%, black);
+/* Direction: clean agency editorial. Near-black and off-white zones alternate; one sky accent.
+   Components read tokens only, so a section flips theme by adding .zone-light or .zone-dark. */
+:root,
+.zone-dark {
+  --background: #05070a;
+  --surface: #0b1219;
+  --foreground: #eef2f6;
+  --muted: #93a0ae;
+  --border: #1d2733;
+  --accent: #38bdf8;
+  --accent-hover: #7dd3fc;
+  --accent-pressed: #0ea5e9;
+  --accent-fill: #38bdf8;
+  --accent-ink: #04121c;
+  --card-shadow: 0 18px 44px -22px rgba(0, 0, 0, 0.85);
+  --glow: rgba(14, 116, 144, 0.32);
+}
+
+.zone-light {
+  --background: #f4f6f8;
+  --surface: #ffffff;
+  --foreground: #0b1220;
+  --muted: #536071;
+  --border: #dbe2ea;
+  --accent: #026fa9;
+  --accent-hover: #03649a;
+  --accent-pressed: #024f7a;
+  --card-shadow: 0 18px 40px -26px rgba(15, 30, 50, 0.28);
+  color-scheme: light;
+}
+
+.zone-dark { color-scheme: dark; }
+
+.zone-light,
+.zone-dark {
+  background: var(--background);
+  color: var(--foreground);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-pressed: var(--accent-pressed);
-  --font-sans: var(--font-inter);
+  --color-accent-fill: var(--accent-fill);
+  --color-accent-ink: var(--accent-ink);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-dm-mono);
 }
 
 body {
@@ -165,9 +198,9 @@ button:disabled {
 }
 
 /* Phone menu: the bar turns solid, the panel grows down from under it, the three lines morph into an X. transform, clip-path, opacity only. */
-.nav-bar::before{content:"";position:absolute;inset:0 0 auto 0;height:4rem;background:rgba(11,11,12,.92);opacity:0;transition:opacity 350ms cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.nav-bar::before{content:"";position:absolute;inset:0 0 auto 0;height:4rem;background:rgba(5,7,10,.92);opacity:0;transition:opacity 350ms cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .nav-bar[data-open="true"]::before{opacity:1}
-.mobile-panel{position:absolute;left:0;right:0;top:4rem;background:linear-gradient(180deg,rgba(11,11,12,.92),rgba(11,11,12,.88));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.1);clip-path:inset(0 0 100% 0);transform:translateY(-12px);opacity:0;visibility:hidden;transition:clip-path 350ms cubic-bezier(.2,.7,.2,1),transform 350ms cubic-bezier(.2,.7,.2,1),opacity 250ms ease,visibility 0s linear 350ms}
+.mobile-panel{position:absolute;left:0;right:0;top:4rem;background:linear-gradient(180deg,rgba(5,7,10,.92),rgba(5,7,10,.88));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.1);clip-path:inset(0 0 100% 0);transform:translateY(-12px);opacity:0;visibility:hidden;transition:clip-path 350ms cubic-bezier(.2,.7,.2,1),transform 350ms cubic-bezier(.2,.7,.2,1),opacity 250ms ease,visibility 0s linear 350ms}
 .nav-bar[data-open="true"] .mobile-panel{clip-path:inset(0 0 0 0);transform:none;opacity:1;visibility:visible;transition:clip-path 350ms cubic-bezier(.2,.7,.2,1),transform 350ms cubic-bezier(.2,.7,.2,1),opacity 200ms ease,visibility 0s}
 .burger{position:relative;display:block;width:20px;height:14px}
 .burger>span{position:absolute;left:0;width:20px;height:2px;border-radius:2px;background:currentColor;transition:transform 350ms cubic-bezier(.65,0,.35,1),opacity 200ms ease}
@@ -182,3 +215,101 @@ button:disabled {
 .menu-row{display:flex;align-items:center;min-height:52px;padding:0 1.25rem;font-size:1rem;color:var(--foreground);text-decoration:none;border-top:1px solid rgba(255,255,255,.08);-webkit-tap-highlight-color:transparent;transition:background-color 80ms ease}
 .menu-row:hover{background:rgba(255,255,255,.04)}
 .menu-row:active,.menu-row[data-pressed]{background:rgba(255,255,255,.1);transition-duration:0ms}
+
+/* ---------- Editorial pieces ---------- */
+
+/* Soft teal light in one corner of a dark zone. Decorative only. */
+.glow { position: relative; isolation: isolate; overflow: hidden; }
+.glow::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  width: 70vmax; height: 70vmax; right: -28vmax; top: -34vmax; border-radius: 9999px;
+  background: radial-gradient(closest-side, var(--glow), transparent 72%);
+}
+.glow-left::before { right: auto; left: -30vmax; top: 10%; }
+
+/* Hairline grid texture for the hero. */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--foreground) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 5%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 70% 30%, black 10%, transparent 70%);
+}
+
+/* ---------- 3D: hero coin ---------- */
+.coin-scene { perspective: 1100px; }
+.coin { transform-style: preserve-3d; will-change: transform; }
+.coin-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face-back { position: absolute; inset: 0; transform: rotateY(180deg); }
+
+/* ---------- 3D: flip cards ---------- */
+.flipcard { perspective: 1400px; }
+.flipcard-inner { display: grid; transform-style: preserve-3d; transition: transform 700ms cubic-bezier(.2,.7,.2,1); }
+.flipcard-inner > .face { grid-area: 1 / 1; }
+.flipcard-inner > .face-back { position: relative; inset: auto; }
+.flipcard[data-flipped="true"] .flipcard-inner { transform: rotateY(180deg); }
+@media (hover: hover) and (pointer: fine) {
+  .flipcard:hover .flipcard-inner, .flipcard:focus-within .flipcard-inner { transform: rotateY(180deg); }
+}
+
+/* ---------- 3D: agency layer stack ----------
+   Each layer is a slab with a top face and four sides, so it has real thickness. */
+.slab-scene { perspective: 1500px; perspective-origin: 50% 25%; }
+.slab-stack { transform-style: preserve-3d; --gap: 10px; --t: 16px; --r: 12px; --part: 0px; --lift: 0px; }
+/* Open: layers spread out, and the stack parts above the selected layer so it can be seen. */
+.slab-scene[data-open="true"] .slab-stack { --gap: 34px; --part: 64px; --lift: 18px; }
+.slab {
+  position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
+  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift)));
+  transition: transform 750ms cubic-bezier(.2,.8,.2,1);
+}
+.slab-top, .slab-side { position: absolute; pointer-events: auto; cursor: pointer; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.slab-top {
+  inset: 0; border-radius: var(--r); transform: translateZ(var(--t));
+  display: flex; align-items: flex-end; padding: 14px;
+  transition: box-shadow 300ms ease, filter 300ms ease;
+}
+.slab-front { left: 0; right: 0; bottom: 0; height: var(--t); transform-origin: bottom; transform: rotateX(-90deg); border-radius: 0 0 var(--r) var(--r); }
+.slab-back { left: 0; right: 0; top: 0; height: var(--t); transform-origin: top; transform: rotateX(90deg); border-radius: var(--r) var(--r) 0 0; }
+.slab-right { top: 0; bottom: 0; right: 0; width: var(--t); transform-origin: right; transform: rotateY(90deg); border-radius: 0 var(--r) var(--r) 0; }
+.slab-left { top: 0; bottom: 0; left: 0; width: var(--t); transform-origin: left; transform: rotateY(-90deg); border-radius: var(--r) 0 0 var(--r); }
+.slab-label { font-size: 14px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
+@media (max-width: 640px) { .slab-stack { --t: 12px; --r: 10px; } .slab-scene[data-open="true"] .slab-stack { --gap: 26px; --part: 50px; --lift: 14px; } .slab-label { font-size: 11px; } .slab-top { padding: 10px; } }
+
+.slab-mine .slab-top { background: linear-gradient(135deg, #7dd3fc, #38bdf8 45%, #0ea5e9); color: #04121c; }
+.slab-mine .slab-front, .slab-mine .slab-back { background: #0284c7; }
+.slab-mine .slab-right, .slab-mine .slab-left { background: #0369a1; }
+.slab-agency .slab-top { background: #ffffff; color: #0b1220; box-shadow: inset 0 0 0 1px #dbe2ea; }
+.slab-agency .slab-front, .slab-agency .slab-back { background: #cfd8e3; }
+.slab-agency .slab-right, .slab-agency .slab-left { background: #b4c1d0; }
+.slab-brand .slab-top { background: linear-gradient(135deg, #1b2a3d, #0b1220 60%); color: #ffffff; }
+.slab-brand .slab-front, .slab-brand .slab-back { background: #1e293b; }
+.slab-brand .slab-right, .slab-brand .slab-left { background: #0f172a; }
+.slab[data-lifted="true"] .slab-top { box-shadow: 0 0 0 3px #38bdf8, 0 0 0 9px rgba(56,189,248,.18); }
+.slab-agency[data-lifted="true"] .slab-top { box-shadow: inset 0 0 0 1px #dbe2ea, 0 0 0 3px #38bdf8, 0 0 0 9px rgba(56,189,248,.18); }
+.slab-shadow {
+  position: absolute; inset: 4%; border-radius: 28px; transform: translateZ(-1px);
+  background: rgba(15, 30, 50, .28); filter: blur(22px);
+}
+
+/* ---------- Progress and loop ---------- */
+.track-fill { transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform 120ms linear; }
+.track-fill-y { transform-origin: center top; transform: scaleY(var(--p, 0)); transition: transform 120ms linear; }
+@keyframes travel { from { left: 0%; } to { left: 100%; } }
+@keyframes travel-y { from { top: 0%; } to { top: 100%; } }
+.pulse-x { animation: travel 4.5s cubic-bezier(.45,0,.55,1) infinite; }
+.pulse-y { animation: travel-y 4.5s cubic-bezier(.45,0,.55,1) infinite; }
+
+/* ---------- Entrance ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise 700ms cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(var(--d, 0) * 90ms); }
+/* Transform only: the headline and portrait are LCP candidates, so they are never hidden. */
+@keyframes lift { from { transform: translateY(14px); } to { transform: none; } }
+.lift { animation: lift 800ms cubic-bezier(.2,.7,.2,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flipcard-inner, .slab, .coin { transition-duration: 1ms !important; }
+  .pulse-x, .pulse-y { animation: none !important; display: none; }
+  .rise, .lift { animation: none !important; }
+}

@@ -1,22 +1,32 @@
-// Direction: precision tech. Flat near-black, one muted stone accent, type and space only.
+// Direction: clean agency editorial. Dark and light zones alternate, one sky accent, CSS 3D where it explains something.
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import ClientWork from "@/components/ClientWork";
-import Projects from "@/components/Projects";
+import Agencies from "@/components/Agencies";
+import WhatIBuild from "@/components/WhatIBuild";
+import Work from "@/components/Work";
 import HowIWork from "@/components/HowIWork";
+import About from "@/components/About";
 import Contact from "@/components/Contact";
+import JsonLd from "@/components/JsonLd";
+import { homeGraph } from "@/lib/schema";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (
     <>
+      <JsonLd data={homeGraph()} />
       <Navbar />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <Hero />
-        <About />
-        <ClientWork />
-        <Projects />
+        <Agencies />
+        <WhatIBuild />
+        <Work />
         <HowIWork />
+        <About />
         <Contact />
       </main>
     </>

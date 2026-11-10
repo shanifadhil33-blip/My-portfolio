@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import BackHome from "@/components/BackHome";
-import { EMAIL } from "@/lib/site";
+import { EMAIL, shareMeta } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Privacy", description: "What this site stores and how to have it deleted." };
+export const metadata: Metadata = {
+  title: "Privacy",
+  description: "What adhilshanif.vercel.app stores, why, and how to have it deleted.",
+  alternates: { canonical: "/privacy" },
+  ...shareMeta("Privacy", "What adhilshanif.vercel.app stores, why, and how to have it deleted.", "/privacy"),
+};
 export const dynamic = "force-static";
 
 const H = "mt-8 text-lg font-medium text-foreground";

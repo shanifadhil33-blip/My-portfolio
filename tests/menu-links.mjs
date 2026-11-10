@@ -3,7 +3,7 @@
 // Needs Chrome: set CHROME_PATH if it is not at /usr/bin/google-chrome.
 import { chromium } from "playwright-core";
 const base = process.argv[2] || "http://localhost:3001";
-const links = [["About", "#about"], ["Work", "#client-work"], ["Projects", "#projects"], ["Contact", "#contact"]];
+const links = [["Agencies", "#agencies"], ["Services", "#services"], ["Work", "#work"], ["How I work", "#how-i-work"], ["About", "#about"], ["Contact", "#contact"]];
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || "/usr/bin/google-chrome", args: ["--no-sandbox"] });
 const failures = [];
 const landed = (page, id) => page.evaluate((id) => {
@@ -19,7 +19,7 @@ for (const [name, id] of links) {
   await phone.locator("#mobile-menu-toggle").tap();
   await phone.waitForFunction(() => document.getElementById("navbar")?.dataset.open === "true");
   await phone.waitForTimeout(400);
-  await phone.locator("#mobile-menu a", { hasText: name }).tap();
+  await phone.locator("#mobile-menu").getByRole("link", { name, exact: true }).tap();
   await phone.waitForTimeout(1600);
   const r = await landed(phone, id);
   const open = await phone.evaluate(() => document.getElementById("navbar")?.dataset.open);
@@ -32,7 +32,7 @@ await desk.goto(base, { waitUntil: "networkidle" });
 await desk.waitForTimeout(800);
 for (const [name, id] of links) {
   await desk.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  await desk.locator("#navbar a", { hasText: name }).first().click();
+  await desk.locator("#navbar").getByRole("link", { name, exact: true }).first().click();
   await desk.waitForTimeout(1600);
   const r = await landed(desk, id);
   console.log(`desktop ${name}: section top ${r.top}`);

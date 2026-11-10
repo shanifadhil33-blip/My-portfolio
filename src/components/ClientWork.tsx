@@ -17,7 +17,7 @@ function StarIcon() {
       focusable="false"
     >
       <path
-        fill="#C4B59A"
+        fill="#38BDF8"
         d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
       />
     </svg>
@@ -41,12 +41,12 @@ export default function ClientWork() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <section id="client-work" className="relative px-5 py-24 sm:px-6 md:py-40">
-      <div className="mx-auto max-w-6xl">
-        <h2 className="text-balance text-2xl font-medium tracking-tight text-foreground">
+    <div id="client-work" className="scroll-mt-20">
+      <div>
+        <h3 className="text-2xl font-semibold tracking-tight text-foreground">
           Client projects
-        </h2>
-        <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
+        </h3>
+        <p className="mt-3 max-w-2xl text-pretty text-base leading-relaxed text-muted">
           Details are anonymised to respect client confidentiality.
         </p>
 
@@ -63,7 +63,7 @@ export default function ClientWork() {
         </div>
 
         <div className="mt-20 md:mt-28">
-          <h3 className="text-xl font-medium tracking-tight text-foreground">
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">
             Client reviews
           </h3>
 
@@ -71,7 +71,7 @@ export default function ClientWork() {
             {reviews.map((review) => (
               <figure
                 key={review.attribution}
-                className="flex h-full flex-col rounded-lg border border-border p-6 sm:p-8"
+                className="flex h-full flex-col rounded-2xl border border-border bg-surface p-6 sm:p-8"
               >
                 <div className="flex items-center gap-2">
                   <span className="inline-flex gap-0.5" role="img" aria-label="5 out of 5 stars">
@@ -100,10 +100,12 @@ export default function ClientWork() {
         </div>
       </div>
 
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
-    </section>
+      <div className="zone-dark contents">
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      </div>
+    </div>
   );
 }

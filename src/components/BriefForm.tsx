@@ -12,6 +12,27 @@ import {
   TIMELINE_OPTIONS,
 } from "@/lib/brief";
 import { EMAIL } from "@/lib/site";
+import { workAreas } from "@/data/services";
+
+const TYPE_PREFILL: Record<string, string> = {
+  agency: "Agency partnership.\nThe client project and the part you want me to own:\n",
+  founder: "Product idea.\nWhat it should do and who it is for:\n",
+  business: "Business software.\nThe process or systems involved:\n",
+};
+
+/** Text carried over from the homepage (scope builder or a partnership button). */
+function prefillFromUrl(): string {
+  const params = new URLSearchParams(window.location.search);
+  const lines: string[] = [];
+  const type = params.get("type");
+  if (type && TYPE_PREFILL[type]) lines.push(TYPE_PREFILL[type]);
+  const scope = (params.get("scope") ?? "")
+    .split(",")
+    .map((id) => workAreas.find((a) => a.id === id)?.label)
+    .filter(Boolean);
+  if (scope.length) lines.push(`Areas I need help with: ${scope.join(", ")}.\n\nDetails:\n`);
+  return lines.join("\n");
+}
 
 function controlClass(invalid: boolean, extra = ""): string {
   return `field mt-2 w-full min-h-11 rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground${invalid ? " is-invalid" : ""}${extra ? ` ${extra}` : ""}`;
@@ -195,6 +216,13 @@ export default function BriefForm() {
   const attachmentRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLParagraphElement>(null);
   const focusField = useRef<BriefFieldName | null>(null);
+
+  useEffect(() => {
+    const field = document.getElementById("project");
+    if (!(field instanceof HTMLTextAreaElement) || field.value) return;
+    const text = prefillFromUrl();
+    if (text) field.value = text;
+  }, []);
 
   useEffect(() => {
     if (!errorTick) return;
