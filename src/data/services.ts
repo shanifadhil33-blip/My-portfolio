@@ -172,7 +172,7 @@ export const stages: Stage[] = [
   {
     number: "04",
     title: "Secure & test",
-    summary: "Access control, security reviews, automated agent testing, my own hands-on testing and corrections.",
+    summary: "Access control, security reviews, automated tests, my own hands-on testing and corrections.",
     groups: [
       {
         id: "security",
@@ -274,14 +274,22 @@ export const stages: Stage[] = [
 ];
 
 export const TESTING_LINE =
-  "Automated testing by my AI agents, followed by my own hands-on testing and final review.";
+  "Automated tests on every change, then I use the software myself before you see it.";
 
 export const qualitySteps = [
   { title: "Implementation", detail: "Built to the agreed requirements." },
-  { title: "Automated checks", detail: "Tests, type checks and reviews run by my AI agents." },
+  { title: "Automated checks", detail: "Tests and type checks on every change." },
   { title: "My hands-on review", detail: "I use the software and walk the important journeys." },
   { title: "Corrections", detail: "Problems fixed, then checked again." },
-  { title: "Verified delivery", detail: "Reviewed against the acceptance criteria." },
+  { title: "Verified delivery", detail: "Delivered with a note of what was tested and any known limits." },
+];
+
+// Commitments a client can check me against. Replaces generic "I use AI tools" copy.
+export const commitments = [
+  "Nothing is called done until I have used it myself.",
+  "Every delivery says what was tested, what wasn't, and any known limits.",
+  "Problems are reported in writing when I find them, with the fix.",
+  "If a project needs more than one engineer, I say so before you pay.",
 ];
 
 export const engagementTerms = [

@@ -174,7 +174,7 @@ export const wholeBuild: LayerCard = {
   ],
   how: [
     "Requirements, architecture, build, testing, deployment, improvements",
-    "Automated testing by my AI agents, followed by my own hands-on testing and final review",
+    "Automated tests on every change, then I use the software myself before you see it",
     "Milestones you approve one at a time",
   ],
   get: ["A deployed application in your accounts", "Documentation and a written handover"],
