@@ -18,10 +18,13 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
-// Verification tokens come from Vercel environment variables, never from the code.
-// Set GOOGLE_SITE_VERIFICATION and/or BING_SITE_VERIFICATION, then redeploy.
+// Search Console ownership token. It is public by design (it is printed in the page head).
+// The same property is also verified by public/googleaed0761f28171045.html.
+const GOOGLE_SITE_VERIFICATION = "Afdg9xFnyZ4Wcve0jGvVDc_uk_DAqlsZCa0CJqxu_tc";
+
+// A Bing token can be added later through the BING_SITE_VERIFICATION environment variable.
 const verification: Metadata["verification"] = {
-  ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+  google: process.env.GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION,
   ...(process.env.BING_SITE_VERIFICATION
     ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
     : {}),
@@ -58,7 +61,7 @@ export const metadata: Metadata = {
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
   },
-  ...(Object.keys(verification).length ? { verification } : {}),
+  verification,
 };
 
 export const viewport: Viewport = {
