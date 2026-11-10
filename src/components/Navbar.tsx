@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import InboxButton from "./InboxButton";
 
 const navLinks = [
+  { label: "Agencies", href: "#agencies" },
+  { label: "Services", href: "#services" },
+  { label: "Work", href: "#work" },
+  { label: "How I work", href: "#how-i-work" },
   { label: "About", href: "#about" },
-  { label: "Work", href: "#client-work" },
-  { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -53,16 +55,18 @@ export default function Navbar() {
   }, [mobileOpen]);
 
   return (
-    <nav id="navbar" data-open={mobileOpen} className="nav-bar absolute top-0 right-0 left-0 z-50">
+    <nav id="navbar" aria-label="Main" data-open={mobileOpen} className="nav-bar absolute top-0 right-0 left-0 z-50">
       <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
         <a
           href="#"
-          className="inline-flex min-h-11 min-w-11 items-center text-lg font-medium tracking-tight text-foreground transition-opacity duration-150 hover:opacity-80 active:opacity-70"
+          aria-label="Adhil Shanif, back to top"
+          className="inline-flex min-h-11 min-w-11 items-center gap-2.5 text-base font-semibold tracking-tight text-foreground transition-opacity duration-150 hover:opacity-80 active:opacity-70"
         >
-          AS
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground font-mono text-xs text-background" aria-hidden>AS</span>
+          <span className="hidden sm:inline">Adhil Shanif</span>
         </a>
 
-        <div className="hidden items-center gap-1 md:flex">
+        <div className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -70,7 +74,7 @@ export default function Navbar() {
               onClick={(e) => {
                 if (scrollToSection(link.href)) e.preventDefault();
               }}
-              className="inline-flex min-h-11 items-center rounded-lg px-4 text-sm text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
+              className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm text-muted transition-colors duration-150 hover:text-foreground active:text-foreground"
             >
               {link.label}
             </a>
@@ -83,7 +87,7 @@ export default function Navbar() {
           id="mobile-menu-toggle"
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70 md:hidden"
+          className="flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70 lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
@@ -94,7 +98,7 @@ export default function Navbar() {
       </div>
 
       {/* Always mounted so it can grow down from under the bar and back. */}
-      <div id="mobile-menu" className="mobile-panel md:hidden" aria-hidden={!mobileOpen} inert={!mobileOpen}>
+      <div id="mobile-menu" className="mobile-panel lg:hidden" aria-hidden={!mobileOpen} inert={!mobileOpen}>
           <div className="menu-rows">
             {navLinks.map((link) => (
               <a

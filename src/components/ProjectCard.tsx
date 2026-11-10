@@ -12,9 +12,9 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
   const canOpen = Boolean(project.caseStudy);
   const isHero = Boolean(project.thumbnail?.startsWith("/screenshots/heroes/"));
 
-  const className = `group flex h-full w-full flex-col overflow-hidden rounded-xl border border-border bg-background text-left shadow-[0_16px_40px_-18px_rgba(0,0,0,0.65)] transition duration-200 ${
+  const className = `group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border bg-surface text-left shadow-[var(--card-shadow)] transition duration-300 ${
     canOpen
-      ? "cursor-pointer active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30 [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[0_22px_50px_-16px_rgba(0,0,0,0.8)]"
+      ? "cursor-pointer active:bg-foreground/5 [@media(hover:hover)_and_(pointer:fine)]:hover:[transform:perspective(1000px)_rotateX(2deg)_rotateY(-2deg)_translateY(-4px)] [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/30"
       : ""
   }`;
 
@@ -41,12 +41,17 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
         <div>
           <h3 className="text-lg font-medium text-foreground">{project.title}</h3>
           <p className="mt-2 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
+          {project.owned && (
+            <p className="mt-3 text-pretty text-sm leading-relaxed text-foreground">
+              <span className="font-medium">What I owned:</span> <span className="text-muted">{project.owned}</span>
+            </p>
+          )}
           {project.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-md border border-border px-2.5 py-1 text-xs text-muted"
+                  className="rounded-full border border-border px-2.5 py-1 text-xs text-muted"
                 >
                   {tag}
                 </span>

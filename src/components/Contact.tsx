@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { Mail } from "lucide-react";
-import { EMAIL, LINKEDIN_URL, UPWORK_URL, WHATSAPP_URL, mailtoHref } from "@/lib/site";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, UPWORK_URL, WHATSAPP_URL, mailtoHref } from "@/lib/site";
+import { GhostLink, GithubIcon, PillLink, SectionHead } from "./ui";
 
 const contactCards = [
   {
@@ -34,6 +36,15 @@ const contactCards = [
     ),
   },
   {
+    label: "GitHub",
+    href: GITHUB_URL,
+    logo: (
+      <span className="shrink-0 text-foreground">
+        <GithubIcon size={24} />
+      </span>
+    ),
+  },
+  {
     label: "Upwork",
     href: UPWORK_URL,
     logo: (
@@ -45,51 +56,69 @@ const contactCards = [
   },
 ];
 
+const footerLinks = [
+  { label: "Agency partnerships", href: "/#agencies" },
+  { label: "Services", href: "/services" },
+  { label: "Work", href: "/#work" },
+  { label: "How I work", href: "/#how-i-work" },
+  { label: "Send a brief", href: "/brief" },
+  { label: "Privacy", href: "/privacy" },
+];
+
 export default function Contact() {
   return (
-    <section id="contact" className="relative border-t border-border px-5 py-24 sm:px-6 md:py-40">
+    <section id="contact" aria-labelledby="contact-title" className="zone-dark glow relative px-5 pt-24 pb-10 sm:px-6 md:pt-36">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col items-start gap-8">
-          <div>
-            <h2 className="text-balance text-2xl font-medium tracking-tight text-foreground">
-              Contact
-            </h2>
-            <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted">
-              Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.
-            </p>
-            <div className="mt-4 flex items-center gap-2.5 text-muted">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-12">
+          <div className="lg:col-span-6">
+            <SectionHead
+              id="contact-title"
+              n="06"
+              label="Contact"
+              title="Tell me what you need built."
+              lead="Your timeline, your budget and what the software has to do. I reply by email within 24 hours."
+            />
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <PillLink href="/brief">Discuss a project</PillLink>
+              <GhostLink href="/brief?type=agency">Discuss an agency partnership</GhostLink>
+            </div>
+            <p className="mt-8 flex items-center gap-2.5 text-muted">
               <Mail size={16} aria-hidden />
-              <a
-                href={`mailto:${EMAIL}`}
-                className="inline-flex min-h-11 items-center break-all text-base text-accent transition-colors duration-150 hover:text-accent-hover active:opacity-80"
-              >
+              <a href={`mailto:${EMAIL}`} className="inline-flex min-h-11 items-center break-all text-base text-accent hover:text-accent-hover">
                 {EMAIL}
               </a>
-            </div>
+            </p>
           </div>
 
-          <div className="flex w-full flex-col gap-3">
+          <ul className="flex flex-col gap-3 lg:col-span-5 lg:col-start-8 lg:pt-20">
             {contactCards.map(({ label, href, logo }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                target={label === "Email" ? undefined : "_blank"}
-                rel={label === "Email" ? undefined : "noopener noreferrer"}
-                className="flex min-h-16 w-full items-center gap-3 rounded-xl border border-border px-5 py-4 text-base font-medium text-foreground transition-[background-color,border-color,transform] duration-200 ease-out hover:border-foreground/30 hover:bg-foreground/5 active:scale-[0.99] active:border-foreground/40 active:bg-foreground/10"
-              >
-                {logo}
-                {label}
-              </a>
+              <li key={label}>
+                <a
+                  href={label === "Email" ? mailtoHref("Project enquiry") : href}
+                  target={label === "Email" ? undefined : "_blank"}
+                  rel={label === "Email" ? undefined : "noopener noreferrer"}
+                  className="flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border bg-surface px-5 py-4 text-base font-medium text-foreground transition-[background-color,border-color,transform] duration-200 ease-out hover:border-foreground/30 active:scale-[0.99]"
+                >
+                  {logo}
+                  {label}
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
-        <div className="mt-20 border-t border-border pt-8 md:mt-28">
-          <p className="text-sm text-muted">
-            © {new Date().getFullYear()} Adhil Shanif. Built with Next.js. <a href="/privacy" className="underline underline-offset-4 hover:text-foreground">Privacy</a>
-          </p>
-        </div>
+        <footer className="mt-24 flex flex-col gap-6 border-t border-border pt-8 md:mt-32 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif · Independent software engineer, Dubai</p>
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
+              {footerLinks.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="inline-flex min-h-11 items-center hover:text-foreground">{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </footer>
       </div>
     </section>
   );

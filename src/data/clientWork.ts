@@ -5,9 +5,10 @@ export const clientProjects: Project[] = [
     id: "recommendation-platform",
     title: "Multi tenant recommendation platform",
     brief:
-      "Database architecture, tenant isolation with row level security, admin and publishing workflows, deployment.",
+      "One codebase that runs many branded comparison sites, each configured and published from an admin panel instead of a new build.",
     tags: ["Row level security", "Multi tenant", "Admin workflows"],
     hideMedia: true,
+    owned: "Database architecture, tenant isolation, admin and publishing workflows, deployment.",
     caseStudy: {
       problem:
         "The client wanted to launch many branded comparison and recommendation websites without paying for a new build each time. Adding a site had to be a setup job in an admin panel, not a coding job.",

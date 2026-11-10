@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import BriefForm from "@/components/BriefForm";
+import { shareMeta } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Send a brief | Adhil Shanif",
-  description: "Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.",
+  title: "Send a Project Brief",
+  description:
+    "Send Adhil Shanif a project brief: what you need built, your timeline and your budget. Replies by email within 24 hours.",
+  alternates: { canonical: "/brief" },
+  ...shareMeta("Send a Project Brief", "What you need built, your timeline and your budget. Replies by email within 24 hours.", "/brief"),
 };
 
 export default function BriefPage() {
