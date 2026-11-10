@@ -248,23 +248,28 @@ button:disabled {
 .flipcard-inner { display: grid; transform-style: preserve-3d; transition: transform 700ms cubic-bezier(.2,.7,.2,1); }
 .flipcard-inner > .face { grid-area: 1 / 1; }
 .flipcard-inner > .face-back { position: relative; inset: auto; }
-.flipcard[data-flipped="true"] .flipcard-inner { transform: rotateY(180deg); }
-@media (hover: hover) and (pointer: fine) {
-  .flipcard:hover .flipcard-inner, .flipcard:focus-within .flipcard-inner { transform: rotateY(180deg); }
-}
+/* Rotation is driven by useSwipeFlip (swipe, tap or button). */
 
 /* ---------- 3D: agency layer stack ----------
    Each layer is a slab with a top face and four sides, so it has real thickness. */
 .slab-scene { perspective: 1500px; perspective-origin: 50% 25%; }
-.slab-stack { transform-style: preserve-3d; --gap: 10px; --t: 16px; --r: 12px; --part: 0px; --lift: 0px; }
+.slab-stack { transform-style: preserve-3d; --gap: 8px; --t: 14px; --r: 12px; --part: 0px; --lift: 0px; }
 /* Open: layers spread out, and the stack parts above the selected layer so it can be seen. */
-.slab-scene[data-open="true"] .slab-stack { --gap: 34px; --part: 64px; --lift: 18px; }
+.slab-scene[data-open="true"] .slab-stack { --gap: 28px; --part: 56px; --lift: 16px; }
 .slab {
   position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
-  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift)));
-  transition: transform 750ms cubic-bezier(.2,.8,.2,1);
+  --press: 0px; --pull: 0px;
+  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift) + var(--press) + var(--pull)));
+  transition: transform 750ms cubic-bezier(.2,.8,.2,1), opacity 400ms ease;
 }
+.slab[data-pressed="true"] { --press: 12px; }
+.slab[data-dragging="true"] { transition: none; }
+/* Lifted out: the slab rises and fades while the card flies in. */
+.slab[data-out="true"] { --pull: 260px; opacity: 0; }
+@media (hover: hover) and (pointer: fine) { .slab:hover { --press: 10px; } }
 .slab-top, .slab-side { position: absolute; pointer-events: auto; cursor: pointer; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.slab-top { touch-action: none; }
+.slab-bottom { inset: 0; border-radius: var(--r); transform: rotateY(180deg); }
 .slab-top {
   inset: 0; border-radius: var(--r); transform: translateZ(var(--t));
   display: flex; align-items: flex-end; padding: 14px;
@@ -275,23 +280,31 @@ button:disabled {
 .slab-right { top: 0; bottom: 0; right: 0; width: var(--t); transform-origin: right; transform: rotateY(90deg); border-radius: 0 var(--r) var(--r) 0; }
 .slab-left { top: 0; bottom: 0; left: 0; width: var(--t); transform-origin: left; transform: rotateY(-90deg); border-radius: var(--r) 0 0 var(--r); }
 .slab-label { font-size: 14px; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; }
-@media (max-width: 640px) { .slab-stack { --t: 12px; --r: 10px; } .slab-scene[data-open="true"] .slab-stack { --gap: 26px; --part: 50px; --lift: 14px; } .slab-label { font-size: 11px; } .slab-top { padding: 10px; } }
+@media (max-width: 640px) { .slab-stack { --t: 10px; --r: 10px; } .slab-scene[data-open="true"] .slab-stack { --gap: 21px; --part: 44px; --lift: 12px; } .slab-label { font-size: 11px; } .slab-top { padding: 10px; } }
 
 .slab-mine .slab-top { background: linear-gradient(135deg, #7dd3fc, #38bdf8 45%, #0ea5e9); color: #04121c; }
 .slab-mine .slab-front, .slab-mine .slab-back { background: #0284c7; }
-.slab-mine .slab-right, .slab-mine .slab-left { background: #0369a1; }
+.slab-mine .slab-right, .slab-mine .slab-left, .slab-mine .slab-bottom { background: #0369a1; }
 .slab-agency .slab-top { background: #ffffff; color: #0b1220; box-shadow: inset 0 0 0 1px #dbe2ea; }
 .slab-agency .slab-front, .slab-agency .slab-back { background: #cfd8e3; }
-.slab-agency .slab-right, .slab-agency .slab-left { background: #b4c1d0; }
+.slab-agency .slab-right, .slab-agency .slab-left, .slab-agency .slab-bottom { background: #b4c1d0; }
 .slab-brand .slab-top { background: linear-gradient(135deg, #1b2a3d, #0b1220 60%); color: #ffffff; }
 .slab-brand .slab-front, .slab-brand .slab-back { background: #1e293b; }
-.slab-brand .slab-right, .slab-brand .slab-left { background: #0f172a; }
+.slab-brand .slab-right, .slab-brand .slab-left, .slab-brand .slab-bottom { background: #0f172a; }
 .slab[data-lifted="true"] .slab-top { box-shadow: 0 0 0 3px #38bdf8, 0 0 0 9px rgba(56,189,248,.18); }
 .slab-agency[data-lifted="true"] .slab-top { box-shadow: inset 0 0 0 1px #dbe2ea, 0 0 0 3px #38bdf8, 0 0 0 9px rgba(56,189,248,.18); }
 .slab-shadow {
   position: absolute; inset: 4%; border-radius: 28px; transform: translateZ(-1px);
   background: rgba(15, 30, 50, .28); filter: blur(22px);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
 }
+
+/* ---------- Layer card (lifted out of the stack) ---------- */
+.card3d { perspective: 1400px; cursor: grab; }
+.card3d:active { cursor: grabbing; }
+.card3d-inner { display: grid; transform-style: preserve-3d; will-change: transform; }
+.card3d-inner > .face { grid-area: 1 / 1; }
+.card3d-inner > .face-back { position: relative; inset: auto; transform: rotateY(180deg); }
 
 /* ---------- Progress and loop ---------- */
 .track-fill { transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform 120ms linear; }
@@ -309,7 +322,7 @@ button:disabled {
 .lift { animation: lift 800ms cubic-bezier(.2,.7,.2,1) both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .flipcard-inner, .slab, .coin { transition-duration: 1ms !important; }
+  .flipcard-inner, .slab, .coin, .card3d-inner { transition-duration: 1ms !important; }
   .pulse-x, .pulse-y { animation: none !important; display: none; }
   .rise, .lift { animation: none !important; }
 }
