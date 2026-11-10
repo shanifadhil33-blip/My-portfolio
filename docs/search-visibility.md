@@ -12,7 +12,7 @@ How this site is set up to be found by search engines and AI assistants, what st
 | robots.txt | `src/app/robots.ts` | Search crawlers and user-request fetchers are allowed. Training crawlers follow `ALLOW_AI_TRAINING`. `/api/` and `/inbox` are not crawled. Preview builds (`VERCEL_ENV=preview`) disallow everything. |
 | sitemap.xml | `src/app/sitemap.ts` | Only indexable canonical pages. `lastModified` uses real content dates: update `UPDATED` when you change a page. |
 | Structured data | `src/lib/schema.ts` | Person, WebSite, ProfilePage, ItemList of projects (home); WebPage, Service, BreadcrumbList (`/services`). No ratings or business claims. |
-| Verification | `src/app/layout.tsx` | Reads `GOOGLE_SITE_VERIFICATION` and `BING_SITE_VERIFICATION` from Vercel environment variables. |
+| Verification | `src/app/layout.tsx`, `public/googleaed0761f28171045.html` | Google Search Console is verified by both a meta tag and an HTML file. A Bing token can be added via `BING_SITE_VERIFICATION`. |
 
 ### Crawlers
 
