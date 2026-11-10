@@ -27,7 +27,7 @@ export default function About() {
               I take responsibility for technical work, from a single backend task to a complete product.
             </p>
             <p>
-              I&apos;m based in Dubai and work remotely with agencies, founders and businesses. Some projects start from an idea, some from a specification, and some from an existing codebase with problems to solve. I work across the stack — data models, backend, interfaces, integrations, AI features and deployment — and I stay involved after launch when a system needs looking after.
+              I&apos;m based in Dubai and work remotely with agencies, founders and businesses. Some projects start from an idea, some from a specification, and some from an existing codebase with problems to solve. I work across the stack: data models, backend, interfaces, integrations, AI features and deployment. I also stay involved after launch when a system needs looking after.
             </p>
             <p>
               Most software problems are data problems. I start with the database and the rules, then build the screens on top, so the system stays correct as it grows.
@@ -38,7 +38,7 @@ export default function About() {
               rel="noopener noreferrer"
               className="inline-flex min-h-11 items-center text-base text-accent underline underline-offset-4 hover:text-accent-hover"
             >
-              Top Rated on Upwork — see verified reviews
+              Top Rated on Upwork: see verified reviews
             </a>
           </div>
 
