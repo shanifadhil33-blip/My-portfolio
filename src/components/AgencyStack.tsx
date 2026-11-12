@@ -202,16 +202,17 @@ export default function AgencyStack() {
 
       <div>
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted">
-          <span className="flex items-center gap-1.5"><Move3d size={14} aria-hidden /> Drag to turn it any way</span>
-          <span className="flex items-center gap-1.5"><ArrowUp size={14} aria-hidden /> Tap or pull a layer up</span>
+          <span className="hidden items-center gap-1.5 sm:flex"><Move3d size={14} aria-hidden /> Drag to turn it any way</span>
+          <span className="flex items-center gap-1.5 sm:hidden"><ArrowUp size={14} aria-hidden /> Tap or pull a layer up</span>
           <button type="button" onClick={resetView} className="flex min-h-9 items-center gap-1 text-accent hover:underline">
             <RotateCcw size={12} aria-hidden /> Reset
           </button>
         </div>
 
+        {/* Reserve space for the expanded stack's upward overflow below the hints. */}
         <div
           ref={sceneRef}
-          className="slab-scene relative mx-auto aspect-[4/5] w-full max-w-[32rem] cursor-grab select-none active:cursor-grabbing sm:aspect-square"
+          className="slab-scene relative mx-auto mt-8 aspect-[4/5] w-full max-w-[32rem] cursor-grab select-none active:cursor-grabbing sm:mt-24 sm:aspect-square"
           data-open={open}
           style={{ touchAction: "pan-y" }}
           onPointerDown={onPointerDown}

@@ -3,15 +3,15 @@ import type { Project } from "@/data/projects";
 export const clientProjects: Project[] = [
   {
     id: "recommendation-platform",
-    title: "Multi tenant recommendation platform",
+    title: "Multi-tenant recommendation platform",
     brief:
       "One codebase that runs many branded comparison sites, each configured and published from an admin panel instead of a new build.",
-    tags: ["Row level security", "Multi tenant", "Admin workflows"],
+    tags: ["Row level security", "Multi-tenant", "Admin workflows"],
     hideMedia: true,
     owned: "Database architecture, tenant isolation, admin and publishing workflows, deployment.",
     caseStudy: {
       problem:
-        "The client wanted to launch many branded comparison and recommendation websites without paying for a new build each time. Adding a site had to be a setup job in an admin panel, not a coding job.",
+        "The client wanted to launch many branded comparison and recommendation websites without a new build each time. Adding a site had to be a setup job in an admin panel, not a coding job.",
       solution:
         "One Next.js and Supabase codebase serving multiple branded sites. A 23 table Postgres schema with row level security on every table, so each tenant only sees its own data. An admin console where an owner with no technical background configures a site, publishes it as a versioned snapshot, activates it, rolls it back or archives it.",
       outcome:

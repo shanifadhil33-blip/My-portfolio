@@ -137,8 +137,8 @@ export const agencyLayer: Record<Mode, LayerCard> = {
     ],
     how: [
       "You share the brief and the designs",
-      "I reply in writing with questions, a scope and a fixed price",
-      "Milestones are funded before work starts",
+      "I reply in writing with questions and a clear scope",
+      "Each milestone is agreed in writing before work starts",
     ],
     get: ["Updates written so you can send them as your own", "Code and accounts in your client's name"],
     proof: "Repeat work from the same client after the first engagement closed at 5 stars.",
@@ -149,7 +149,7 @@ export const agencyLayer: Record<Mode, LayerCard> = {
     summary: "A client asks for something outside what you do. You introduce them, I scope and deliver it.",
     take: [
       "You introduce the client and the need",
-      "I scope it in writing and quote a fixed price",
+      "I scope it in writing before any work starts",
       "Referral terms are agreed before any work starts",
     ],
     how: [

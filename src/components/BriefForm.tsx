@@ -6,7 +6,6 @@ import BackHome from "@/components/BackHome";
 import {
   attachmentError,
   BRIEF_FIELD_ORDER,
-  BUDGET_OPTIONS,
   type BriefFieldName,
   parseBriefFields,
   TIMELINE_OPTIONS,
@@ -53,7 +52,6 @@ function readBrief(data: FormData) {
     company: text("company"),
     project: text("project"),
     timeline: text("timeline"),
-    budget: text("budget"),
     hpField: text("hp_field"),
   };
 }
@@ -340,7 +338,7 @@ export default function BriefForm() {
         Send a brief
       </h1>
       <p className="mt-4 text-pretty text-base leading-relaxed text-muted">
-        Tell me what you need built, your timeline and your budget. I reply by email within 24 hours.
+        Tell me what you need built and your timeline. I reply by email within 24 hours.
       </p>
       <form method="post" action="/api/brief" onSubmit={onSubmit} className="relative mt-10 space-y-6" noValidate>
         <div className="pointer-events-none absolute -left-[10000px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
@@ -423,18 +421,6 @@ export default function BriefForm() {
           options={TIMELINE_OPTIONS}
           invalid={invalidFields.includes("timeline")}
           describedBy={invalidFields.includes("timeline") ? "brief-error" : undefined}
-          onPicked={refreshAfterAttempt}
-        />
-
-        <ChoiceField
-          id="budget"
-          name="budget"
-          label="Budget range"
-          optional
-          placeholder="Select a budget range"
-          options={BUDGET_OPTIONS}
-          invalid={invalidFields.includes("budget")}
-          describedBy={invalidFields.includes("budget") ? "brief-error" : undefined}
           onPicked={refreshAfterAttempt}
         />
 
