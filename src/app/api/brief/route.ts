@@ -38,7 +38,6 @@ export async function POST(request: Request) {
     company: text("company"),
     project: text("project"),
     timeline: text("timeline"),
-    budget: text("budget"),
     hpField: text("hp_field"),
   });
 

@@ -81,7 +81,7 @@ export function homeGraph() {
       {
         "@type": "ItemList",
         "@id": `${SITE_URL}/#projects`,
-        name: "Personal software projects",
+        name: "Demos and personal builds",
         itemListElement: publicProjects.map((p, i) => ({
           "@type": "ListItem",
           position: i + 1,

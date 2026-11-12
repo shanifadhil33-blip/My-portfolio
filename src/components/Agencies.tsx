@@ -4,7 +4,7 @@ import { PillLink, SectionHead } from "./ui";
 const handoffs = [
   { title: "Client portals & dashboards", detail: "Logins, roles and the screens your client's customers or staff use every day." },
   { title: "Custom web applications", detail: "A complete build from your designs, taken to a deployed, working product." },
-  { title: "Integrations", detail: "Connecting the tools your client already pays for: payments, CRMs, booking and email." },
+  { title: "Integrations", detail: "Connecting the tools your client already uses: payments, CRMs, booking and email." },
   { title: "AI features", detail: "Document extraction and assistants on the client's own data, with a person approving the output." },
   { title: "Fixing what's already there", detail: "Production problems, security issues, or an app someone else left half done." },
   { title: "Looking after it after launch", detail: "Hosting, monitoring and updates, so you don't need an engineer on call." },
@@ -13,7 +13,7 @@ const handoffs = [
 const working = [
   "Built from your designs and brief",
   "Written updates you can forward or send as your own",
-  "Fixed scope and price per milestone",
+  "Clear scope, delivered in agreed milestones",
   "Your client relationship stays yours",
 ];
 
@@ -26,7 +26,7 @@ export default function Agencies() {
           n="01"
           label="Agency partnerships"
           title="Technical delivery for agencies and consultants."
-          lead="For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don't build in house. I build it, behind your brand or by referral, with written updates and fixed milestones."
+          lead="For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don't build in house. I build it, behind your brand or by referral, with written updates and agreed milestones."
         />
 
         <div className="mt-16 md:mt-20">

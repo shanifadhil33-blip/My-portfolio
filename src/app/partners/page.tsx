@@ -4,13 +4,13 @@ import { PillLink } from "@/components/ui";
 import { namedClientProjects } from "@/data/clientWork";
 import { shareMeta, UPWORK_URL } from "@/lib/site";
 
-// A direct link for agency outreach. It repeats the homepage agency section,
-// so it stays out of search results to avoid a duplicate page.
+// The short agency landing is linked from the footer and listed in the sitemap.
+// It should be indexed.
 export const metadata: Metadata = {
   title: "Technical Delivery for Agencies",
   description:
     "Adhil Shanif works with agencies and consultants as an external engineering partner, from one workstream to complete application builds.",
-  robots: { index: false, follow: true },
+  robots: { index: true, follow: true },
   ...shareMeta(
     "Technical Delivery for Agencies",
     "External engineering partner for agencies and consultants, from one workstream to complete application builds.",
@@ -22,7 +22,7 @@ const points = [
   "Portals, dashboards, web apps, integrations and AI features your clients ask for.",
   "Behind your brand: you stay the face of the project and I build underneath it.",
   "Or refer it to me: I scope and deliver it, and referral terms are agreed up front.",
-  "Fixed scope and price per milestone, with written updates you can send as your own.",
+  "Clear scope, delivered in agreed milestones, with written updates you can send as your own.",
 ];
 
 export default function PartnersPage() {
@@ -34,7 +34,7 @@ export default function PartnersPage() {
           Technical delivery for agencies and consultants.
         </h1>
         <p className="mt-6 text-pretty text-lg leading-relaxed text-muted">
-          For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don&apos;t build in house. I build it, behind your brand or by referral, with written updates and fixed milestones.
+          For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don&apos;t build in house. I build it, behind your brand or by referral, with written updates and agreed milestones.
         </p>
 
         <ul className="mt-10 space-y-3">

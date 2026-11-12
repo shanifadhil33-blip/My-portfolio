@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import InboxButton from "./InboxButton";
 
 const navLinks = [
   { label: "Agencies", href: "#agencies" },
@@ -82,7 +81,6 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-1">
-        <InboxButton />
         <button
           id="mobile-menu-toggle"
           type="button"

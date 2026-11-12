@@ -168,7 +168,7 @@ export default function ServicesPage() {
           <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
               <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">Tell me what you need built.</h2>
-              <p className="mt-4 text-pretty text-lg leading-relaxed text-muted">Describe the project, the timeline and the budget. I reply by email within 24 hours.</p>
+              <p className="mt-4 text-pretty text-lg leading-relaxed text-muted">Describe the project and the timeline. I reply by email within 24 hours.</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <PillLink href="/brief">Send a brief</PillLink>

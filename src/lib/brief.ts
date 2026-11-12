@@ -9,14 +9,6 @@ export const TIMELINE_OPTIONS = [
   "not sure",
 ] as const;
 
-export const BUDGET_OPTIONS = [
-  "under US $1,000",
-  "US $1,000 to 3,000",
-  "US $3,000 to 10,000",
-  "US $10,000+",
-  "not sure",
-] as const;
-
 const ALLOWED_EXTENSIONS = new Set([".pdf", ".docx", ".png", ".jpg", ".jpeg"]);
 
 const ALLOWED_MIME_TYPES = new Set([
@@ -39,13 +31,12 @@ const briefFields = z.object({
     .min(1, "Describe what you need built.")
     .max(8000, "That description is too long."),
   timeline: z.union([z.literal(""), z.enum(TIMELINE_OPTIONS)], { error: "Choose a timeline." }),
-  budget: z.union([z.literal(""), z.enum(BUDGET_OPTIONS)], { error: "Choose a budget range." }),
   hpField: z.string(),
 });
 
 export type BriefFields = z.infer<typeof briefFields>;
 
-export const BRIEF_FIELD_ORDER = ["name", "email", "project", "timeline", "budget", "company"] as const;
+export const BRIEF_FIELD_ORDER = ["name", "email", "project", "timeline", "company"] as const;
 
 export type BriefFieldName = (typeof BRIEF_FIELD_ORDER)[number];
 
@@ -54,7 +45,6 @@ const BRIEF_FIELD_LABEL: Record<BriefFieldName, string> = {
   email: "Email",
   project: "What you need built",
   timeline: "Timeline",
-  budget: "Budget range",
   company: "Company",
 };
 
@@ -66,7 +56,6 @@ export type BriefInput = {
   company: string;
   project: string;
   timeline: string;
-  budget: string;
   hpField: string;
 };
 
@@ -166,13 +155,11 @@ export function briefSubject(name: string, company: string): string {
 export function briefBody(fields: BriefFields): string {
   const company = fields.company.trim() || "Not given";
   const timeline = fields.timeline.trim() || "Not given";
-  const budget = fields.budget.trim() || "Not given";
   return [
     `Name: ${fields.name}`,
     `Email: ${fields.email}`,
     `Company: ${company}`,
     `Timeline: ${timeline}`,
-    `Budget: ${budget}`,
     "",
     "What you need built:",
     fields.project,
