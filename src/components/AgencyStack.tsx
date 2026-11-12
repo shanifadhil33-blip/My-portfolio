@@ -98,7 +98,7 @@ const drawerFits = (box: ReturnType<typeof drawerBounds>, limit: ReturnType<type
 // Probe synchronously with transitions disabled so no intermediate pose can paint.
 const clampDrawer = (shift: HTMLElement, requested: number, limit: ReturnType<typeof drawerLimit>) => {
   let lo = 0;
-  let hi = Math.max(0, requested);
+  let hi = 320;
   let best = 0;
   for (let step = 0; step < 12; step++) {
     const mid = (lo + hi) / 2;
@@ -106,8 +106,9 @@ const clampDrawer = (shift: HTMLElement, requested: number, limit: ReturnType<ty
     if (drawerFits(drawerBounds(shift), limit)) { best = mid; lo = mid; }
     else hi = mid;
   }
-  shift.style.transform = `translateX(${best}px)`;
-  return best;
+  const applied = Math.min(Math.max(0, requested), best);
+  shift.style.transform = `translateX(${applied}px)`;
+  return { applied, limit: best };
 };
 
 export default function AgencyStack() {
@@ -120,7 +121,7 @@ export default function AgencyStack() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
   const view = useRef({ spin: DEFAULT_SPIN, tilt: DEFAULT_TILT });
-  const g = useRef<{ pointerId: number; x: number; y: number; spin: number; tilt: number; mode: "pending" | "rotate" | "slide"; layer: string | null } | null>(null);
+  const g = useRef<{ pointerId: number; x: number; y: number; spin: number; tilt: number; mode: "pending" | "rotate" | "slide"; layer: string | null; pulled: number; limit: number } | null>(null);
   const touched = useRef(false);
   const movingDrawers = useRef(new Set<string>());
   const returnUntil = useRef(new Map<string, number>());
@@ -186,9 +187,9 @@ export default function AgencyStack() {
 
   const poseNow = (): Pose => ({ tilt: view.current.tilt, spin: view.current.spin, size: stackRef.current?.offsetWidth ?? 160 });
 
-  const openCard = (id: string) => {
+  const openCard = (id: string, fromDrawer = false) => {
     touched.current = true;
-    snapDrawer(true);
+    if (!fromDrawer) snapDrawer(true);
     if (id !== "whole") setSelected(id);
     setFrom(rectOf(id));
     setPose(poseNow());
@@ -220,17 +221,25 @@ export default function AgencyStack() {
     return { x: x / len, y: y / len, perLocal: len };
   };
 
-  const slideDrawer = (id: string, requested: number) => {
+  const slideDrawer = (id: string, requested: number, dragging = true) => {
     const el = slabEl(id);
     const scene = sceneRef.current;
     const shift = el?.querySelector<HTMLElement>(".slab-shift");
-    if (!el || !scene || !shift) return 0;
+    if (!el || !scene || !shift) return { applied: 0, limit: 0 };
+    const start = getComputedStyle(shift).transform;
     returnUntil.current.delete(id);
     shift.style.transitionDuration = "";
     el.dataset.dragging = "true";
-    const best = clampDrawer(shift, requested, drawerLimit(scene));
+    const moved = clampDrawer(shift, requested, drawerLimit(scene));
+    if (!dragging) {
+      // Probes never paint; ease from the actual pulled pose on release.
+      shift.style.transform = start;
+      shift.getBoundingClientRect();
+      el.dataset.dragging = "false";
+      shift.style.transform = `translateX(${moved.applied}px)`;
+    }
     movingDrawers.current.add(id);
-    return best;
+    return moved;
   };
 
   const snapDrawer = (immediate = false) => {
@@ -260,6 +269,8 @@ export default function AgencyStack() {
           const slab = stackRef.current?.querySelector<HTMLElement>(`[data-layer="${id}"]`);
           const shift = slab?.querySelector<HTMLElement>(".slab-shift");
           if (!slab || !shift) { movingDrawers.current.delete(id); continue; }
+          // The lifted-out slab keeps its drawn pose until the card closes.
+          if (slab.dataset.out === "true") continue;
           const x = new DOMMatrixReadOnly(getComputedStyle(shift).transform).m41;
           if (x <= 0) {
             shift.style.transitionDuration = "";
@@ -291,7 +302,7 @@ export default function AgencyStack() {
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     if (e.button !== 0 || !e.isPrimary || g.current) return;
     const layer = layerAtPoint(e.currentTarget, e.clientX, e.clientY);
-    g.current = { pointerId: e.pointerId, x: e.clientX, y: e.clientY, spin: view.current.spin, tilt: view.current.tilt, mode: "pending", layer };
+    g.current = { pointerId: e.pointerId, x: e.clientX, y: e.clientY, spin: view.current.spin, tilt: view.current.tilt, mode: "pending", layer, pulled: 0, limit: 0 };
     if (layer) {
       e.preventDefault();
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -320,13 +331,15 @@ export default function AgencyStack() {
     }
     if (d.mode === "rotate") {
       // Free rotation on both axes, so the stack can turn all the way round and show its underside.
-      view.current.spin = d.spin + dx * 0.45;
+      view.current.spin = d.spin - dx * 0.45;
       view.current.tilt = d.tilt - dy * 0.4;
       applyView();
     } else if (d.mode === "slide" && d.layer) {
       const axis = rightOnScreen();
       const along = (e.clientX - d.x) * axis.x + (e.clientY - d.y) * axis.y;
-      slideDrawer(d.layer, Math.max(0, along / axis.perLocal));
+      const moved = slideDrawer(d.layer, Math.max(0, along / axis.perLocal));
+      d.pulled = moved.applied;
+      d.limit = moved.limit;
     }
   }
 
@@ -340,7 +353,12 @@ export default function AgencyStack() {
       openCard(d.layer);
       return;
     }
-    if (d.mode === "slide" && d.layer) snapDrawer();
+    if (d.mode === "slide" && d.layer) {
+      if (d.limit > 12 && d.pulled >= d.limit * 0.4) {
+        slideDrawer(d.layer, d.limit, false);
+        openCard(d.layer, true);
+      } else snapDrawer();
+    }
   }
 
   function cancelGesture(e?: React.PointerEvent<HTMLDivElement>) {
@@ -511,7 +529,7 @@ export default function AgencyStack() {
           from={from}
           pose={pose}
           onStep={step}
-          onClose={() => { setOpenId(null); setFrom(null); }}
+          onClose={() => { setOpenId(null); setFrom(null); snapDrawer(); }}
         />
       )}
     </div>

@@ -85,6 +85,11 @@ try {
         if (cdp) await sendTouch("touchEnd");
         else await page.mouse.up();
       };
+      // Keep the public stack's along-axis projection at the Reset pose.
+      const along = (p, distance) => ({
+        x: p.x + distance * Math.cos(-38 * Math.PI / 180),
+        y: p.y + distance * Math.sin(-38 * Math.PI / 180) * Math.cos(58 * Math.PI / 180),
+      });
       for (const id of ids) {
         await reset();
         const p = await center(label(id));
@@ -101,27 +106,50 @@ try {
         assert.equal(await scene.getAttribute("data-down-captured"), "true", "layer pointerdown immediately captures the pointer");
         // The fallback must cancel native touch panning only while holding a slab.
         assert(await scene.evaluate((node) => !node.dispatchEvent(new Event("touchmove", { bubbles: true, cancelable: true }))));
-        for (const distance of [12, 45, 100, 160]) {
-          await move({ x: p.x + distance, y: p.y - distance * 0.414 });
+        for (const distance of [12, 45, 100, 160, 340]) {
+          await move(along(p, distance));
           await page.waitForTimeout(60);
           const offsets = await shifts();
           assert(offsets[ids.indexOf(id)] > 0, `${id} should slide`);
           assert(offsets.every((x, i) => i === ids.indexOf(id) || Math.abs(x) < 0.01), "only the grabbed slab slides");
-          const fits = await page.locator(`[data-layer="${id}"] .slab-shift`).evaluate((node) =>
-            [...node.querySelectorAll(".slab-top, .slab-side, .slab-label")].every((part) => {
+          const fits = await page.locator(`[data-layer="${id}"] .slab-shift`).evaluate((node) => {
+            const scene = node.closest(".slab-scene").getBoundingClientRect();
+            return [...node.querySelectorAll(".slab-top, .slab-side, .slab-label")].every((part) => {
               const r = part.getBoundingClientRect();
-              return r.left >= 7.5 && r.right <= innerWidth - 7.5 && r.top >= 7.5 && r.bottom <= innerHeight - 7.5;
-            }),
-          );
-          assert(fits, `${id} stays in the viewport`);
+              return r.left >= Math.max(7.5, scene.left + 7.5) && r.right <= Math.min(innerWidth - 7.5, scene.right - 7.5)
+                && r.top >= Math.max(7.5, scene.top + 7.5) && r.bottom <= Math.min(innerHeight - 7.5, scene.bottom - 7.5);
+            });
+          });
+          assert(fits, `${id} and its label stay inside the scene and viewport`);
         }
+        const room = (await shifts())[ids.indexOf(id)];
+        assert(room > 12, `${id} has room to exercise the release threshold`);
+        await move(along(p, room * 0.25));
+        assert.equal(await dialog.count(), 0, "a drag only opens on release");
         assert.equal(await page.evaluate(() => scrollY), beforeY, "grabbing a layer must not scroll");
         await up();
         await page.waitForTimeout(600);
-        assert.equal(await dialog.count(), 0, "drag release must not open a card");
-        assert((await shifts()).every((x) => Math.abs(x) < 0.01), "release snaps all slabs back");
+        assert.equal(await dialog.count(), 0, "a drag below 40% must not open a card");
+        assert((await shifts()).every((x) => Math.abs(x) < 0.01), "a short drag snaps all slabs back");
+
+        await reset();
+        const start = await center(label(id));
+        await down(start);
+        await move(along(start, room * 0.5));
+        const pulled = (await shifts())[ids.indexOf(id)];
+        assert(pulled >= room * 0.4, "the long drag passes the clamp threshold");
+        assert.equal(await dialog.count(), 0, "a long drag waits for release");
+        await up();
+        await dialog.waitFor();
+        assert.equal(await dialog.getAttribute("aria-labelledby"), `layer-card-${id}`);
+        assert.equal(await page.locator(`[data-layer="${id}"]`).getAttribute("data-out"), "true");
+        assert((await shifts())[ids.indexOf(id)] >= pulled - 0.5, "fly-out starts from the drawn pose without snapping closed");
+        assert.equal(await page.getByRole("radio", { name: /Behind your brand/ }).getAttribute("aria-checked"), "true");
+        await close();
+        const returned = await shifts();
+        assert(returned.every((x) => Math.abs(x) < 0.01), `closing ${id} returns the drawn slab: ${returned}`);
       }
-      console.log(`${engine} ${width}: ${cdp ? "touch" : "mouse"} drags select only the intended slab, clamp and snap back`);
+      console.log(`${engine} ${width}: ${cdp ? "touch" : "mouse"} drags clamp, short drags snap, long drags open the matching card`);
 
       await reset();
       const p = await center(label("backend"));
@@ -130,8 +158,21 @@ try {
       const turned = await page.locator(".slab-stack").getAttribute("style");
       await up();
       assert.equal(await dialog.count(), 0, "rotation does not open a card");
+      assert(turned.includes("rotateZ(-2deg)"), "left drag increases spin by -dx * 0.45");
+      assert(turned.includes("rotateX(98deg)"), "tilt keeps its existing direction");
       await reset();
       assert.notEqual(await page.locator(".slab-stack").getAttribute("style"), turned, "Reset restores rotation");
+      // Empty padding permits a rightward free rotate rather than a slab pull.
+      const bounds = await scene.boundingBox();
+      const emptyRight = { x: bounds.x + 8, y: bounds.y + 20 };
+      await down(emptyRight);
+      await move({ x: emptyRight.x + 80, y: emptyRight.y });
+      await up();
+      const turnedRight = await page.locator(".slab-stack").getAttribute("style");
+      assert(turnedRight.includes("rotateZ(-74deg)"), "right drag decreases spin by dx * 0.45, matching the private site");
+      assert(turnedRight.includes("rotateX(58deg)"));
+      assert.equal(await dialog.count(), 0, "free rotate to the right does not open a card");
+      await reset();
       await down(await center(label("backend")));
       const held = await center(label("backend"));
       await move({ x: held.x + 60, y: held.y - 25 });
