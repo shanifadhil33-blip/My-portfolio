@@ -73,7 +73,7 @@ export default function Contact() {
           <div className="order-1 lg:col-span-6">
             <SectionHead
               id="contact-title"
-              n="06"
+              n="07"
               label="Contact"
               title="Tell me what you need built."
               lead="WhatsApp and email are the main ways to reach me. The brief form is optional if you would rather write it out. I reply within 24 hours."
