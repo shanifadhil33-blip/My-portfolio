@@ -262,9 +262,8 @@ button:disabled {
 @property --next-above { syntax: "<number>"; inherits: false; initial-value: 0; }
 @property --next-sel { syntax: "<number>"; inherits: false; initial-value: 0; }
 @property --press { syntax: "<length>"; inherits: false; initial-value: 0px; }
-@property --pull { syntax: "<length>"; inherits: false; initial-value: 0px; }
 @property --exit { syntax: "<length>"; inherits: false; initial-value: 0px; }
-.slab-scene { perspective: 1500px; perspective-origin: 50% 25%; }
+.slab-stage { perspective: 1500px; perspective-origin: 50% 25%; }
 .slab-scene, .slab-scene * { -webkit-tap-highlight-color: transparent; }
 .slab-stack {
   transform-style: preserve-3d; --gap: calc(var(--t) + 2px); --t: 22px; --r: 14px; --part: 0px; --lift: 0px;
@@ -274,16 +273,17 @@ button:disabled {
 .slab-scene[data-open="true"] .slab-stack { --gap: 64px; --part: 36px; --lift: 10px; }
 .slab {
   position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
-  --press: 0px; --pull: 0px; --exit: 0px; --face-opacity: 1;
+  --press: 0px; --exit: 0px; --face-opacity: 1;
   /* Keep a 2px air gap, including the selected layer's extra separation. */
   --room: max(0px, calc(var(--gap) - var(--t) + (var(--next-above) - var(--above)) * var(--part) + (var(--next-sel) - var(--sel)) * var(--lift) - 2px));
-  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift) + min(var(--room), calc(var(--press) + var(--pull))) + var(--exit)));
-  transition-property: --above, --sel, --next-above, --next-sel, --press, --pull, --exit;
+  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift) + min(var(--room), var(--press)) + var(--exit)));
+  transition-property: --above, --sel, --next-above, --next-sel, --press, --exit;
   transition-duration: 750ms;
   transition-timing-function: cubic-bezier(.2,.8,.2,1);
 }
+.slab-shift { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 480ms cubic-bezier(.2,.8,.2,1); }
 .slab[data-pressed="true"] { --press: 12px; }
-.slab[data-dragging="true"] { transition-duration: 100ms; transition-timing-function: ease-out; }
+.slab[data-dragging="true"] .slab-shift { transition: none; }
 /* Lifted out: the slab rises and fades while the card flies in. */
 .slab[data-out="true"] { --exit: 120px; --face-opacity: 0; transition-duration: 500ms; }
 @media (hover: hover) and (pointer: fine) { .slab:hover { --press: 10px; } }
@@ -293,7 +293,8 @@ button:disabled {
   /* Fade the leaves, since opacity on the slab flattens its 3D geometry. */
   opacity: var(--face-opacity); transition: opacity 400ms ease;
 }
-.slab[data-out="true"] > span { transition: opacity 140ms ease; }
+.slab[data-out="true"] .slab-top,
+.slab[data-out="true"] .slab-side { transition: opacity 140ms ease; }
 .slab-top { touch-action: none; }
 .slab-bottom { inset: 0; clip-path: var(--cap); transform: rotateY(180deg); background: var(--side-dark); }
 .slab-top {
@@ -349,7 +350,7 @@ button:disabled {
 .lift { animation: lift 800ms cubic-bezier(.2,.7,.2,1) both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .flipcard-inner, .slab-stack, .slab, .slab-top, .slab-side, .coin, .card3d-inner { transition-duration: 1ms !important; }
+  .flipcard-inner, .slab-stack, .slab, .slab-shift, .slab-top, .slab-side, .coin, .card3d-inner { transition-duration: 1ms !important; }
   .pulse-x, .pulse-y { animation: none !important; display: none; }
   .rise, .lift { animation: none !important; }
 }

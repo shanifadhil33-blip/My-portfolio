@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUp, Move3d, RotateCcw } from "lucide-react";
+import { ArrowRight, Move3d, RotateCcw } from "lucide-react";
 import { agencyLayer, engineeringLayers, wholeBuild, type LayerCard, type Mode } from "@/data/agencyLayers";
 import LayerCardModal, { type CardOwner, type Pose, type Rect } from "./LayerCardModal";
 
@@ -22,7 +22,6 @@ const modes: { id: Mode; title: string; detail: string }[] = [
 
 const DEFAULT_SPIN = -38;
 const DEFAULT_TILT = 58;
-const PULL_OPEN = 56; // px of upward drag that lifts a layer out as a card
 
 // The caps and corner walls use the same eight chords per quarter circle.
 // Shared endpoints close the box without the old full-width corner fins.
@@ -59,6 +58,45 @@ const capOutline = `polygon(${capPoints.join(", ")})`;
 
 type Slab = { card: LayerCard; owner: CardOwner };
 
+const drawerBounds = (shift: HTMLElement) => {
+  const parts = [...shift.querySelectorAll(".slab-top, .slab-front, .slab-right, .slab-label")].map((node) => node.getBoundingClientRect());
+  return parts.reduce((box, part) => ({
+    left: Math.min(box.left, part.left),
+    top: Math.min(box.top, part.top),
+    right: Math.max(box.right, part.right),
+    bottom: Math.max(box.bottom, part.bottom),
+  }), { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity });
+};
+
+const drawerLimit = (scene: HTMLElement) => {
+  const box = scene.getBoundingClientRect();
+  const pad = 8;
+  return {
+    left: Math.max(pad, box.left + pad),
+    top: Math.max(pad, box.top + pad),
+    right: Math.min(window.innerWidth - pad, box.right - pad),
+    bottom: Math.min(window.innerHeight - pad, box.bottom - pad),
+  };
+};
+
+const drawerFits = (box: ReturnType<typeof drawerBounds>, limit: ReturnType<typeof drawerLimit>) =>
+  box.left >= limit.left && box.right <= limit.right && box.top >= limit.top && box.bottom <= limit.bottom;
+
+// Probe synchronously with transitions disabled so no intermediate pose can paint.
+const clampDrawer = (shift: HTMLElement, requested: number, limit: ReturnType<typeof drawerLimit>) => {
+  let lo = 0;
+  let hi = Math.max(0, requested);
+  let best = 0;
+  for (let step = 0; step < 12; step++) {
+    const mid = (lo + hi) / 2;
+    shift.style.transform = `translateX(${mid}px)`;
+    if (drawerFits(drawerBounds(shift), limit)) { best = mid; lo = mid; }
+    else hi = mid;
+  }
+  shift.style.transform = `translateX(${best}px)`;
+  return best;
+};
+
 export default function AgencyStack() {
   const [mode, setMode] = useState<Mode>("whitelabel");
   const [selected, setSelected] = useState<string>("backend");
@@ -69,8 +107,11 @@ export default function AgencyStack() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
   const view = useRef({ spin: DEFAULT_SPIN, tilt: DEFAULT_TILT });
-  const g = useRef<{ x: number; y: number; spin: number; tilt: number; mode: "pending" | "rotate" | "pull"; layer: string | null; mouse: boolean } | null>(null);
+  const g = useRef<{ x: number; y: number; spin: number; tilt: number; mode: "pending" | "rotate" | "slide"; layer: string | null } | null>(null);
   const touched = useRef(false);
+  const drawn = useRef<string | null>(null);
+  const movingDrawers = useRef(new Set<string>());
+  const returnUntil = useRef(new Map<string, number>());
 
   const slabs: Slab[] = [
     ...engineeringLayers.map((l) => ({ card: l, owner: "mine" as CardOwner })),
@@ -126,7 +167,7 @@ export default function AgencyStack() {
   };
 
   const openIdRef = useRef<string | null>(null);
-  openIdRef.current = openId;
+  useEffect(() => { openIdRef.current = openId; }, [openId]);
   const step = useCallback((dir: -1 | 1) => {
     const cur = openIdRef.current;
     if (!cur) return;
@@ -140,19 +181,91 @@ export default function AgencyStack() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setPull = (id: string, px: number, dragging: boolean) => {
-    const el = slabEl(id);
-    if (!el) return;
-    el.dataset.dragging = String(dragging);
-    // Reserve the full pressed lift as well as the air gap in --room.
-    // The top layer has no ceiling; its --room allows the original 220px pull.
-    el.style.setProperty("--pull", `min(${px}px, max(0px, calc(var(--room) - 12px)))`);
+  // Screen direction of the slab's own right edge, after the current isometric turn.
+  const rightOnScreen = () => {
+    const spin = (view.current.spin * Math.PI) / 180;
+    const tilt = (view.current.tilt * Math.PI) / 180;
+    const x = Math.cos(spin);
+    const y = Math.sin(spin) * Math.cos(tilt);
+    const len = Math.hypot(x, y) || 1;
+    return { x: x / len, y: y / len, perLocal: len };
   };
+
+  const slideDrawer = (id: string, requested: number, dragging: boolean) => {
+    const el = slabEl(id);
+    const scene = sceneRef.current;
+    const shift = el?.querySelector<HTMLElement>(".slab-shift");
+    if (!el || !scene || !shift) return 0;
+    const current = getComputedStyle(shift).transform;
+    returnUntil.current.delete(id);
+    shift.style.transitionDuration = "";
+    el.dataset.dragging = "true";
+    const best = clampDrawer(shift, requested, drawerLimit(scene));
+    // Probes never paint. Restore the rendered pose before easing to the target.
+    shift.style.transform = current === "none" ? "translateX(0px)" : current;
+    shift.getBoundingClientRect();
+    el.dataset.dragging = String(dragging);
+    shift.style.transform = `translateX(${best}px)`;
+    movingDrawers.current.add(id);
+    return best;
+  };
+
+  const snapDrawer = () => {
+    drawn.current = null;
+    stackRef.current?.querySelectorAll<HTMLElement>(".slab").forEach((slab) => {
+      slab.dataset.dragging = "false";
+      const shift = slab.querySelector<HTMLElement>(".slab-shift");
+      if (shift) {
+        returnUntil.current.set(slab.dataset.layer!, performance.now() + 480);
+        shift.style.transitionDuration = "";
+        shift.style.transform = "translateX(0px)";
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    let frame = 0;
+    const constrain = () => {
+      const scene = sceneRef.current;
+      if (scene && movingDrawers.current.size) {
+        const limit = drawerLimit(scene);
+        for (const id of movingDrawers.current) {
+          const slab = stackRef.current?.querySelector<HTMLElement>(`[data-layer="${id}"]`);
+          const shift = slab?.querySelector<HTMLElement>(".slab-shift");
+          if (!slab || !shift) { movingDrawers.current.delete(id); continue; }
+          const x = new DOMMatrixReadOnly(getComputedStyle(shift).transform).m41;
+          if (x <= 0) {
+            shift.style.transitionDuration = "";
+            returnUntil.current.delete(id);
+            if (drawn.current !== id && g.current?.layer !== id) movingDrawers.current.delete(id);
+            continue;
+          }
+          // Recheck during the press, return animation, scrolling and resizing too.
+          if (!drawerFits(drawerBounds(shift), limit)) {
+            const dragging = slab.dataset.dragging;
+            slab.dataset.dragging = "true";
+            clampDrawer(shift, x, limit);
+            shift.getBoundingClientRect();
+            slab.dataset.dragging = dragging;
+            if (drawn.current !== id && !(g.current?.mode === "slide" && g.current.layer === id)) {
+              // A clamp correction must not restart the 480ms return clock.
+              shift.style.transitionDuration = `${Math.max(0, (returnUntil.current.get(id) ?? performance.now()) - performance.now())}ms`;
+              shift.style.transform = "translateX(0px)";
+            }
+          }
+        }
+      }
+      frame = requestAnimationFrame(constrain);
+    };
+    frame = requestAnimationFrame(constrain);
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     if (e.button !== 0) return;
     const layer = (e.target as Element).closest<HTMLElement>("[data-layer]")?.dataset.layer ?? null;
-    g.current = { x: e.clientX, y: e.clientY, spin: view.current.spin, tilt: view.current.tilt, mode: "pending", layer, mouse: e.pointerType === "mouse" };
+    g.current = { x: e.clientX, y: e.clientY, spin: view.current.spin, tilt: view.current.tilt, mode: "pending", layer };
     if (layer) slabEl(layer)?.setAttribute("data-pressed", "true");
   }
 
@@ -163,43 +276,56 @@ export default function AgencyStack() {
     const dy = e.clientY - d.y;
     if (d.mode === "pending") {
       if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-      if (d.layer && -dy > Math.abs(dx)) d.mode = "pull";
-      else if (Math.abs(dx) >= Math.abs(dy) || d.mouse || d.layer) d.mode = "rotate";
-      else { cancelGesture(); return; } // vertical swipe on empty space scrolls the page
+      const axis = rightOnScreen();
+      const along = dx * axis.x + dy * axis.y;
+      const perp = Math.abs(-dx * axis.y + dy * axis.x);
+      if (d.layer && along > 6 && along > perp) d.mode = "slide";
+      else if (!d.layer && Math.abs(dy) > Math.abs(dx)) { cancelGesture(); return; }
+      else d.mode = "rotate";
       touched.current = true;
       e.currentTarget.setPointerCapture(e.pointerId);
+      snapDrawer();
     }
     if (d.mode === "rotate") {
       // Free rotation on both axes, so the stack can turn all the way round and show its underside.
       view.current.spin = d.spin + dx * 0.45;
       view.current.tilt = d.tilt - dy * 0.4;
       applyView();
-    } else if (d.mode === "pull" && d.layer) {
-      setPull(d.layer, Math.max(0, Math.min(220, -dy * 1.3)), true);
+    } else if (d.mode === "slide" && d.layer) {
+      const axis = rightOnScreen();
+      const along = (e.clientX - d.x) * axis.x + (e.clientY - d.y) * axis.y;
+      slideDrawer(d.layer, Math.max(0, along / axis.perLocal), true);
     }
   }
 
-  function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
+  function onPointerUp() {
     const d = g.current;
     g.current = null;
     if (!d) return;
     if (d.layer) slabEl(d.layer)?.removeAttribute("data-pressed");
-    if (d.mode === "pending" && d.layer) { openCard(d.layer); return; } // tap
-    if (d.mode === "pull" && d.layer) {
-      const pulled = d.y - e.clientY;
-      setPull(d.layer, 0, false);
-      if (pulled > PULL_OPEN) openCard(d.layer);
+    if (d.mode === "pending" && d.layer) {
+      touched.current = true;
+      if (drawn.current === d.layer) snapDrawer();
+      else {
+        snapDrawer();
+        drawn.current = d.layer;
+        slideDrawer(d.layer, 280, false);
+      }
+      return;
     }
+    if (d.mode === "slide" && d.layer) snapDrawer();
   }
 
   function cancelGesture() {
     const d = g.current;
     g.current = null;
-    if (d?.layer) { slabEl(d.layer)?.removeAttribute("data-pressed"); setPull(d.layer, 0, false); }
+    if (d?.layer) slabEl(d.layer)?.removeAttribute("data-pressed");
+    snapDrawer();
   }
 
   const resetView = () => {
     touched.current = true;
+    cancelGesture();
     view.current = { spin: DEFAULT_SPIN, tilt: DEFAULT_TILT };
     applyView(true);
   };
@@ -238,16 +364,16 @@ export default function AgencyStack() {
       <div>
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted">
           <span className="hidden items-center gap-1.5 sm:flex"><Move3d size={14} aria-hidden /> Drag to turn it any way</span>
-          <span className="flex items-center gap-1.5 sm:hidden"><ArrowUp size={14} aria-hidden /> Tap or pull a layer up</span>
+          <span className="flex items-center gap-1.5"><ArrowRight size={14} aria-hidden /> Tap a layer or drag it right</span>
           <button type="button" onClick={resetView} className="flex min-h-9 items-center gap-1 text-accent hover:underline">
             <RotateCcw size={12} aria-hidden /> Reset
           </button>
         </div>
 
-        {/* Reserve space for the expanded stack's upward overflow below the hints. */}
+        {/* Include the reserved space above the stack in the drawer clamp bounds. */}
         <div
           ref={sceneRef}
-          className="slab-scene relative mx-auto mt-8 aspect-[4/5] w-full max-w-[32rem] cursor-grab select-none active:cursor-grabbing sm:mt-24 sm:aspect-square"
+          className="slab-scene relative mx-auto w-full max-w-[32rem] cursor-grab pt-8 select-none active:cursor-grabbing sm:pt-24"
           data-open={open}
           style={{ touchAction: "pan-y" }}
           onPointerDown={onPointerDown}
@@ -256,45 +382,49 @@ export default function AgencyStack() {
           onPointerCancel={cancelGesture}
           aria-hidden
         >
-          {/* Positioned with margins, not a transform, so the stack keeps the scene's perspective. */}
-          <div className="absolute top-[calc(66%+5rem)] left-1/2 -mt-[22%] -ml-[22%] aspect-square w-[44%]">
-            <div ref={stackRef} className="slab-stack relative h-full w-full" style={{ "--cap": capOutline } as React.CSSProperties}>
-              <div className="slab-shadow" />
-              {slabs.map((s, i) => (
-                <div
-                  key={s.card.id}
-                  data-layer={s.card.id}
-                  className={`slab slab-${s.owner}`}
-                  data-out={openId === s.card.id}
-                  style={{
-                    "--i": i,
-                    "--above": i > selIndex ? 1 : 0,
-                    "--sel": i === selIndex ? 1 : 0,
-                    "--next-above": i + 1 > selIndex ? 1 : 0,
-                    "--next-sel": i + 1 === selIndex ? 1 : 0,
-                    ...(i === slabs.length - 1 ? { "--room": "232px" } : {}),
-                  } as React.CSSProperties}
-                >
-                  <span className="slab-side slab-bottom" />
-                  <span className="slab-side slab-front" />
-                  <span className="slab-side slab-right" />
-                  <span className="slab-side slab-back" />
-                  <span className="slab-side slab-left" />
-                  {cornerWalls.map((style, corner) => (
-                    <span key={corner} className="slab-side slab-corner" style={style} />
-                  ))}
-                  <span className="slab-top">
-                    {s.owner === "brand" && (
-                      <span className="absolute top-3 left-3 flex gap-1" aria-hidden>
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
+          <div className="slab-stage relative aspect-[4/5] sm:aspect-square">
+            {/* Positioned with margins, not a transform, so the stack keeps the scene's perspective. */}
+            <div className="absolute top-[calc(66%+5rem)] left-1/2 -mt-[22%] -ml-[22%] aspect-square w-[44%]">
+              <div ref={stackRef} className="slab-stack relative h-full w-full" style={{ "--cap": capOutline } as React.CSSProperties}>
+                <div className="slab-shadow" />
+                {slabs.map((s, i) => (
+                  <div
+                    key={s.card.id}
+                    data-layer={s.card.id}
+                    className={`slab slab-${s.owner}`}
+                    data-out={openId === s.card.id}
+                    style={{
+                      "--i": i,
+                      "--above": i > selIndex ? 1 : 0,
+                      "--sel": i === selIndex ? 1 : 0,
+                      "--next-above": i + 1 > selIndex ? 1 : 0,
+                      "--next-sel": i + 1 === selIndex ? 1 : 0,
+                      ...(i === slabs.length - 1 ? { "--room": "232px" } : {}),
+                    } as React.CSSProperties}
+                  >
+                    <div className="slab-shift">
+                      <span className="slab-side slab-bottom" />
+                      <span className="slab-side slab-front" />
+                      <span className="slab-side slab-right" />
+                      <span className="slab-side slab-back" />
+                      <span className="slab-side slab-left" />
+                      {cornerWalls.map((style, corner) => (
+                        <span key={corner} className="slab-side slab-corner" style={style} />
+                      ))}
+                      <span className="slab-top">
+                        {s.owner === "brand" && (
+                          <span className="absolute top-3 left-3 flex gap-1" aria-hidden>
+                            <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                          </span>
+                        )}
+                        <span className="slab-label">{s.card.label}</span>
                       </span>
-                    )}
-                    <span className="slab-label">{s.card.label}</span>
-                  </span>
-                </div>
-              ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
