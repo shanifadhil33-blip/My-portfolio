@@ -260,13 +260,6 @@ export const commitments = [
   "If a project needs more than one engineer, I say so before work starts.",
 ];
 
-export const engagementTerms = [
-  { title: "Agreed milestones", detail: "I deliver a milestone, you review it, then we start the next one." },
-  { title: "Written communication", detail: "Every decision is on record and easy to forward." },
-  { title: "You own everything", detail: "The code, the accounts and the infrastructure, from day one." },
-  { title: "Scoped first", detail: "The work is agreed in writing after I understand what you need." },
-];
-
 // Only technologies used in shipped projects or client work.
 export const techLayers = [
   { layer: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Three.js"] },
