@@ -6,6 +6,8 @@ import Agencies from "@/components/Agencies";
 import WhatIBuild from "@/components/WhatIBuild";
 import Work from "@/components/Work";
 import HowIWork from "@/components/HowIWork";
+import AiCapabilities from "@/components/AiCapabilities";
+import AiTeam from "@/components/AiTeam";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import JsonLd from "@/components/JsonLd";
@@ -26,6 +28,8 @@ export default function Home() {
         <WhatIBuild />
         <Work />
         <HowIWork />
+        <AiCapabilities />
+        <AiTeam />
         <About />
         <Contact />
       </main>

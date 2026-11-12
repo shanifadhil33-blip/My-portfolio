@@ -16,7 +16,7 @@ export default function About() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           id="about-title"
-          n="05"
+          n="06"
           label="About"
           title="Adhil Shanif, independent software engineer."
         />
