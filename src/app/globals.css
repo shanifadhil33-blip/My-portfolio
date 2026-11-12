@@ -252,21 +252,40 @@ button:disabled {
 
 /* ---------- 3D: agency layer stack ----------
    Closed rounded boxes: inset straight walls and chord-matched corner walls. */
+/* Animate the inputs, then clamp the resulting pose on every frame. Animating
+   the final transform could carry a pulled slab through an opening neighbour. */
+@property --gap { syntax: "<length>"; inherits: true; initial-value: 24px; }
+@property --part { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --lift { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --above { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --sel { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --next-above { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --next-sel { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --press { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --pull { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --exit { syntax: "<length>"; inherits: false; initial-value: 0px; }
 .slab-scene { perspective: 1500px; perspective-origin: 50% 25%; }
 .slab-scene, .slab-scene * { -webkit-tap-highlight-color: transparent; }
-.slab-stack { transform-style: preserve-3d; --gap: calc(var(--t) + 2px); --t: 22px; --r: 14px; --part: 0px; --lift: 0px; }
+.slab-stack {
+  transform-style: preserve-3d; --gap: calc(var(--t) + 2px); --t: 22px; --r: 14px; --part: 0px; --lift: 0px;
+  transition: transform var(--view-duration, 0ms) cubic-bezier(.2,.8,.2,1), --gap 750ms cubic-bezier(.2,.8,.2,1), --part 750ms cubic-bezier(.2,.8,.2,1), --lift 750ms cubic-bezier(.2,.8,.2,1);
+}
 /* Open: every block has clear air above it, and the stack parts a little above the selected block. */
-.slab-scene[data-open="true"] .slab-stack { --gap: 48px; --part: 36px; --lift: 10px; }
+.slab-scene[data-open="true"] .slab-stack { --gap: 64px; --part: 36px; --lift: 10px; }
 .slab {
   position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
   --press: 0px; --pull: 0px; --exit: 0px; --face-opacity: 1;
-  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift) + var(--press) + var(--pull) + var(--exit)));
-  transition: transform 750ms cubic-bezier(.2,.8,.2,1);
+  /* Keep a 2px air gap, including the selected layer's extra separation. */
+  --room: max(0px, calc(var(--gap) - var(--t) + (var(--next-above) - var(--above)) * var(--part) + (var(--next-sel) - var(--sel)) * var(--lift) - 2px));
+  transform: translateZ(calc(var(--i) * var(--gap) + var(--above) * var(--part) + var(--sel) * var(--lift) + min(var(--room), calc(var(--press) + var(--pull))) + var(--exit)));
+  transition-property: --above, --sel, --next-above, --next-sel, --press, --pull, --exit;
+  transition-duration: 750ms;
+  transition-timing-function: cubic-bezier(.2,.8,.2,1);
 }
 .slab[data-pressed="true"] { --press: 12px; }
-.slab[data-dragging="true"] { transition: none; }
+.slab[data-dragging="true"] { transition-duration: 100ms; transition-timing-function: ease-out; }
 /* Lifted out: the slab rises and fades while the card flies in. */
-.slab[data-out="true"] { --exit: 120px; --face-opacity: 0; transition: transform 500ms cubic-bezier(.2,.8,.2,1); }
+.slab[data-out="true"] { --exit: 120px; --face-opacity: 0; transition-duration: 500ms; }
 @media (hover: hover) and (pointer: fine) { .slab:hover { --press: 10px; } }
 .slab-top, .slab-side {
   position: absolute; pointer-events: auto; cursor: pointer;
@@ -291,7 +310,7 @@ button:disabled {
 .slab-left { top: var(--r); bottom: var(--r); left: 0; width: var(--t); transform-origin: left; transform: rotateY(-90deg); --wall: var(--side-dark); --edge-light: to left; }
 .slab-corner { height: var(--t); transform-origin: 0 0; }
 .slab-label { font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
-@media (max-width: 640px) { .slab-stack { --t: 15px; --r: 11px; } .slab-scene[data-open="true"] .slab-stack { --gap: 34px; --part: 26px; --lift: 8px; } .slab-label { font-size: 12px; } .slab-top { padding: 10px; } }
+@media (max-width: 640px) { .slab-stack { --t: 15px; --r: 11px; } .slab-scene[data-open="true"] .slab-stack { --gap: 50px; --part: 26px; --lift: 8px; } .slab-label { font-size: 12px; } .slab-top { padding: 10px; } }
 
 .slab-mine .slab-top { background: linear-gradient(135deg, #7dd3fc, #38bdf8 45%, #0ea5e9); color: #04121c; }
 .slab-mine { --side-light: #0284c7; --side-dark: #0369a1; }

@@ -83,7 +83,7 @@ export default function AgencyStack() {
   const applyView = (animate = false) => {
     const el = stackRef.current;
     if (!el) return;
-    el.style.transition = animate ? "transform 700ms cubic-bezier(.2,.8,.2,1)" : "none";
+    el.style.setProperty("--view-duration", animate ? "700ms" : "0ms");
     el.style.transform = `rotateX(${view.current.tilt}deg) rotateZ(${view.current.spin}deg)`;
   };
 
@@ -144,7 +144,9 @@ export default function AgencyStack() {
     const el = slabEl(id);
     if (!el) return;
     el.dataset.dragging = String(dragging);
-    el.style.setProperty("--pull", `${px}px`);
+    // Reserve the full pressed lift as well as the air gap in --room.
+    // The top layer has no ceiling; its --room allows the original 220px pull.
+    el.style.setProperty("--pull", `min(${px}px, max(0px, calc(var(--room) - 12px)))`);
   };
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
@@ -255,7 +257,7 @@ export default function AgencyStack() {
           aria-hidden
         >
           {/* Positioned with margins, not a transform, so the stack keeps the scene's perspective. */}
-          <div className="absolute top-[66%] left-1/2 -mt-[22%] -ml-[22%] aspect-square w-[44%]">
+          <div className="absolute top-[calc(66%+5rem)] left-1/2 -mt-[22%] -ml-[22%] aspect-square w-[44%]">
             <div ref={stackRef} className="slab-stack relative h-full w-full" style={{ "--cap": capOutline } as React.CSSProperties}>
               <div className="slab-shadow" />
               {slabs.map((s, i) => (
@@ -264,7 +266,14 @@ export default function AgencyStack() {
                   data-layer={s.card.id}
                   className={`slab slab-${s.owner}`}
                   data-out={openId === s.card.id}
-                  style={{ "--i": i, "--above": i > selIndex ? 1 : 0, "--sel": i === selIndex ? 1 : 0 } as React.CSSProperties}
+                  style={{
+                    "--i": i,
+                    "--above": i > selIndex ? 1 : 0,
+                    "--sel": i === selIndex ? 1 : 0,
+                    "--next-above": i + 1 > selIndex ? 1 : 0,
+                    "--next-sel": i + 1 === selIndex ? 1 : 0,
+                    ...(i === slabs.length - 1 ? { "--room": "232px" } : {}),
+                  } as React.CSSProperties}
                 >
                   <span className="slab-side slab-bottom" />
                   <span className="slab-side slab-front" />
