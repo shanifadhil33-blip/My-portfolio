@@ -2,8 +2,6 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
 import {
-  BookOpen,
-  Brain,
   Calculator,
   CalendarCheck,
   Cloud,
@@ -82,7 +80,6 @@ function usePhone() {
 }
 
 const cameraPreset: Record<string, { rx: number; rz: number }> = {
-  brain: { rx: 18, rz: -8 },
   teammates: { rx: 32, rz: -14 },
   systems: { rx: 30, rz: -14 },
   guardrails: { rx: 16, rz: -6 },
@@ -106,7 +103,7 @@ function Canvas({
   const spinRef = useRef<HTMLDivElement>(null);
   const tilt = useRef({ x: 0, z: 0 });
   const spin = useRef({ x: Number.NaN, z: Number.NaN });
-  const base = cameraPreset[name] ?? cameraPreset.brain;
+  const base = cameraPreset[name] ?? cameraPreset.teammates;
   const camRx = phone ? 11 : base.rx;
   const camRz = phone ? -5 : base.rz;
 
@@ -215,32 +212,6 @@ function Tile({
         )}
       </div>
     </div>
-  );
-}
-
-const layers = [
-  { label: "Company brain", detail: "Shared policies and prices.", icon: Brain, y: 22, z: 56 },
-  { label: "Team knowledge", detail: "Playbooks for each team.", icon: BookOpen, y: 50, z: 36 },
-  { label: "Agent memory", detail: "Notes from the work.", icon: Contact, y: 78, z: 18 },
-];
-
-export function BrainDiagram({ playing, settle = false }: { playing: boolean; settle?: boolean }) {
-  const [shown, setShown] = useState(settle ? 3 : 1);
-
-  useEffect(() => {
-    if (!playing || settle) return;
-    const timers = [1, 2, 3].map((step) => window.setTimeout(() => setShown(step), step * 900));
-    return () => timers.forEach((timer) => clearTimeout(timer));
-  }, [playing, settle]);
-
-  const visible = settle ? 3 : shown;
-
-  return (
-    <Canvas playing={playing} name="brain">
-      {layers.slice(0, visible).map((layer, index) => (
-        <Tile key={layer.label} icon={layer.icon} label={layer.label} detail={layer.detail} at={{ x: 50, y: layer.y }} tier active={index === visible - 1} z={layer.z} badge={playing && index === 2 && visible >= 3 ? "Notes saved" : undefined} />
-      ))}
-    </Canvas>
   );
 }
 

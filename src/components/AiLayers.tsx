@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { BrainDiagram, GuardrailsDiagram, RunsDiagram, SystemsDiagram, TeammatesDiagram } from "./AiDiagrams";
+import { useEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent, type PointerEvent } from "react";
+import { GuardrailsDiagram, RunsDiagram, SystemsDiagram, TeammatesDiagram } from "./AiDiagrams";
 
 const steps = [
-  { id: "brain", name: "Brain", title: "One shared company brain", line: "Policies, prices, and the notes each agent keeps.", ms: 4200 },
-  { id: "teammates", name: "Teammates", title: "Agents that own the job", line: "A coordinator sends the work to the right agent.", ms: 5600 },
-  { id: "systems", name: "Systems", title: "Work in the real tools", line: "Email, the CRM, accounting, and the company files.", ms: 4600 },
-  { id: "guardrails", name: "Guardrails", title: "Routine work just runs", line: "A discount above the limit waits for a person.", ms: 7000 },
-  { id: "runs", name: "Where it runs", title: "Cloud, or your server", line: "The data can stay inside the company.", ms: 3600 },
+  { id: "brain", name: "Explained", title: "Forward deployed engineering, explained", line: "How an AI team joins a business and does real work, in about a minute." },
+  { id: "teammates", name: "Teammates", title: "Agents that own the job", line: "A coordinator sends the work to the right agent." },
+  { id: "systems", name: "Systems", title: "Work in the real tools", line: "Email, the CRM, accounting, and the company files." },
+  { id: "guardrails", name: "Guardrails", title: "Routine work just runs", line: "A discount above the limit waits for a person." },
+  { id: "runs", name: "Where it runs", title: "Cloud, or your server", line: "The data can stay inside the company." },
 ] as const;
 
 function subscribe(onStoreChange: () => void) {
@@ -21,11 +21,30 @@ function reducedNow() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function Diagram({ id, playing, settle = false, onHold }: { id: (typeof steps)[number]["id"]; playing: boolean; settle?: boolean; onHold?: (held: boolean) => void }) {
-  if (id === "brain") return <BrainDiagram playing={playing} settle={settle} />;
+function Explainer() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-[#dbe2ea] bg-white shadow-[0_18px_40px_-28px_rgba(15,30,50,0.28)]">
+      <video
+        className="aspect-video w-full bg-[#F8F1E7]"
+        controls
+        playsInline
+        preload="metadata"
+        poster="/ai-team/forward-deployed-poster.png"
+        width={1920}
+        height={1080}
+        aria-label="Forward deployed engineering, explained"
+      >
+        <source src="/ai-team/forward-deployed.mp4" type="video/mp4" />
+      </video>
+    </div>
+  );
+}
+
+function Diagram({ id, playing, settle = false }: { id: (typeof steps)[number]["id"]; playing: boolean; settle?: boolean }) {
+  if (id === "brain") return <Explainer />;
   if (id === "teammates") return <TeammatesDiagram playing={playing} settle={settle} />;
   if (id === "systems") return <SystemsDiagram playing={playing} settle={settle} />;
-  if (id === "guardrails") return <GuardrailsDiagram playing={playing} settle={settle} onHold={onHold} />;
+  if (id === "guardrails") return <GuardrailsDiagram playing={playing} settle={settle} />;
   return <RunsDiagram playing={playing} settle={settle} />;
 }
 
@@ -41,82 +60,75 @@ function StepCopy({ title, line }: { title: string; line: string }) {
 export default function AiLayers() {
   const reduce = useSyncExternalStore(subscribe, reducedNow, () => true);
   const [index, setIndex] = useState(0);
-  const [playId, setPlayId] = useState(0);
-  const [touring, setTouring] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [held, setHeld] = useState(false);
-  const startedAt = useRef(0);
-  const pausedAt = useRef(0);
-  const armed = useRef(false);
-  const drag = useRef<{ x: number; y: number } | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ x: number; scrollLeft: number; index: number; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
+
+  // Size the track to its current slide, including expanding teammate profiles.
+  useEffect(() => {
+    const track = trackRef.current;
+    const slide = track?.children[index];
+    if (!track || !(slide instanceof HTMLElement)) return;
+    const resize = new ResizeObserver(() => {
+      track.style.height = `${slide.getBoundingClientRect().height + 16}px`;
+    });
+    resize.observe(slide);
+    return () => resize.disconnect();
+  }, [index, reduce]);
 
   useEffect(() => {
-    const stage = document.getElementById("aid-stage");
-    if (!stage || reduce) return;
-    const seen = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || armed.current) return;
-      armed.current = true;
-      startedAt.current = 0;
-      setTouring(true);
-      setPlayId((value) => value + 1);
-    }, { threshold: 0.35 });
-    seen.observe(stage);
-    return () => seen.disconnect();
-  }, [reduce]);
+    if (index !== 0) trackRef.current?.querySelector("video")?.pause();
+  }, [index]);
 
-  useEffect(() => {
-    if (reduce || !touring || paused || held || index >= steps.length - 1) return;
-    if (!startedAt.current) startedAt.current = Date.now();
-    const wait = Math.max(0, steps[index].ms - (Date.now() - startedAt.current));
-    const timer = window.setTimeout(() => {
-      startedAt.current = 0;
-      setIndex((value) => value + 1);
-      setPlayId((value) => value + 1);
-      if (index >= steps.length - 2) setTouring(false);
-    }, wait);
-    return () => clearTimeout(timer);
-  }, [reduce, touring, paused, held, index, playId]);
-
-  function stageAnims(pause: boolean) {
-  const root = document.getElementById("aid-stage");
-  if (!root) return;
-  root.getAnimations({ subtree: true }).forEach((anim) => (pause ? anim.pause() : anim.play()));
-}
-
-function choose(next: number) {
-    const last = steps.length - 1;
-    const safe = next < 0 ? last : next > last ? 0 : next;
-    startedAt.current = 0;
-    setTouring(false);
-    setPaused(false);
-    setHeld(false);
-    setIndex(safe);
-    setPlayId((value) => value + 1);
+  function nearestSlide(track: HTMLDivElement) {
+    const first = (track.children[0] as HTMLElement).offsetLeft;
+    return Array.from(track.children).reduce((nearest, slide, slideIndex) => {
+      const distance = Math.abs((slide as HTMLElement).offsetLeft - first - track.scrollLeft);
+      const previous = Math.abs((track.children[nearest] as HTMLElement).offsetLeft - first - track.scrollLeft);
+      return distance < previous ? slideIndex : nearest;
+    }, 0);
   }
 
-  function toggleTour() {
-    if (!touring || index >= steps.length - 1) {
-      startedAt.current = 0;
-      setPaused(false);
-      setHeld(false);
-      setIndex(0);
-      setTouring(true);
-      setPlayId((value) => value + 1);
-      return;
-    }
-    if (paused) {
-      startedAt.current += Date.now() - pausedAt.current;
-      setPaused(false);
-      stageAnims(false);
-      return;
-    }
-    pausedAt.current = Date.now();
-    setPaused(true);
-    stageAnims(true);
+  function choose(next: number) {
+    const track = trackRef.current;
+    if (!track) return;
+    const safe = Math.max(0, Math.min(steps.length - 1, next));
+    const slide = track.children[safe] as HTMLElement;
+    const first = track.children[0] as HTMLElement;
+    track.scrollTo({ left: slide.offsetLeft - first.offsetLeft, behavior: reduce ? "instant" : "smooth" });
   }
 
-  const active = steps[index];
-  const playing = !reduce && playId > 0;
+  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const target = event.target as HTMLElement;
+    const dot = target.closest<HTMLButtonElement>("[data-carousel-dot]");
+    // Leave video seeking and controls inside diagrams to their native handlers.
+    if (target !== trackRef.current && !dot) return;
+    let next = dot ? Number(dot.dataset.carouselDot) : index;
+    if (event.key === "ArrowRight") next += 1;
+    else if (event.key === "ArrowLeft") next -= 1;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = steps.length - 1;
+    else return;
+    event.preventDefault();
+    next = Math.max(0, Math.min(steps.length - 1, next));
+    choose(next);
+    if (dot) document.getElementById(`aid-dot-${steps[next].id}`)?.focus({ preventScroll: true });
+  }
+
+  function finishDrag(event: PointerEvent<HTMLDivElement>) {
+    const start = drag.current;
+    if (!start) return;
+    drag.current = null;
+    const track = event.currentTarget;
+    const distance = track.scrollLeft - start.scrollLeft;
+    let next = nearestSlide(track);
+    if (next === start.index && Math.abs(distance) > 40) next += Math.sign(distance);
+    track.style.scrollSnapType = "";
+    if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
+    if (!start.moved) return;
+    suppressClick.current = true;
+    choose(next);
+  }
 
   if (reduce) {
     return (
@@ -134,80 +146,87 @@ function choose(next: number) {
   }
 
   return (
-    <div className="mt-16 md:mt-24">
-      <div className="flex items-center justify-between gap-6">
-        <div className="flex items-center gap-1" role="tablist" aria-label="AI team tour">
-          {steps.map((step, stepIndex) => {
-            const selected = stepIndex === index;
-            return (
-              <button
-                key={step.id}
-                type="button"
-                role="tab"
-                id={`aid-tab-${step.id}`}
-                aria-selected={selected}
-                aria-label={step.name}
-                aria-controls="aid-stage"
-                tabIndex={selected ? 0 : -1}
-                onClick={() => choose(stepIndex)}
-                onKeyDown={(event) => {
-                  const last = steps.length - 1;
-                  let next = stepIndex;
-                  if (event.key === "ArrowRight" || event.key === "ArrowDown") next = stepIndex === last ? 0 : stepIndex + 1;
-                  else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = stepIndex === 0 ? last : stepIndex - 1;
-                  else return;
-                  event.preventDefault();
-                  choose(next);
-                  document.getElementById(`aid-tab-${steps[next].id}`)?.focus();
-                }}
-                className="inline-flex h-11 w-11 items-center justify-center"
-              >
-                <span className={`h-2.5 w-2.5 rounded-full ${selected ? "bg-foreground" : "bg-foreground/25"}`} />
-              </button>
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-6">
-          <button type="button" onClick={toggleTour} className="min-h-11 text-base font-medium text-muted">
-            {touring && !paused ? "Pause" : "Play"}
-          </button>
-          <button type="button" onClick={() => choose(index + 1)} className="min-h-11 text-base font-medium text-foreground">
-            Next
-          </button>
-        </div>
-      </div>
-
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="AI team tour"
+      className="mt-16 md:mt-24"
+      onKeyDown={onKeyDown}
+    >
+      <p id="aid-instructions" className="sr-only">Swipe or use the left and right arrow keys to change slides.</p>
       <div
+        ref={trackRef}
         id="aid-stage"
-        role="tabpanel"
-        aria-labelledby={`aid-tab-${active.id}`}
-        className="mt-10"
-        onPointerDown={(event) => {
-          if (event.pointerType !== "touch") return;
-          drag.current = { x: event.clientX, y: event.clientY };
+        role="group"
+        aria-label={`${steps[index].name}, slide ${index + 1} of ${steps.length}`}
+        aria-describedby="aid-instructions"
+        tabIndex={0}
+        className="relative flex snap-x snap-mandatory items-start gap-4 overflow-x-auto overflow-y-hidden overscroll-x-contain py-2 pr-12 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-6 sm:pr-0"
+        onScroll={(event) => {
+          if (!drag.current) setIndex(nearestSlide(event.currentTarget));
         }}
-        onPointerUp={(event) => {
+        onPointerDown={(event) => {
+          suppressClick.current = false;
+          if (event.pointerType !== "mouse" || event.button !== 0) return;
+          if ((event.target as HTMLElement).closest("video, button, a, input, select, textarea")) return;
+          const track = event.currentTarget;
+          drag.current = { x: event.clientX, scrollLeft: track.scrollLeft, index, moved: false };
+          track.setPointerCapture(event.pointerId);
+          track.focus({ preventScroll: true });
+          event.preventDefault();
+        }}
+        onPointerMove={(event) => {
           const start = drag.current;
-          drag.current = null;
-          if (!start || event.pointerType !== "touch") return;
-          const dx = event.clientX - start.x;
-          const dy = event.clientY - start.y;
-          if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
-          choose(index + (dx < 0 ? 1 : -1));
+          if (!start) return;
+          const distance = event.clientX - start.x;
+          if (!start.moved && Math.abs(distance) < 6) return;
+          start.moved = true;
+          event.currentTarget.style.scrollSnapType = "none";
+          event.currentTarget.scrollLeft = start.scrollLeft - distance;
+        }}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onLostPointerCapture={finishDrag}
+        onClickCapture={(event) => {
+          if (!suppressClick.current) return;
+          event.preventDefault();
+          event.stopPropagation();
+          suppressClick.current = false;
         }}
       >
-        <StepCopy title={active.title} line={active.line} />
-        <div className="mt-10">
-          <Diagram key={`${active.id}-${playId}`} id={active.id} playing={playing} onHold={(next) => {
-            if (next) {
-              pausedAt.current = Date.now();
-              setHeld(true);
-            } else {
-              startedAt.current += Date.now() - pausedAt.current;
-              setHeld(false);
-            }
-          }} />
-        </div>
+        {steps.map((step, stepIndex) => (
+          <div
+            key={step.id}
+            id={`aid-slide-${step.id}`}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${stepIndex + 1} of ${steps.length}: ${step.name}`}
+            inert={stepIndex !== index}
+            className="min-w-0 shrink-0 basis-full snap-start"
+          >
+            <StepCopy title={step.title} line={step.line} />
+            <div className="mt-8 sm:mt-10">
+              <Diagram id={step.id} playing={stepIndex === index} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 flex justify-center gap-1" role="group" aria-label="Choose a step">
+        {steps.map((step, stepIndex) => (
+          <button
+            key={step.id}
+            id={`aid-dot-${step.id}`}
+            type="button"
+            data-carousel-dot={stepIndex}
+            aria-label={step.name}
+            aria-controls={`aid-slide-${step.id}`}
+            aria-current={stepIndex === index ? "step" : undefined}
+            onClick={() => choose(stepIndex)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full"
+          >
+            <span className={`h-2.5 rounded-full transition-[width,background-color] motion-reduce:transition-none ${stepIndex === index ? "w-6 bg-foreground" : "w-2.5 bg-foreground/25"}`} />
+          </button>
+        ))}
       </div>
     </div>
   );

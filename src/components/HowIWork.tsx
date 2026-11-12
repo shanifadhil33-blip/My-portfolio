@@ -1,4 +1,4 @@
-import { commitments, engagementTerms, qualitySteps, TESTING_LINE } from "@/data/services";
+import { commitments, qualitySteps, TESTING_LINE } from "@/data/services";
 import Lifecycle from "./Lifecycle";
 import { SectionHead } from "./ui";
 
@@ -90,17 +90,6 @@ export default function HowIWork() {
             </ul>
           </div>
         </aside>
-
-        <h3 className="mt-24 text-2xl font-semibold tracking-tight text-foreground md:mt-28">Working terms</h3>
-        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {engagementTerms.map((term, i) => (
-            <li key={term.title} className="rounded-2xl border border-border p-6">
-              <span className="font-mono text-sm text-accent">{String(i + 1).padStart(2, "0")}</span>
-              <h4 className="mt-4 text-base font-semibold text-foreground">{term.title}</h4>
-              <p className="mt-1.5 text-pretty text-sm leading-relaxed text-muted">{term.detail}</p>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
