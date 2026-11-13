@@ -46,6 +46,19 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
               <span className="font-medium">What I owned:</span> <span className="text-muted">{project.owned}</span>
             </p>
           )}
+          {project.underTheHood?.some((point) => point.cardDescription) && (
+            <div className="mt-4">
+              <h4 className="mb-2 text-sm font-medium text-muted">Under the hood</h4>
+              <ul className="space-y-3">
+                {project.underTheHood.filter((point) => point.cardDescription).map((point) => (
+                  <li key={point.title} className="text-pretty text-sm leading-relaxed text-muted">
+                    <span className="font-medium text-foreground">{point.title}:</span>{" "}
+                    {point.cardDescription}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {project.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5">
               {project.tags.map((tag) => (
@@ -67,6 +80,26 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
     return (
       <article id={`project-card-${project.id}`} className={className}>
         {body}
+      </article>
+    );
+  }
+
+  if (project.showLiveOnCard && project.liveUrl) {
+    return (
+      <article id={`project-card-${project.id}`} className={className}>
+        <button type="button" onClick={onClick} className="flex w-full flex-grow cursor-pointer flex-col text-left">
+          {body}
+        </button>
+        <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-foreground transition-colors duration-150 hover:border-foreground/30 active:border-foreground/40 active:bg-foreground/5"
+          >
+            {project.liveUrlLabel || "Visit Site"}
+          </a>
+        </div>
       </article>
     );
   }
