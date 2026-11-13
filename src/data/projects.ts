@@ -517,6 +517,57 @@ const baseProjects: Project[] = [
     },
   },
   {
+    id: "meridian-freight",
+    title: "Meridian Freight",
+    liveUrlLabel: "Visit Web Application",
+    brief:
+      "Step through a freight quote from service and route to cargo and size, then copy the summary. Shipping lanes on a 3D globe, a container load planner, English and Persian right to left, and light and dark mode.",
+    tags: ["Freight forwarding", "Three.js", "Cloudflare Pages"],
+    thumbnail: "/screenshots/heroes/meridian-freight.webp",
+    thumbnailAlt:
+      "Meridian Freight on desktop, with a quote from Yiwu to Mashhad and shipping lanes on a 3D globe.",
+    techStackDetailed: [
+      "React",
+      "Vite",
+      "TypeScript",
+      "Three.js",
+      "Cloudflare Pages",
+    ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "React, Vite and TypeScript, with Three.js for the globe and the container load planner. Cloudflare Pages hosts the site.",
+        cardDescription:
+          "React, Vite, TypeScript, Three.js, and Cloudflare Pages.",
+      },
+      {
+        title: "Quote",
+        description:
+          "The quote is built in the browser, from service and route to cargo and size, then a summary. You can copy it or open it in an email. Nothing you enter is sent to a server.",
+        cardDescription:
+          "The quote is built in the browser. You can copy the summary or open it in an email.",
+      },
+      {
+        title: "Languages",
+        description:
+          "English and Persian. Persian switches the page to a right to left layout. Language and the light or dark theme are remembered in the browser.",
+        cardDescription:
+          "English and Persian, with a right to left layout for Persian, and light and dark mode.",
+      },
+    ],
+    honestNote:
+      "This is a portfolio demo for an invented brand, not a freight business. Nothing you enter is sent, and no one replies.",
+    showLiveOnCard: true,
+    caseStudy: {
+      screenshots: ["/screenshots/heroes/meridian-freight.webp"],
+      screenshotAlts: {
+        "/screenshots/heroes/meridian-freight.webp":
+          "Meridian Freight on desktop, with a quote from Yiwu to Mashhad and shipping lanes on a 3D globe.",
+      },
+    },
+  },
+  {
     id: "eob-reader",
     title: "EOB Reader",
     liveUrlLabel: "Visit Web Application",

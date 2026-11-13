@@ -18,6 +18,9 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
   "gleam": {
     liveUrl: "https://exterior-cleaning-quote.pages.dev/premium/uk/",
   },
+  "meridian-freight": {
+    liveUrl: "https://meridian-freight.pages.dev/",
+  },
   "cold-email-agent": {
     githubUrl: "https://github.com/shanifadhil33-blip/reclaim-outreach-agent",
   },
