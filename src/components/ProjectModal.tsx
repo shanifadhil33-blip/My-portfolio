@@ -120,10 +120,15 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   }, [finishClose]);
 
   const openTechnicalDetails = useCallback(() => {
+    const underTheHood = document.getElementById("project-under-the-hood");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (underTheHood) {
+      underTheHood.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      return;
+    }
     const details = document.getElementById("technical-details");
     if (!(details instanceof HTMLDetailsElement)) return;
     details.open = true;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     requestAnimationFrame(() => {
       details.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     });
@@ -299,6 +304,39 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   </div>
                 </div>
                 <p className="mt-3 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
+                {project.whatYouCanTry && project.whatYouCanTry.length > 0 && (
+                  <section className="mt-6" aria-labelledby="project-demo-title">
+                    <h3 id="project-demo-title" className={labelClass}>
+                      What you can try (one tap demo, no sign up)
+                    </h3>
+                    <div className="space-y-3">
+                      {project.whatYouCanTry.map((paragraph) => (
+                        <p key={paragraph} className="text-pretty text-base leading-relaxed text-muted">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </section>
+                )}
+                {project.underTheHood && project.underTheHood.length > 0 && (
+                  <section id="project-under-the-hood" className="mt-6 scroll-mt-4" aria-labelledby="project-under-the-hood-title">
+                    <h3 id="project-under-the-hood-title" className={labelClass}>Under the hood</h3>
+                    <dl className="space-y-4">
+                      {project.underTheHood.map((point) => (
+                        <div key={point.title}>
+                          <dt className="mb-1 text-sm font-medium text-foreground">{point.title}:</dt>
+                          <dd className="text-pretty text-base leading-relaxed text-muted">{point.description}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </section>
+                )}
+                {project.honestNote && (
+                  <section className="mt-6" aria-labelledby="project-honest-note-title">
+                    <h3 id="project-honest-note-title" className={labelClass}>Honest note</h3>
+                    <p className="text-pretty text-base leading-relaxed text-muted">{project.honestNote}</p>
+                  </section>
+                )}
               </div>
 
               {(heroSrc || modalVideos.length > 0 || modalImages.length > 0) && (

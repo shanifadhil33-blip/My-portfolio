@@ -32,6 +32,10 @@ export interface Project {
   owned?: string;
   methodology?: string;
   techStackDetailed?: string[];
+  whatYouCanTry?: string[];
+  underTheHood?: { title: string; description: string; cardDescription?: string }[];
+  honestNote?: string;
+  showLiveOnCard?: boolean;
   keyDecisions?: string;
   systemOverview?: string;
   stages?: {
@@ -695,14 +699,94 @@ const baseProjects: Project[] = [
     title: "Groundwork",
     liveUrlLabel: "Visit Web Application",
     brief:
-      "For small maintenance, plumbing and HVAC companies. It plans the day, flags late jobs, and closes a job from a spoken note, in 22 languages.",
+      "A facility maintenance app for service companies in the Gulf. A client request becomes a job, the office assigns a technician, the technician finishes it on his phone, and the client sees every step.",
     tags: ["Maintenance", "22 languages", "Spoken notes"],
     thumbnail: "/screenshots/heroes/groundwork.webp",
     thumbnailAlt:
       "Groundwork on a light background, with the owner day in a browser window and the same day on a phone.",
     role: "Solo engineer",
     methodology: "End to end",
-    techStackDetailed: ["Next.js", "Vercel"],
+    techStackDetailed: ["Next.js 16", "React 19", "TypeScript", "Auth.js", "node-postgres", "Vercel"],
+    showLiveOnCard: true,
+    whatYouCanTry: [
+      "9 demo people: owner, admin, supervisor, office staff, technician, two client managers, client staff and a home client. Each one sees the same company through their own role.",
+      "Each visitor gets a private copy of the demo company, which deletes itself after 6 hours.",
+    ],
+    underTheHood: [
+      {
+        title: "Database",
+        description:
+          "Neon Postgres. 64 tables, built by 75 versioned migrations. 33 of those migrations have a rollback script.",
+      },
+      {
+        title: "Data separation",
+        description:
+          "row level security is switched on and forced on every table (64 of 64), with 180 policies. One company can never see another company's data, a client sees only his own company's jobs, and a technician sees only the jobs given to him, even if the app code has a bug.",
+        cardDescription:
+          "row level security is switched on and forced on every table (64 of 64), with 180 policies.",
+      },
+      {
+        title: "Database logins",
+        description:
+          "the app connects with a limited login that cannot bypass row level security and cannot change the database structure. Migrations run under a separate owner login.",
+        cardDescription:
+          "the app connects with a limited login that cannot bypass row level security and cannot change the database structure.",
+      },
+      {
+        title: "Roles",
+        description:
+          "owner, admin, supervisor, office staff, technician, client manager, client staff and home client. Permissions are checked on the server and again inside the database, not just hidden buttons.",
+        cardDescription:
+          "Permissions are checked on the server and again inside the database, not just hidden buttons.",
+      },
+      {
+        title: "History",
+        description:
+          "database triggers record every change to jobs, clients, sites and team. The app's own login can read this history but cannot edit or delete it.",
+      },
+      {
+        title: "Secrets",
+        description:
+          "WhatsApp phone numbers, message text and voice notes are encrypted with AES 256 GCM before they are stored. Agent access keys are stored only as hashes and shown once.",
+        cardDescription: "Agent access keys are stored only as hashes and shown once.",
+      },
+      {
+        title: "Sign in",
+        description:
+          "Google sign in with database sessions, one time codes for field workers who have no email, and the one tap demo logins.",
+      },
+      {
+        title: "AI assistant",
+        description:
+          "answers from the app's own data and asks before changing anything. Runs on free models (Google Gemini, Groq, OpenRouter and others), with a daily limit per company and a per minute limit per person kept in the database.",
+      },
+      {
+        title: "Speed",
+        description:
+          "tested on a copy with 21,000 jobs and 250,000 history rows. Every API answers in under 300 ms and every page loads in under 1.5 s. Jobs load 50 at a time.",
+        cardDescription:
+          "Every API answers in under 300 ms and every page loads in under 1.5 s.",
+      },
+      {
+        title: "Reliability",
+        description:
+          "every create carries an idempotency key so a retry never makes a duplicate, queries stop at 8 seconds with a clear message, and the app works offline for pages already opened.",
+      },
+      {
+        title: "Languages",
+        description: "22 languages including Arabic (Gulf Arabic, right to left layout).",
+      },
+      {
+        title: "Stack",
+        description: "Next.js 16, React 19, TypeScript, Auth.js, node-postgres, Vercel.",
+      },
+      {
+        title: "Tests",
+        description: "4,827 automated tests, including row level security checks for every role.",
+      },
+    ],
+    honestNote:
+      "WhatsApp intake is shown as a preview in the demo; a live WhatsApp provider is not connected yet.",
     caseStudy: {
       problem:
         "This is for small maintenance, plumbing and HVAC companies in the Gulf. The day's work is scattered across WhatsApp chats, paper notes and phone calls. A late job is easy to miss, and a day off is easy to double book. When the work is finished, the note often just says done, even when the fix will not last or a part is still missing.",
