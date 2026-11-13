@@ -62,17 +62,58 @@ const baseProjects: Project[] = [
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
-      "Next.js 16 (App Router)",
+      "Next.js 16",
+      "React 19",
       "TypeScript",
-      "Tailwind CSS and shadcn/ui",
-      "Supabase (Postgres, Google sign in, RLS)",
+      "Tailwind CSS",
+      "shadcn/ui",
       "pdf.js",
-      "Gemini API",
-      "Groq",
-      "OpenRouter",
-      "docx and JSZip",
+      "docx",
       "Vercel",
     ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, pdf.js, docx, Vercel.",
+        cardDescription:
+          "Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, pdf.js, docx, Vercel.",
+      },
+      {
+        title: "Database",
+        description:
+          "Supabase Postgres. The repo schema has a profiles table and an appeals table. Row level security is switched on for both, with policies that limit each row to the signed in user.",
+        cardDescription:
+          "Row level security is switched on for the profiles and appeals tables, with policies that limit each row to the signed in user.",
+      },
+      {
+        title: "Sign in",
+        description:
+          "Google sign in through Supabase Auth. The app does not store a password.",
+        cardDescription:
+          "Google sign in through Supabase Auth. The app does not store a password.",
+      },
+      {
+        title: "AI",
+        description:
+          "a fallback chain of Google Gemini, then Groq, then OpenRouter. A provider is skipped when its key is missing. Groq is not used for vision. Default Gemini model names in the code include gemini 3.5 flash lite, gemini 3.1 flash lite, gemini 3.8 flash, and gemini 2.5 flash lite.",
+        cardDescription:
+          "a fallback chain of Google Gemini, then Groq, then OpenRouter. A provider is skipped when its key is missing.",
+      },
+      {
+        title: "Privacy",
+        description:
+          "denied claim rows are kept in the browser's localStorage and are cleared on sign out.",
+      },
+      {
+        title: "Tests",
+        description:
+          "two Node test files in the repo (AI provider order and worklist deduping).",
+      },
+    ],
+    honestNote:
+      "This is a portfolio project, not a HIPAA product, and not for real patient information.",
+    showLiveOnCard: true,
     caseStudy: {
       problem:
         "This is for people who handle insurance paperwork for a doctor's office. When an insurer refuses to pay for part of a visit, it says so in a statement, usually a PDF several pages long. Someone has to read every page, find the refused items, note how much money each one is worth, and write a letter asking the insurer to look again. It's slow work. A refused item that gets missed is money nobody asks for.",
@@ -159,17 +200,57 @@ const baseProjects: Project[] = [
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
-      "Next.js",
+      "Next.js 15",
+      "React 19",
       "TypeScript",
       "Tailwind CSS",
       "Auth.js",
-      "Neon Postgres",
-      "pgvector",
       "Drizzle",
-      "Gemini API",
+      "Neon Postgres with pgvector",
       "Vercel Blob",
-      "react-pdf",
+      "Vercel",
     ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "Next.js 15, React 19, TypeScript, Tailwind CSS, Auth.js, Drizzle, Neon Postgres with pgvector, Vercel Blob, Vercel.",
+        cardDescription:
+          "Next.js 15, React 19, TypeScript, Auth.js, Drizzle, Neon Postgres with pgvector, Vercel Blob.",
+      },
+      {
+        title: "Database",
+        description:
+          "documents, chunks, extractions, settings, and questions. Chunks use an HNSW cosine index. Document lists are filtered in the app by the signed in Google account id (demo documents or rows whose user id is the viewer). Private file bytes are streamed only after that same visibility check.",
+        cardDescription:
+          "Document lists are filtered in the app by the signed in Google account id. Private file bytes are streamed only after that same visibility check.",
+      },
+      {
+        title: "Sign in",
+        description:
+          "Google sign in with Auth.js and JWT sessions. Upload and delete require a session.",
+        cardDescription:
+          "Google sign in with Auth.js and JWT sessions. Upload and delete require a session.",
+      },
+      {
+        title: "AI",
+        description:
+          "embeddings default to Gemini gemini-embedding-2 at 768 dimensions. Chat defaults to Gemini gemini-3.5-flash-lite, with an optional OpenRouter fallback when both the key and model are set. Answers are asked only from retrieved passages and cite page numbers.",
+        cardDescription:
+          "Answers are asked only from retrieved passages and cite page numbers. Chat defaults to Gemini gemini-3.5-flash-lite, with an optional OpenRouter fallback.",
+      },
+      {
+        title: "Limits",
+        description:
+          "PDFs only, 10 MB, at most 5 documents per account. Signed out demo questions are capped at 20 per IP per UTC day, with an atomic database counter.",
+      },
+      {
+        title: "Tests",
+        description:
+          "223 test cases across 56 Vitest files in the repo.",
+      },
+    ],
+    showLiveOnCard: true,
     caseStudy: {
       problem:
         "For anyone who has to answer questions from long documents such as contracts, invoices or policies. A chatbot gives you an answer, but you can't tell where it came from without reading the whole file.",
@@ -244,7 +325,52 @@ const baseProjects: Project[] = [
       "For home cleaning companies that want customers to get a price on their phone and book on WhatsApp. This portfolio demo updates the estimate as they choose their home and extras.",
     tags: ["Home cleaning", "Instant pricing", "Next.js"],
     thumbnail: "/screenshots/cleaning-estimator-desktop.png",
-    techStackDetailed: ["Next.js", "TypeScript", "Vercel"],
+    techStackDetailed: [
+      "Next.js 15",
+      "React 19",
+      "TypeScript",
+      "Three.js",
+      "React Three Fiber",
+      "Vercel",
+    ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "Next.js 15, React 19, TypeScript, Three.js, React Three Fiber, Vercel.",
+        cardDescription:
+          "Next.js 15, React 19, TypeScript, Three.js, React Three Fiber, Vercel.",
+      },
+      {
+        title: "Prices",
+        description:
+          "Rates, brand copy, and a WhatsApp number live in JSON config files. The price is calculated in the browser.",
+        cardDescription:
+          "Rates, brand copy, and a WhatsApp number live in JSON config files. The price is calculated in the browser.",
+      },
+      {
+        title: "Booking",
+        description:
+          "a WhatsApp link opens with the quote already written in the message.",
+        cardDescription:
+          "a WhatsApp link opens with the quote already written in the message.",
+      },
+      {
+        title: "Markets",
+        description:
+          "a company slug at /c/ followed by the company slug, plus /us (USD, English and Spanish), /ca (CAD, English and French), and /uk (GBP, English).",
+        cardDescription:
+          "company routes for the US, Canada and the UK, plus a per company slug.",
+      },
+      {
+        title: "Tests",
+        description:
+          "29 Vitest cases in 4 unit test files (quote, market quote, phone, and countries). Playwright scripts are also in the repo under e2e.",
+      },
+    ],
+    honestNote:
+      "This is a demo for a fictional brand. Contact details in the market files are placeholders.",
+    showLiveOnCard: true,
     caseStudy: {
       problem:
         "This is for home cleaning companies that want customers to see a price and book on WhatsApp from their phone. Customers can see the crew, hours and materials in their estimate before they book.",
@@ -310,6 +436,42 @@ const baseProjects: Project[] = [
     thumbnail: "/screenshots/gleam-desktop.webp",
     thumbnailAlt:
       "Gleam on desktop in the UK, with a 3D house, a live total, and a Book this price button.",
+    techStackDetailed: [
+      "static HTML and JavaScript",
+      "Three.js",
+      "Cloudflare Pages",
+    ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "static HTML and JavaScript built from the wip folder, a Three.js 3D house (Three r170 loaded from a CDN), and Cloudflare Pages (the live host is a pages.dev URL). A GitHub Actions workflow also publishes the built files to GitHub Pages.",
+        cardDescription:
+          "static HTML and JavaScript, a Three.js 3D house, and Cloudflare Pages.",
+      },
+      {
+        title: "Prices",
+        description:
+          "prices and the booking message are built in the browser.",
+        cardDescription:
+          "prices and the booking message are built in the browser.",
+      },
+      {
+        title: "Booking",
+        description:
+          "a placeholder number is used. Some markets open WhatsApp, others open a prefilled SMS.",
+        cardDescription:
+          "Some markets open WhatsApp, others open a prefilled SMS.",
+      },
+      {
+        title: "Languages",
+        description:
+          "English, with an Arabic switch and a right to left layout for the Saudi market, remembered in localStorage.",
+        cardDescription:
+          "English, with an Arabic switch and a right to left layout for the Saudi market.",
+      },
+    ],
+    showLiveOnCard: true,
     caseStudy: {
       videos: [
         {
@@ -367,17 +529,57 @@ const baseProjects: Project[] = [
     role: "Solo engineer",
     methodology: "End to end",
     techStackDetailed: [
-      "Next.js 16 (App Router)",
+      "Next.js 16",
+      "React 19",
       "TypeScript",
-      "Tailwind CSS and shadcn/ui",
-      "TanStack Table",
-      "Supabase (Postgres, Google sign in, private Storage, RLS)",
+      "Tailwind CSS",
+      "shadcn/ui",
       "pdf.js",
-      "Gemini API",
-      "Groq",
-      "OpenRouter",
       "Vercel",
     ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, pdf.js, Vercel.",
+        cardDescription:
+          "Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui, pdf.js, Vercel.",
+      },
+      {
+        title: "Database",
+        description:
+          "Supabase Postgres and a private storage bucket. The repo migrations create 7 app tables (practices, batches, eob_extractions, eob_line_items, payer_templates, audit_log, and feedback). Row level security is switched on for those tables, with 11 named policies in the migrations (including 3 storage policies).",
+        cardDescription:
+          "Row level security is switched on for the app tables, with 11 named policies in the migrations (including 3 storage policies).",
+      },
+      {
+        title: "Sign in",
+        description:
+          "Google sign in through Supabase Auth. The app does not store a password. After sign in, uploads are limited to that Google account.",
+        cardDescription:
+          "Google sign in through Supabase Auth. After sign in, uploads are limited to that Google account.",
+      },
+      {
+        title: "AI",
+        description:
+          "Google Gemini first, then Groq, then OpenRouter. A provider is skipped when its key is missing. A local Ollama path exists if AI_PROVIDER is set to ollama. Default Gemini model names in the repo include gemini 3.5 flash lite, gemini 3.1 flash lite, gemini 3.8 flash, and gemini 2.5 flash lite.",
+        cardDescription:
+          "Google Gemini first, then Groq, then OpenRouter. A provider is skipped when its key is missing.",
+      },
+      {
+        title: "Files",
+        description:
+          "a scanned PDF with no text layer is skipped.",
+      },
+      {
+        title: "Tests",
+        description:
+          "25 test cases across 3 test files (extraction, list order, and batch formatting).",
+      },
+    ],
+    honestNote:
+      "This is a learning project, not a HIPAA product, and not for real patient information. A public fictional demo works without an account.",
+    showLiveOnCard: true,
     caseStudy: {
       problem:
         "This is for staff in a dental office. Insurance companies send payment statements as PDFs, often a stack at a time. Each one lists every treatment, what was charged and what the insurer paid. Someone then types those numbers into the office's software by hand, line by line.",
@@ -469,12 +671,40 @@ const baseProjects: Project[] = [
     role: "Solo engineer",
     methodology: "Scheduled automation",
     techStackDetailed: [
-      "Python 3.12",
-      "SQLite",
-      "MailerSend API",
+      "Python",
       "GitHub Actions",
-      "Cloudflare R2",
-      "hashlib (MD5 variant rotation)",
+      "SQLite",
+      "MailerSend",
+    ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "Python, GitHub Actions, SQLite (outreach.db), MailerSend, requests.",
+        cardDescription:
+          "Python, GitHub Actions, SQLite, MailerSend, requests.",
+      },
+      {
+        title: "How it runs",
+        description:
+          "a GitHub Actions workflow wakes the agent every 15 minutes, Monday to Friday, in a US morning window (12:00 to 18:00 UTC). Each run sends up to BATCH_SIZE emails and then stops. A DAILY_CAP (default 30) stops further sends that day.",
+        cardDescription:
+          "a GitHub Actions workflow sends a limited batch on a weekday morning schedule, with a daily cap.",
+      },
+      {
+        title: "Data",
+        description:
+          "sent state is stored in SQLite and committed back to the repo so the same person is not emailed twice. A suppression list holds unsubscribes.",
+        cardDescription:
+          "sent state is stored in SQLite so the same person is not emailed twice. A suppression list holds unsubscribes.",
+      },
+      {
+        title: "Personalization",
+        description:
+          "subject and body variants are chosen in code, not by a live model call.",
+        cardDescription:
+          "subject and body variants are chosen in code, not by a live model call.",
+      },
     ],
     caseStudy: {
       problem:
@@ -545,18 +775,39 @@ const baseProjects: Project[] = [
     role: "Solo engineer",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
-      "GitHub Actions (Ubuntu runner)",
-      "Ollama Cloud (gpt-oss:120b-cloud)",
-      "Tavily API",
-      "HuggingFace Inference API (FLUX.1-schnell)",
-      "Cloudflare Workers AI",
-      "Pollinations.ai",
-      "Microsoft Edge TTS",
-      "Kokoro-82M (local ONNX)",
-      "faster-whisper",
+      "Node.js 20",
       "FFmpeg",
-      "Cloudflare R2 (S3 compatible)",
-      "Telegram Bot API",
+      "Cloudflare R2",
+      "Telegram",
+      "GitHub Actions",
+    ],
+    underTheHood: [
+      {
+        title: "Stack",
+        description:
+          "Node.js 20 on GitHub Actions, FFmpeg, Cloudflare R2 for delivery, Telegram for the download link.",
+        cardDescription:
+          "Node.js 20 on GitHub Actions, FFmpeg, Cloudflare R2, and Telegram for the download link.",
+      },
+      {
+        title: "AI and media",
+        description:
+          "Ollama Cloud (gpt-oss:120b-cloud) for script and metadata, optional DeepSeek V3 for the script tier, Tavily for research, image fallback of Hugging Face Flux Schnell then Cloudflare Workers AI then Pollinations, TTS fallback of Edge TTS then Kokoro then StreamElements, and faster-whisper base.en for caption timing.",
+        cardDescription:
+          "Ollama Cloud for script and metadata, with named fallbacks for images, voice and captions.",
+      },
+      {
+        title: "Source text",
+        description:
+          "Quran and hadith are read from local files, not generated by a model.",
+        cardDescription:
+          "Quran and hadith are read from local files, not generated by a model.",
+      },
+      {
+        title: "Status",
+        description:
+          "frozen as a portfolio case study on 15 July 2026. The scheduled cron is disabled; a manual workflow run remains.",
+      },
     ],
     caseStudy: {
       problem:
