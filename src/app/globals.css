@@ -376,7 +376,7 @@ button:disabled {
   .cap-card { animation: none !important; transform: none !important; }
 }
 
-.cap-line { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 8px; margin: 0; padding: 0; list-style: none; }
+.cap-line { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 8px; padding: 0; list-style: none; }
 .cap-line li { position: relative; text-align: center; }
 .cap-line li span {
   display: block;
