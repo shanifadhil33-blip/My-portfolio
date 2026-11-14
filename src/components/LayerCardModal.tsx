@@ -13,7 +13,7 @@ const OWNER_LABEL: Record<CardOwner, string> = {
   mine: "Delivered by me",
   agency: "Usually kept by your team, or mine to build",
   brand: "Stays with your agency",
-  whole: "Every layer, one engineer",
+  whole: "One person responsible for every layer",
 };
 
 const OWNER_BAND: Record<CardOwner, string> = {
