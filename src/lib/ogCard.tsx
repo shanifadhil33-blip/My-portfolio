@@ -39,7 +39,7 @@ export function OgCard() {
           {HEADLINE}
         </div>
         <div style={{ marginTop: 32, fontSize: 30, color: "#93a0ae", lineHeight: 1.35 }}>
-          {`${ROLE} · Custom software, APIs, integrations and AI systems`}
+          {`${ROLE} · Dubai`}
         </div>
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element -- next/og renders plain img */}

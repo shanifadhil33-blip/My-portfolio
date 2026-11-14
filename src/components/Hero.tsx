@@ -18,7 +18,7 @@ export default function Hero() {
           <p className="rise flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs tracking-[0.16em] text-muted uppercase" style={{ "--d": 0 } as React.CSSProperties}>
             <span className="text-accent">Adhil Shanif</span>
             <span aria-hidden className="h-px w-6 bg-border" />
-            <span>Independent software engineer · Dubai</span>
+            <span>Software delivery partner · Dubai</span>
           </p>
 
           <h1
@@ -33,7 +33,7 @@ export default function Hero() {
           </p>
 
           <div className="rise mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" style={{ "--d": 3 } as React.CSSProperties}>
-            <PillLink href="#agencies">Partner with me</PillLink>
+            <PillLink href="/brief?type=agency">Discuss a partnership</PillLink>
             <GhostLink href="#work">
               See delivered work <ArrowDown size={16} aria-hidden />
             </GhostLink>

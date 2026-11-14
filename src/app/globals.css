@@ -376,7 +376,7 @@ button:disabled {
   .cap-card { animation: none !important; transform: none !important; }
 }
 
-.cap-line { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 8px; margin: 0; padding: 0; list-style: none; }
+.cap-line { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 8px; margin: 0; padding: 0; list-style: none; }
 .cap-line li { position: relative; text-align: center; }
 .cap-line li span {
   display: block;
@@ -398,7 +398,7 @@ button:disabled {
   border-radius: 999px;
   background: var(--accent);
 }
-.cap-line li:not(:nth-child(3n))::after {
+.cap-line li:not(:last-child)::after {
   content: "";
   position: absolute;
   top: 4px;
@@ -406,19 +406,6 @@ button:disabled {
   width: calc(100% - 20px);
   height: 1px;
   background: color-mix(in srgb, var(--accent) 55%, transparent);
-}
-@media (min-width: 1024px) {
-  .cap-line { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .cap-line li:nth-child(3)::after {
-    content: "";
-    position: absolute;
-    top: 4px;
-    left: calc(50% + 10px);
-    width: calc(100% - 20px);
-    height: 1px;
-    background: color-mix(in srgb, var(--accent) 55%, transparent);
-  }
-  .cap-line li:last-child::after { display: none; }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .cap-card-body { transition: transform 180ms cubic-bezier(.2, .7, .2, 1); }

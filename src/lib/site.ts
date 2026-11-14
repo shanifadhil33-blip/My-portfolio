@@ -15,17 +15,17 @@ export const WHATSAPP_URL = "https://wa.me/971504874729";
 
 export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
-export const ROLE = "Independent Software Engineer";
+export const ROLE = "Software Delivery Partner";
 
-export const HEADLINE = "The engineer behind the build.";
+export const HEADLINE = "Your client needs software. I own the build.";
 
 export const SUBHEADLINE =
-  "Independent software engineer for agencies, founders and businesses. From a single backend task to complete, production-ready products.";
+  "For agencies and consultants who sell software but don't have the engineers to deliver it. I take full technical responsibility, from scope to a deployed, tested product, under your brand, with written updates. AI coding agents let me deliver in weeks, not months.";
 
-export const PAGE_TITLE = "Adhil Shanif | Software Engineer & Technical Delivery Partner";
+export const PAGE_TITLE = "Adhil Shanif | Software Delivery Partner";
 
 export const PAGE_DESCRIPTION =
-  "Independent software engineer in Dubai building custom software, backends, APIs, integrations and AI systems for agencies, founders and businesses.";
+  "Software delivery partner in Dubai for agencies and consultants, and for founders and businesses. I own the build from scope to a deployed, tested product.";
 
 export function mailtoHref(subject: string): string {
   return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;

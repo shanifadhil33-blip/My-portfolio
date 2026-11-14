@@ -4,7 +4,7 @@ import { SectionHead } from "./ui";
 
 // Facts that stay true: no counts or ratings that drift.
 const facts = [
-  { big: "End to end", small: "Database, backend, frontend, AI and deployment in one pair of hands." },
+  { big: "End to end", small: "Database, backend, frontend, AI and deployment, with one person responsible." },
   { big: "Multi-tenant", small: "SaaS delivered for a client with isolation enforced in the database." },
   { big: "In writing", small: "Decisions, progress and handover notes are written down and easy to forward." },
   { big: "You own it", small: "Code, accounts and infrastructure belong to the client from day one." },
@@ -18,16 +18,16 @@ export default function About() {
           id="about-title"
           n="06"
           label="About"
-          title="Adhil Shanif, independent software engineer."
+          title="Adhil Shanif. I own the technical delivery."
         />
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="space-y-5 text-pretty text-lg leading-relaxed text-muted lg:col-span-7">
             <p className="text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
-              I take responsibility for technical work, from a single backend task to a complete product.
+              I build complete products by directing AI coding agents, and I&apos;m responsible for the scope, the testing, the deployment and the handover.
             </p>
             <p>
-              I&apos;m based in Dubai and work remotely with agencies, founders and businesses. Some projects start from an idea, some from a specification, and some from an existing codebase with problems to solve. I work across the stack: data models, backend, interfaces, integrations, AI features and deployment. I also stay involved after launch when a system needs looking after.
+              I&apos;m based in Dubai and work remotely, mostly with agencies and consultants, and also with founders and businesses. Some projects start from an idea, some from a specification, and some from an existing app with problems to solve. I stay involved after launch when a system needs looking after.
             </p>
             <p>
               Most software problems are data problems. I start with the database and the rules, then build the screens on top, so the system stays correct as it grows.
@@ -53,9 +53,9 @@ export default function About() {
         </div>
 
         <div className="mt-24 md:mt-28">
-          <h3 className="text-2xl font-semibold tracking-tight text-foreground">Technology follows the problem.</h3>
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground">Tools in products I&apos;ve shipped</h3>
           <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
-            I work across the software stack and adapt to the technologies, architecture and requirements of each project. These are the tools in work I have shipped. When a project needs unfamiliar or specialist technology, I assess feasibility, risks and the right delivery approach before committing.
+            When a project needs unfamiliar or specialist technology, I check feasibility and risks before committing.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {techLayers.map((group) => (
