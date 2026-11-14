@@ -9,11 +9,11 @@ import { shareMeta, UPWORK_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Technical Delivery for Agencies",
   description:
-    "Adhil Shanif works with agencies and consultants as an external engineering partner, from one workstream to complete application builds.",
+    "Adhil Shanif works with agencies and consultants as a software delivery partner, from one workstream to complete application builds.",
   robots: { index: true, follow: true },
   ...shareMeta(
     "Technical Delivery for Agencies",
-    "External engineering partner for agencies and consultants, from one workstream to complete application builds.",
+    "Software delivery partner for agencies and consultants, from one workstream to complete application builds.",
     "/partners",
   ),
 };

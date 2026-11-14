@@ -358,7 +358,7 @@ const baseProjects: Project[] = [
       {
         title: "Markets",
         description:
-          "a company slug at /c/ followed by the company slug, plus /us (USD, English and Spanish), /ca (CAD, English and French), and /uk (GBP, English).",
+          "a company slug at /c/ followed by the company slug, plus /us (English and Spanish), /ca (English and French), and /uk (English).",
         cardDescription:
           "company routes for the US, Canada and the UK, plus a per company slug.",
       },

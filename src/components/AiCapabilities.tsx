@@ -1,43 +1,31 @@
 import { SectionHead } from "./ui";
 
-const steps = ["Scope", "Context", "Orchestrate", "Review", "Test", "Improve"] as const;
+const steps = ["Plan", "Build", "Test", "Learn"] as const;
 
 const cards = [
   {
-    title: "Requirements Engineering & Technical Scoping",
-    body: "Translate ideas and business requirements into structured development tasks, workflows, and implementation criteria.",
+    title: "Your brief becomes a clear plan",
+    body: "A written scope and acceptance checks before anything is built.",
     src: "scoping",
-    alt: "A tangled knot marked Idea, with an arrow toward a goal board and a three week line.",
+    alt: "A tangled knot marked Idea, with an arrow toward a goal board.",
   },
   {
-    title: "Context Engineering & Knowledge Management",
-    body: "Organize project instructions, decisions, technical context, and handoffs to maintain continuity across AI assisted development sessions.",
-    src: "context",
-    alt: "Loose notes gathering into a tidy stack that feeds a small AI unit.",
-  },
-  {
-    title: "AI Agent Orchestration",
-    body: "Direct specialized AI assistants and coding tools through delegated tasks, defined responsibilities, operating constraints, and human approval.",
+    title: "Built fast by AI agents I direct",
+    body: "Weeks instead of months, with written limits on what the agents touch.",
     src: "orchestration",
     alt: "A coordinator linked to research, writing, testing, and review.",
   },
   {
-    title: "Critical Reasoning & Implementation Review",
-    body: "Challenge generated solutions, identify unsupported assumptions, recognize logical inconsistencies, and evaluate implementation decisions.",
-    src: "review",
-    alt: "A row of blocks, with a magnifying glass on a cracked one marked Issue and a check marked Fixed.",
-  },
-  {
-    title: "Functional Testing & Quality Assurance",
-    body: "Test live applications, identify broken workflows and interface problems, document reproducible failures, and coordinate corrections.",
+    title: "Nothing reaches you untested",
+    body: "I use it myself and send back anything that doesn't hold up.",
     src: "testing",
     alt: "A track of gates, two marked Pass and one marked Fail.",
   },
   {
-    title: "Engineering Workflow Design",
-    body: "Structure AI assisted development processes with tool selection, task coordination, review checkpoints, usage controls, and documented lessons.",
-    src: "workflow",
-    alt: "Five cards in a row marked Plan, Build, Review, Test, and Ship.",
+    title: "Each project starts from the last one's lessons",
+    body: "Written checklists so mistakes don't repeat.",
+    src: "context",
+    alt: "Loose notes gathering into a tidy stack that feeds a small AI unit.",
   },
 ];
 
@@ -49,7 +37,7 @@ export default function AiCapabilities() {
           id="capabilities-title"
           n="05"
           label="Capabilities"
-          title="AI Assisted Engineering Capabilities"
+          title="Why it's fast and still reliable"
         />
         <ol className="cap-line mt-12 md:mt-16" aria-label="How the capabilities connect">
           {steps.map((step) => (
@@ -59,7 +47,7 @@ export default function AiCapabilities() {
             </li>
           ))}
         </ol>
-        <ol className="mt-10 grid list-none grid-cols-1 gap-6 p-0 lg:grid-cols-3 lg:gap-8">
+        <ol className="mt-10 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:gap-8">
           {cards.map((card) => (
             <li key={card.title} className="cap-card">
               <article className="cap-card-body flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface">

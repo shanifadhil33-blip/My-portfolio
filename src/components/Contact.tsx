@@ -111,7 +111,7 @@ export default function Contact() {
         </div>
 
         <footer className="mt-24 flex flex-col gap-6 border-t border-border pt-8 md:mt-32 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif · Independent software engineer, Dubai</p>
+          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif · Software delivery partner, Dubai</p>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
               {footerLinks.map((l) => (

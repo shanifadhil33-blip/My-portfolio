@@ -89,9 +89,7 @@ export const stages: Stage[] = [
         items: [
           "Understand the business problem and the constraints",
           "Requirements, scope and a first version",
-          "Architecture and technology choices",
           "Risks, dependencies and acceptance criteria",
-          "A roadmap and project milestones",
         ],
       },
     ],
@@ -105,11 +103,8 @@ export const stages: Stage[] = [
         id: "frontend",
         title: "UX, UI and frontend",
         items: [
-          "User journeys, workflows and wireframes",
           "Responsive interface design and design systems",
-          "Frontend development for web applications",
           "Dashboards, admin panels, forms and validation",
-          "Accessibility, performance and browser support",
         ],
       },
       {
@@ -118,8 +113,6 @@ export const stages: Stage[] = [
         items: [
           "Backend and API development",
           "Database design, schemas and migrations",
-          "Business logic, validation and background jobs",
-          "Search, file handling and data import and export",
           "Multi-tenant architecture and data synchronisation",
         ],
       },
@@ -128,15 +121,13 @@ export const stages: Stage[] = [
   {
     number: "03",
     title: "Connect & automate",
-    summary: "Integrations, payments, external services, AI agents and workflows.",
+    summary: "Integrations, external services, AI features and workflows.",
     groups: [
       {
         id: "integrations",
         title: "Integrations and automations",
         items: [
-          "Payments, CRMs, email and other business tools",
           "Third-party APIs, webhooks and notifications",
-          "Scheduling, cloud storage and event-driven workflows",
           "Workflow automation",
         ],
       },
@@ -144,11 +135,8 @@ export const stages: Stage[] = [
         id: "ai",
         title: "AI agents and AI systems",
         items: [
-          "Custom AI agents and multi-agent systems",
           "Retrieval, knowledge assistants and document extraction",
           "Context, memory, tool calling and human approval",
-          "Evaluation, monitoring and usage controls",
-          "AI features inside existing applications",
         ],
       },
     ],
@@ -164,9 +152,7 @@ export const stages: Stage[] = [
         items: [
           "Authentication, roles and access control",
           "Multi-tenant data isolation",
-          "Sessions, API security and secrets handling",
           "Input validation, rate limiting and abuse prevention",
-          "Security reviews, dependency checks and audit logging",
         ],
       },
       {
@@ -174,11 +160,8 @@ export const stages: Stage[] = [
         title: "Testing and quality assurance",
         items: [
           "Unit, integration and end-to-end tests",
-          "API, database, permission and tenant isolation tests",
           "Regression, edge cases and error handling",
-          "Performance, device and browser checks where needed",
-          "AI agent evaluation",
-          "I test it myself, then re-test every fix",
+          "I test it myself, then test every fix again",
         ],
       },
     ],
@@ -186,16 +169,14 @@ export const stages: Stage[] = [
   {
     number: "05",
     title: "Launch & monitor",
-    summary: "Hosting, domains, deployments, logging, monitoring, backups and recovery.",
+    summary: "Hosting, domains, deployments, logging and error tracking.",
     groups: [
       {
         id: "deployment",
         title: "Deployment and infrastructure",
         items: [
           "Hosting, domains, DNS and TLS",
-          "Development, staging and production environments",
           "CI/CD, migrations, verification and rollback",
-          "Cloud infrastructure configuration",
         ],
       },
       {
@@ -203,11 +184,7 @@ export const stages: Stage[] = [
         title: "Monitoring, performance and recovery",
         items: [
           "Logging, error tracking and alerts",
-          "Performance and availability monitoring",
-          "Caching, queues and database optimisation",
-          "Backups, restoration tests and recovery planning",
           "Production troubleshooting",
-          "AI usage monitoring",
         ],
       },
     ],
@@ -221,10 +198,8 @@ export const stages: Stage[] = [
         id: "handover",
         title: "Documentation and handover",
         items: [
-          "Technical, architecture and API documentation",
           "Deployment and environment setup instructions",
           "Repository, credentials and source ownership",
-          "Admin guidance and known limits, written down",
         ],
       },
       {
@@ -232,8 +207,6 @@ export const stages: Stage[] = [
         title: "Maintenance and improvements",
         items: [
           "Bug fixes, security and dependency updates",
-          "Performance and infrastructure adjustments",
-          "Feature and integration updates after launch",
           "Improvements from real user feedback",
         ],
       },
@@ -260,11 +233,11 @@ export const commitments = [
   "If a project needs more than one engineer, I say so before work starts.",
 ];
 
-// Only technologies used in shipped projects or client work.
+// Only tools used in shipped portfolio projects (checked against each repo).
 export const techLayers = [
   { layer: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Three.js"] },
-  { layer: "Backend", items: ["Node.js", "Python", "FastAPI", "Auth.js", "Zod"] },
+  { layer: "Backend", items: ["Node.js", "Python", "Auth.js", "Zod"] },
   { layer: "Data", items: ["Postgres", "Supabase", "Neon", "Drizzle", "pgvector", "SQLite"] },
-  { layer: "AI", items: ["OpenAI", "Claude", "Gemini", "Groq", "OpenRouter", "Whisper"] },
-  { layer: "Infrastructure", items: ["Vercel", "Cloudflare", "Docker", "Render", "GitHub Actions"] },
+  { layer: "AI", items: ["Gemini", "Groq", "OpenRouter", "Whisper"] },
+  { layer: "Infrastructure", items: ["Vercel", "Cloudflare", "GitHub Actions"] },
 ];
