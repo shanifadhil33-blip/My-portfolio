@@ -165,7 +165,7 @@ export const agencyLayer: Record<Mode, LayerCard> = {
 export const wholeBuild: LayerCard = {
   id: "whole",
   label: "Complete application",
-  summary: "Every layer in this stack, from one engineer, scoped from your requirements to a deployed product.",
+  summary: "Every layer in this stack, with one person responsible, scoped from your requirements to a deployed product.",
   take: [
     "Requirements and architecture",
     "Frontend, backend and database",
