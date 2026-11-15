@@ -41,6 +41,9 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
         <div>
           <h3 className="text-lg font-medium text-foreground">{project.title}</h3>
           <p className="mt-2 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
+          {project.businessOutcome && (
+            <p className="mt-2 text-pretty text-sm leading-relaxed text-muted">{project.businessOutcome}</p>
+          )}
           {project.owned && (
             <p className="mt-3 text-pretty text-sm leading-relaxed text-foreground">
               <span className="font-medium">What I owned:</span> <span className="text-muted">{project.owned}</span>

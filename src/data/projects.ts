@@ -12,6 +12,8 @@ export interface Project {
   id: string;
   title: string;
   brief: string;
+  /** One plain business-outcome line, shown under the card brief. */
+  businessOutcome?: string;
   tags: string[];
   thumbnail?: string;
   thumbnailAlt?: string;
@@ -55,6 +57,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "AI reads an insurance PDF, pulls out only the denied claims with their amounts, and drafts an appeal letter you can edit and copy.",
+    businessOutcome: "Denied lines are pulled out of an insurance statement, checked against the original page, and turned into an appeal letter you can edit, save or download as a Word file.",
     tags: ["Document AI", "Letter drafting", "Next.js"],
     thumbnail: "/screenshots/heroes/reclaim.webp",
     thumbnailAlt:
@@ -195,6 +198,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "Ask a PDF a question and get an answer that cites the page it came from, with the PDF opened on that page.",
+    businessOutcome: "A long document can be explained in full, or any question about it answered in plain language, with the exact page and passage shown so it can be checked.",
     tags: ["Next.js", "pgvector", "Citations"],
     thumbnail: "/screenshots/doctalk-home.png",
     role: "Built end to end",
@@ -323,6 +327,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "For home cleaning companies that want customers to get a price on their phone and book on WhatsApp. This portfolio demo updates the estimate as they choose their home and extras.",
+    businessOutcome: "Customers set their home on a live 3D model, see a priced breakdown of crew, hours and extras, and book on WhatsApp in their own language.",
     tags: ["Home cleaning", "Instant pricing", "Next.js"],
     thumbnail: "/screenshots/cleaning-estimator-desktop.png",
     techStackDetailed: [
@@ -432,6 +437,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "Tap any part of a 3D house and the big live total updates, with a Book this price button and a bundle saving. 7 markets, including Arabic right to left, and light and dark mode.",
+    businessOutcome: "A customer taps the parts of a 3D house that need cleaning, watches the price update, and sends the booking from the same page, in their market and language.",
     tags: ["Exterior cleaning", "Three.js", "Cloudflare Pages"],
     thumbnail: "/screenshots/gleam-desktop.webp",
     thumbnailAlt:
@@ -522,6 +528,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "Step through a freight quote from service and route to cargo and size, then copy the summary. Shipping lanes on a 3D globe, a container load planner, English and Persian right to left, and light and dark mode.",
+    businessOutcome: "A shipper can build a full freight quote with an indicative price and transit time, compare routes, plan the container load, and hand over a complete summary without a back-and-forth on details.",
     tags: ["Freight forwarding", "Three.js", "Cloudflare Pages"],
     thumbnail: "/screenshots/heroes/meridian-freight.webp",
     thumbnailAlt:
@@ -573,6 +580,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "Upload a batch of insurance PDFs. AI pulls out every line item, a person approves each document, and approved rows export as a CSV.",
+    businessOutcome: "A stack of insurance statements is turned into a draft of every payment line, reviewed next to the original PDF, and exported only once approved into the office's billing software.",
     tags: ["Batch extraction", "Human review", "CSV export"],
     thumbnail: "/screenshots/heroes/eob-reader.webp",
     thumbnailAlt:
@@ -717,6 +725,7 @@ const baseProjects: Project[] = [
     title: "Cold Email Agent",
     brief:
       "A working prototype that sends personalized cold email on a schedule, with a hard cap of 30 emails per day.",
+    businessOutcome: "Weekday outreach goes out on a schedule, personalized from each lead's role and company, with a daily cap, no repeat sends, and an unsubscribe list.",
     tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],
     thumbnail: "/screenshots/cold_email_agent.png",
     role: "Built end to end",
@@ -821,6 +830,7 @@ const baseProjects: Project[] = [
     title: "YouTube Automation Pipeline",
     brief:
       "Automates script, voice and video generation for long documentary videos, with a manual upload step.",
+    businessOutcome: "A scheduled job researches a topic, writes the script, builds the voice, images and captions, and delivers a finished documentary ready to upload by hand.",
     tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
     thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
     role: "Built end to end",
@@ -1002,6 +1012,7 @@ const baseProjects: Project[] = [
     liveUrlLabel: "Visit Web Application",
     brief:
       "A facility maintenance app for service companies in the Gulf. A client request becomes a job, the office assigns a technician, the technician finishes it on his phone, and the client sees every step.",
+    businessOutcome: "The office, the technicians and the clients all work from the same jobs: the day is planned in one place, a technician closes work with a spoken report, and the client follows progress in their own language without calling the office.",
     tags: ["Maintenance", "22 languages", "Spoken notes"],
     thumbnail: "/screenshots/heroes/groundwork.webp",
     thumbnailAlt:
