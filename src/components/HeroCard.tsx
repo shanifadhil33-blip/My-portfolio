@@ -103,7 +103,6 @@ export default function HeroCard() {
         onPointerCancel={() => { drag.current = null; settle(Math.round(angle.current / 180) * 180); }}
         onClickCapture={onClickCapture}
       >
-        <div aria-hidden className="absolute inset-[-14%] rounded-full bg-[radial-gradient(closest-side,rgba(56,189,248,0.18),transparent)]" />
         <div ref={coinRef} className="coin relative h-full w-full">
           {/* Front */}
           <button
@@ -111,7 +110,7 @@ export default function HeroCard() {
             onClick={flip}
             inert={showingBack}
             aria-label="Flip the card for contact links"
-            className="coin-face absolute inset-0 overflow-hidden rounded-full bg-surface shadow-[0_0_0_2px_rgba(56,189,248,0.45),0_30px_70px_-30px_rgba(0,0,0,0.95)]"
+            className="coin-face absolute inset-0 overflow-hidden rounded-full bg-surface"
             style={{ transform: "translateZ(1px)" }}
           >
             <Image
@@ -123,13 +122,13 @@ export default function HeroCard() {
               sizes="(max-width: 640px) 62vw, 320px"
               className="pointer-events-none rounded-full object-cover object-[50%_22%]"
             />
-            <span aria-hidden className="absolute inset-0 rounded-full shadow-[inset_0_0_0_6px_rgba(5,7,10,0.35),inset_0_-60px_80px_-40px_rgba(5,7,10,0.7)]" />
+            <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14)]" />
           </button>
 
           {/* Back */}
           <div
             inert={!showingBack}
-            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-6 text-center text-white shadow-[0_0_0_2px_rgba(56,189,248,0.45)]"
+            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-6 text-center text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14)]"
             style={{ transform: "rotateY(180deg) translateZ(1px)" }}
           >
             <p className="font-mono text-[11px] tracking-[0.2em] text-sky-300 uppercase">Get in touch</p>
