@@ -1,6 +1,6 @@
 # Adhil Shanif — Portfolio
 
-Portfolio of Adhil Shanif, an independent software engineer in Dubai: custom software, backend systems, APIs, integrations, AI applications and complete technical delivery for agencies, founders and businesses.
+Portfolio of Adhil Shanif, based in Dubai. He builds complete software products end to end: web apps, backends, APIs, integrations and AI features, from design and build through security and deploy.
 
 **Live:** [adhilshanif.vercel.app](https://adhilshanif.vercel.app)
 

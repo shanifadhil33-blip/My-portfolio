@@ -59,7 +59,7 @@ const baseProjects: Project[] = [
     thumbnail: "/screenshots/heroes/reclaim.webp",
     thumbnailAlt:
       "Reclaim on a soft blue background, with the denial list in an angled browser window and the drafted letter overlapping it.",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "End to end",
     techStackDetailed: [
       "Next.js 16",
@@ -197,7 +197,7 @@ const baseProjects: Project[] = [
       "Ask a PDF a question and get an answer that cites the page it came from, with the PDF opened on that page.",
     tags: ["Next.js", "pgvector", "Citations"],
     thumbnail: "/screenshots/doctalk-home.png",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "End to end",
     techStackDetailed: [
       "Next.js 15",
@@ -577,7 +577,7 @@ const baseProjects: Project[] = [
     thumbnail: "/screenshots/heroes/eob-reader.webp",
     thumbnailAlt:
       "EOB Reader on a soft green background, with a straight browser window and a zoomed card of the extracted amounts.",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "End to end",
     techStackDetailed: [
       "Next.js 16",
@@ -719,7 +719,7 @@ const baseProjects: Project[] = [
       "A working prototype that sends personalized cold email on a schedule, with a hard cap of 30 emails per day.",
     tags: ["Python", "GitHub Actions", "MailerSend API", "SQLite"],
     thumbnail: "/screenshots/cold_email_agent.png",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "Scheduled automation",
     techStackDetailed: [
       "Python",
@@ -823,7 +823,7 @@ const baseProjects: Project[] = [
       "Automates script, voice and video generation for long documentary videos, with a manual upload step.",
     tags: ["GitHub Actions", "LLM APIs", "FFmpeg", "Cloudflare R2"],
     thumbnail: "/screenshots/akhir_zamaan_pipeline.png",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
       "Node.js 20",
@@ -924,7 +924,7 @@ const baseProjects: Project[] = [
       "Takes a YouTube transcript and builds Instagram carousel slides (copy, images and type), then publishes them on a schedule.",
     tags: ["LLM APIs", "Image generation", "Automation", "Instagram API"],
     thumbnail: "/screenshots/instagram_carousel_pipeline.png",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "Scheduled pipeline",
     techStackDetailed: [
       "Node.js (sharp)",
@@ -1006,7 +1006,7 @@ const baseProjects: Project[] = [
     thumbnail: "/screenshots/heroes/groundwork.webp",
     thumbnailAlt:
       "Groundwork on a light background, with the owner day in a browser window and the same day on a phone.",
-    role: "Solo engineer",
+    role: "Built end to end",
     methodology: "End to end",
     techStackDetailed: ["Next.js 16", "React 19", "TypeScript", "Auth.js", "node-postgres", "Vercel"],
     showLiveOnCard: true,

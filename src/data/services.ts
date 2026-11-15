@@ -109,7 +109,7 @@ export const stages: Stage[] = [
       },
       {
         id: "backend",
-        title: "Backend and database engineering",
+        title: "Backends and databases",
         items: [
           "Backend and API development",
           "Database design, schemas and migrations",

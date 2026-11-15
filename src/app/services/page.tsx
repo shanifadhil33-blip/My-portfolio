@@ -26,7 +26,7 @@ const evidence = [
 ];
 
 const limits = [
-  "Large programmes that need several engineers working at once over a long period",
+  "Large programmes that need a larger team working at once over a long period",
   "Regulated systems that need formal compliance or specialist security approval",
   "Independent QA or penetration testing that has to be done by a separate party",
   "Continuous operational support with guaranteed response times",
