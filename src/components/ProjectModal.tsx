@@ -304,6 +304,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   </div>
                 </div>
                 <p className="mt-3 text-pretty text-base leading-relaxed text-muted">{project.brief}</p>
+                {project.businessOutcome && (
+                  <p className="mt-2 text-pretty text-sm leading-relaxed text-muted">{project.businessOutcome}</p>
+                )}
                 {project.whatYouCanTry && project.whatYouCanTry.length > 0 && (
                   <section className="mt-6" aria-labelledby="project-demo-title">
                     <h3 id="project-demo-title" className={labelClass}>
