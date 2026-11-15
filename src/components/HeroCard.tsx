@@ -150,7 +150,7 @@ export default function HeroCard() {
 
       <div className="mt-6 text-center">
         <p className="text-lg font-semibold tracking-tight text-foreground">Adhil Shanif</p>
-        <p className="mt-0.5 text-sm text-muted">Design, build, security, deploy · Dubai</p>
+        <p className="mt-0.5 text-sm text-muted">Full-stack product builder · Dubai</p>
         <p className={`mt-3 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs text-muted transition-opacity duration-500 ${hinted ? "opacity-100" : "opacity-70"}`}>
           <MoveHorizontal size={13} aria-hidden /> Swipe or tap to flip
         </p>

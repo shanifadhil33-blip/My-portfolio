@@ -18,7 +18,7 @@ export default function Hero() {
           <p className="rise flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs tracking-[0.16em] text-muted uppercase" style={{ "--d": 0 } as React.CSSProperties}>
             <span className="text-accent">Adhil Shanif</span>
             <span aria-hidden className="h-px w-6 bg-border" />
-            <span>Design, build, security, deploy · Dubai</span>
+            <span>Full-stack product builder · Dubai</span>
           </p>
 
           <h1

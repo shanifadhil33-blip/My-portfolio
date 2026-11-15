@@ -15,7 +15,7 @@ export const WHATSAPP_URL = "https://wa.me/971504874729";
 
 export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
-export const ROLE = "Design, build, security, deploy";
+export const ROLE = "Full-stack product builder";
 
 export const HEADLINE = "I build and ship complete software products.";
 
