@@ -13,7 +13,7 @@ export type LayerCard = {
   proof: string;
 };
 
-/** Engineering layers, bottom to top. All of them are delivered by me in both modes. */
+/** Build layers, bottom to top. All of them are delivered by me in both modes. */
 export const engineeringLayers: LayerCard[] = [
   {
     id: "deploy",

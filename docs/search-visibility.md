@@ -69,10 +69,10 @@ Many AI answers never produce a click, so referral numbers undercount visibility
 Ask each platform the same buyer-style questions in a fresh, logged-out session. Record what you see. One answer is a snapshot, not a ranking.
 
 Example questions:
-- "Freelance engineer who can take over backend work for my agency's client project"
+- "Someone in Dubai who can take over backend work on a client project"
 - "Independent developer in Dubai who builds multi-tenant SaaS with Supabase"
 - "Who can build an AI document extraction tool with human review?"
-- "Adhil Shanif software engineer" (branded, checks accuracy)
+- "Adhil Shanif" (branded, checks accuracy)
 
 | Date | Platform | Query | Site shown? | Cited URL | Accurate? | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
