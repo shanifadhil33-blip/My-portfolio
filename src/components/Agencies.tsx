@@ -2,19 +2,19 @@ import AgencyStack from "./AgencyStack";
 import { PillLink, SectionHead } from "./ui";
 
 const handoffs = [
-  { title: "Client portals & dashboards", detail: "Logins, roles and the screens your client's customers or staff use every day." },
+  { title: "Portals & dashboards", detail: "Logins, roles and the screens customers or staff use every day." },
   { title: "Custom web applications", detail: "A complete build from your designs, taken to a deployed, working product." },
-  { title: "Integrations", detail: "Connecting the tools your client already uses: payments, CRMs, booking and email." },
-  { title: "AI features", detail: "Document extraction and assistants on the client's own data, with a person approving the output." },
+  { title: "Integrations", detail: "Connecting the tools a business already uses: payments, CRMs, booking and email." },
+  { title: "AI features", detail: "Document extraction and assistants that use business data, with a person approving the output." },
   { title: "Fixing what's already there", detail: "Production problems, security issues, or an app someone else left half done." },
-  { title: "Looking after it after launch", detail: "Hosting, monitoring and updates, so you don't need an engineer on call." },
+  { title: "Looking after it after launch", detail: "Hosting, monitoring, troubleshooting and updates after launch." },
 ];
 
 const working = [
   "Built from your designs and brief",
-  "Written updates you can forward or send as your own",
+  "Written updates on progress, decisions and issues",
   "Clear scope, delivered in agreed milestones",
-  "Your client relationship stays yours",
+  "Code, accounts and handover notes in your control",
 ];
 
 export default function Agencies() {
@@ -24,16 +24,16 @@ export default function Agencies() {
         <SectionHead
           id="agencies-title"
           n="01"
-          label="Agency partnerships"
-          title="Technical delivery for agencies and consultants."
-          lead="For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don't build in house. I build it, behind your brand or by referral, with written updates and agreed milestones."
+          label="Projects I take on"
+          title="Software for teams, founders and businesses."
+          lead="I work from an idea, a brief or an existing application. The scope can cover a complete product, one part of a system or support after launch. We agree on milestones and I share progress in writing."
         />
 
         <div className="mt-16 md:mt-20">
           <AgencyStack />
         </div>
 
-        <h3 className="mt-24 text-2xl font-semibold tracking-tight text-foreground md:mt-28">What agencies hand over</h3>
+        <h3 className="mt-24 text-2xl font-semibold tracking-tight text-foreground md:mt-28">What I take on</h3>
         <ol className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {handoffs.map((item, i) => (
             <li key={item.title} className="rounded-2xl border border-border bg-surface p-6 sm:p-7">
@@ -53,7 +53,7 @@ export default function Agencies() {
               </li>
             ))}
           </ul>
-          <PillLink href="/brief?type=agency" className="shrink-0 self-start lg:self-auto">Discuss an agency partnership</PillLink>
+          <PillLink href="/brief?type=agency" className="shrink-0 self-start lg:self-auto">Start a project</PillLink>
         </div>
       </div>
     </section>

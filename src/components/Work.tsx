@@ -10,7 +10,7 @@ export default function Work() {
           id="work-title"
           n="03"
           label="Work"
-          title="Delivered software, not mockups."
+          title="Projects I have shipped."
           lead="Client work first, with details anonymised, then demos and personal builds you can open and try."
         />
         <div className="mt-16 flex flex-col gap-24 md:mt-20 md:gap-32">

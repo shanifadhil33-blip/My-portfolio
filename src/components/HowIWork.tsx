@@ -11,7 +11,7 @@ function QualityLoop() {
           <path d="M 700 56 C 700 8, 300 8, 300 56" fill="none" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="5 6" vectorEffect="non-scaling-stroke" />
         </svg>
         <span className="absolute -top-12 left-1/2 -translate-x-1/2 rounded-full border border-border bg-background px-3 py-1 font-mono text-xs text-muted">
-          re-test after every fix
+          test again after every fix
         </span>
         <div aria-hidden className="absolute top-6 right-[10%] left-[10%] h-px bg-border">
           <span className="pulse-x absolute -top-[3px] h-[7px] w-[7px] -translate-x-1/2 rounded-full bg-accent shadow-[0_0_12px_var(--accent)]" />
@@ -54,7 +54,7 @@ export default function HowIWork() {
           n="04"
           label="How I work"
           title="From requirements to a system you can run."
-          lead="Every engagement follows the same path, whether it is one feature or a full product. Specific deliverables are agreed during scoping."
+          lead="I agree on requirements and deliverables before building, whether the scope covers one feature or a full product."
         />
 
         <div className="mt-16 md:mt-20">
@@ -67,7 +67,7 @@ export default function HowIWork() {
             <h3 className="text-2xl font-semibold tracking-tight text-foreground">How work gets verified</h3>
             <p className="mt-4 text-pretty text-base leading-relaxed text-muted">{TESTING_LINE}</p>
             <p className="mt-4 text-pretty text-base leading-relaxed text-muted">
-              Automated checks catch many problems. My review focuses on how the software behaves when someone uses it: I test the important workflows myself, investigate anything unexpected and re-test every fix.
+              Automated checks catch many problems. My review focuses on how the software behaves when someone uses it: I test the important workflows myself, investigate anything unexpected and test every fix again.
             </p>
           </div>
           <div className="lg:col-span-8 lg:pt-20">

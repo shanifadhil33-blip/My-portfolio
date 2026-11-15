@@ -8,15 +8,15 @@ import LayerCardModal, { type CardOwner, type Pose, type Rect } from "./LayerCar
 const modes: { id: Mode; title: string; detail: string }[] = [
   {
     id: "whitelabel",
-    title: "Behind your brand",
+    title: "Work with your team",
     detail:
-      "You sell the project and stay the face of it. I build the software underneath, under your name, and the client relationship stays yours.",
+      "I work in your repository and tools, with an agreed scope, review points and written updates.",
   },
   {
     id: "referral",
-    title: "Refer it to me",
+    title: "Introduce a project",
     detail:
-      "A client asks for something outside what you do. Introduce them, I scope and deliver it, and you stay in the loop. Referral terms are agreed up front.",
+      "Introduce me to the people who need the software. I clarify the requirements with them and agree on scope, milestones and updates.",
   },
 ];
 

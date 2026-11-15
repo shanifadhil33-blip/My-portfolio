@@ -7,22 +7,22 @@ import { shareMeta, UPWORK_URL } from "@/lib/site";
 // The short agency landing is linked from the footer and listed in the sitemap.
 // It should be indexed.
 export const metadata: Metadata = {
-  title: "Technical Delivery for Agencies",
+  title: "Working Together on Software",
   description:
-    "Adhil Shanif works with agencies and consultants as a software delivery partner, from one workstream to complete application builds.",
+    "I work with teams, founders and businesses on web apps, backends, integrations and AI features, with agreed scope, milestones and written updates.",
   robots: { index: true, follow: true },
   ...shareMeta(
-    "Technical Delivery for Agencies",
-    "Software delivery partner for agencies and consultants, from one workstream to complete application builds.",
+    "Working Together on Software",
+    "Web apps, backends, integrations and AI features, with agreed scope, milestones and written updates.",
     "/partners",
   ),
 };
 
 const points = [
-  "Portals, dashboards, web apps, integrations and AI features your clients ask for.",
-  "Behind your brand: you stay the face of the project and I build underneath it.",
-  "Or refer it to me: I scope and deliver it, and referral terms are agreed up front.",
-  "Clear scope, delivered in agreed milestones, with written updates you can send as your own.",
+  "Portals, dashboards, web apps, integrations and AI features.",
+  "I work in your repository and tools, with changes available for review.",
+  "You can introduce a project. I clarify the requirements with the people who will use and review the software.",
+  "We agree on scope and milestones, with written updates on progress, decisions and issues.",
 ];
 
 export default function PartnersPage() {
@@ -31,10 +31,10 @@ export default function PartnersPage() {
       <div className="mx-auto max-w-2xl">
         <BackHome />
         <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-          Technical delivery for agencies and consultants.
+          Working together on software.
         </h1>
         <p className="mt-6 text-pretty text-lg leading-relaxed text-muted">
-          For design studios, marketing agencies, no-code shops and consultants whose clients ask for software they don&apos;t build in house. I build it, behind your brand or by referral, with written updates and agreed milestones.
+          I work with teams, founders and businesses on complete products and specific parts of existing systems. We start with the requirements, agree on scope and review the work at each milestone.
         </p>
 
         <ul className="mt-10 space-y-3">
@@ -66,7 +66,7 @@ export default function PartnersPage() {
         </a>
 
         <div className="mt-10">
-          <PillLink href="/brief?type=agency">Discuss an agency partnership</PillLink>
+          <PillLink href="/brief?type=agency">Start a project</PillLink>
         </div>
       </div>
     </main>
