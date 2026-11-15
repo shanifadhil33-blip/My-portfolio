@@ -20,7 +20,7 @@ export const ROLE = "Software Delivery Partner";
 export const HEADLINE = "Your client needs software. I own the build.";
 
 export const SUBHEADLINE =
-  "For agencies and consultants who sell software but don't have the engineers to deliver it. I take full technical responsibility, from scope to a deployed, tested product, under your brand, with written updates. AI coding agents let me deliver in weeks, not months.";
+  "For agencies and consultants who sell software but don't have the engineers to deliver it. I take full technical responsibility, from scope to a deployed, tested product, under your brand, with written updates. Short on engineers for a project you've already sold? I take a defined part, build and test it, and deliver it against the acceptance criteria we agree.";
 
 export const PAGE_TITLE = "Adhil Shanif | Software Delivery Partner";
 
