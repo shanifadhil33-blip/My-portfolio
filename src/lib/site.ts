@@ -17,10 +17,10 @@ export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
 export const ROLE = "Software Delivery Partner";
 
-export const HEADLINE = "Your client needs software. I own the build.";
+export const HEADLINE = "I build and ship complete software products.";
 
 export const SUBHEADLINE =
-  "For agencies and consultants who sell software but don't have the engineers to deliver it. I take full technical responsibility, from scope to a deployed, tested product, under your brand, with written updates. AI coding agents let me deliver in weeks, not months.";
+  "Web apps, backends, integrations and AI features, from scope to a tested, deployed product. Based in Dubai, working remotely with teams and founders.";
 
 export const PAGE_TITLE = "Adhil Shanif | Software Delivery Partner";
 
