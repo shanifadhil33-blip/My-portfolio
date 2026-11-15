@@ -23,7 +23,7 @@ export default function Hero() {
 
           <h1
             id="hero-title"
-            className="lift mt-7 text-balance text-[clamp(3rem,8.4vw,6.4rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-foreground"
+            className="lift mt-7 text-balance text-[clamp(3rem,8.4vw,6.4rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-foreground"
           >
             {HEADLINE}
           </h1>
