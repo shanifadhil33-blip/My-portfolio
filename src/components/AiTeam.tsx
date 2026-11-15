@@ -1,9 +1,9 @@
 import AiLayers from "./AiLayers";
 
 const outcomes = [
-  "Routine work gets done faster.",
-  "People focus on the decisions.",
-  "Knowledge lives in one place.",
+  "Agents handle tasks with defined rules.",
+  "People approve actions that need a decision.",
+  "Assistants answer from company documents.",
 ];
 
 export default function AiTeam() {
@@ -15,23 +15,23 @@ export default function AiTeam() {
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground font-mono text-sm text-background">
               AI
             </span>
-            <span className="text-sm text-muted">Forward deployed AI engineering</span>
+            <span className="text-sm text-muted">AI systems for business workflows</span>
           </p>
           <h2
             id="ai-team-title"
             className="mt-8 text-balance text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-foreground"
           >
-            An AI team inside the business
+            AI connected to business tools
           </h2>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted sm:text-xl">
-            It works inside the business, like a team that already knows the work.
+            Agents and assistants can use company documents and connected tools, with permissions and human approval steps.
           </p>
         </header>
 
         <AiLayers />
 
         <p className="mt-16 max-w-xl text-lg leading-relaxed text-muted md:mt-24">
-          I map the business, build the brain, and set the guardrails.
+          I map the workflow, connect the tools and define what needs human approval.
         </p>
 
         <ul className="mt-16 max-w-xl space-y-5 md:mt-20">
@@ -42,7 +42,7 @@ export default function AiTeam() {
           ))}
         </ul>
         <p className="mt-16 max-w-xl text-xl font-medium leading-relaxed text-foreground sm:text-2xl md:mt-20">
-          You explain how the business runs. The right system gets built around that.
+          I start with the process and its constraints, then agree on which tasks the system should handle.
         </p>
       </div>
     </section>

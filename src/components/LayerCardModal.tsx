@@ -11,9 +11,9 @@ export type Pose = { tilt: number; spin: number; size: number };
 
 const OWNER_LABEL: Record<CardOwner, string> = {
   mine: "Delivered by me",
-  agency: "Usually kept by your team, or mine to build",
-  brand: "Stays with your agency",
-  whole: "One person responsible for every layer",
+  agency: "Scope agreed with your team",
+  brand: "Scope and communication",
+  whole: "I take the product from scope to deployment",
 };
 
 const OWNER_BAND: Record<CardOwner, string> = {

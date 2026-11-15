@@ -14,7 +14,7 @@ import { EMAIL } from "@/lib/site";
 import { workAreas } from "@/data/services";
 
 const TYPE_PREFILL: Record<string, string> = {
-  agency: "Agency partnership.\nThe client project and the part you want me to own:\n",
+  agency: "Software project.\nThe project and the part you need help with:\n",
   founder: "Product idea.\nWhat it should do and who it is for:\n",
   business: "Business software.\nThe process or systems involved:\n",
 };

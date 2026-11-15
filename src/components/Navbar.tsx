@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
-  { label: "Agencies", href: "#agencies" },
+  { label: "What I take on", href: "#agencies" },
   { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "How I work", href: "#how-i-work" },
   { label: "Capabilities", href: "#capabilities" },
-  { label: "AI team", href: "#ai-team" },
+  { label: "AI systems", href: "#ai-team" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];

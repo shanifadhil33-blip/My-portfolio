@@ -10,20 +10,20 @@ const cards = [
     alt: "A tangled knot marked Idea, with an arrow toward a goal board.",
   },
   {
-    title: "Built fast by AI agents I direct",
-    body: "Weeks instead of months, with written limits on what the agents touch.",
+    title: "I direct AI coding agents",
+    body: "Tasks have written requirements and limits on what the agents can change.",
     src: "orchestration",
     alt: "A coordinator linked to research, writing, testing, and review.",
   },
   {
-    title: "Nothing reaches you untested",
-    body: "I use it myself and send back anything that doesn't hold up.",
+    title: "I test the main workflows",
+    body: "I use the software, investigate problems and check each fix again.",
     src: "testing",
     alt: "A track of gates, two marked Pass and one marked Fail.",
   },
   {
-    title: "Each project starts from the last one's lessons",
-    body: "Written checklists so mistakes don't repeat.",
+    title: "I keep notes from each project",
+    body: "I update checklists with issues found during builds and reviews.",
     src: "context",
     alt: "Loose notes gathering into a tidy stack that feeds a small AI unit.",
   },
@@ -37,7 +37,7 @@ export default function AiCapabilities() {
           id="capabilities-title"
           n="05"
           label="Capabilities"
-          title="Why it's fast and still reliable"
+          title="How I plan, build and check the work"
         />
         <ol className="cap-line mt-12 md:mt-16" aria-label="How the capabilities connect">
           {steps.map((step) => (

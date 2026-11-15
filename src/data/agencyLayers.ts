@@ -18,7 +18,7 @@ export const engineeringLayers: LayerCard[] = [
   {
     id: "deploy",
     label: "Deployment & operations",
-    summary: "Getting the client's system live and keeping it healthy after launch.",
+    summary: "Deploying the system, monitoring it and resolving problems after launch.",
     take: [
       "Hosting, domains, environments and CI/CD",
       "Error tracking, logging and alerts",
@@ -28,7 +28,7 @@ export const engineeringLayers: LayerCard[] = [
     how: [
       "Deploys run through your accounts, so you keep ownership",
       "Staging first, then production, with a rollback path",
-      "Live issues get a written cause and fix, ready to forward",
+      "Live issues get a written cause and fix",
     ],
     get: ["Deployment notes and a rollback plan", "Credentials handed over in writing"],
     proof: "A client review on Upwork singles out my credential rotation inventory and deployment notes.",
@@ -54,7 +54,7 @@ export const engineeringLayers: LayerCard[] = [
   {
     id: "integrations",
     label: "APIs & integrations",
-    summary: "Connecting the client's system to the services it depends on.",
+    summary: "Connecting the application to the services it depends on.",
     take: [
       "Payment gateways and payment verification",
       "CRMs, email and scheduling tools",
@@ -72,10 +72,10 @@ export const engineeringLayers: LayerCard[] = [
   {
     id: "backend",
     label: "Backend & security",
-    summary: "Business logic, sign-in and roles, and the security around them.",
+    summary: "Business logic, sign in, roles and access control.",
     take: [
       "Server logic, background jobs and webhooks",
-      "Sign-in, user roles and permissions",
+      "Sign in, user roles and permissions",
       "Security review of an existing app, then the fixes",
       "Rate limits and abuse protection",
     ],
@@ -93,16 +93,16 @@ export const engineeringLayers: LayerCard[] = [
     summary: "AI added to a product that already exists, with a person in control.",
     take: [
       "Document reading and structured data extraction",
-      "Assistants that answer from the client's own documents",
+      "Assistants that answer from business documents",
       "Agents with tool access and an approval step",
-      "Cost limits, provider fallback and logging",
+      "Usage limits, provider fallback and logging",
     ],
     how: [
       "Scoped as one feature, not a rebuild",
       "Model output is checked before anyone relies on it",
-      "Works with the client's existing login and data",
+      "Works with the existing login and data",
     ],
-    get: ["A working feature inside the product", "Notes on cost, limits and failure cases"],
+    get: ["A working feature inside the product", "Notes on usage limits and failure cases"],
     proof: "Reclaim and EOB Reader: AI extraction from insurance PDFs, reviewed by a person before export.",
   },
   {
@@ -128,36 +128,36 @@ export const engineeringLayers: LayerCard[] = [
 export const agencyLayer: Record<Mode, LayerCard> = {
   whitelabel: {
     id: "top",
-    label: "Your brand",
-    summary: "You sell the project and stay the face of it. I build the software underneath, under your name.",
+    label: "Working with a team",
+    summary: "I join an existing project and work with the people responsible for its requirements and review.",
     take: [
-      "I work in your tools and under your name",
-      "No contact with your client unless you want it",
-      "Your relationship and your margin stay yours",
+      "I work in your repository and tools",
+      "We agree on who reviews the work and answers questions",
+      "Scope, decisions and progress are recorded in writing",
     ],
     how: [
       "You share the brief and the designs",
       "I reply in writing with questions and a clear scope",
       "Each milestone is agreed in writing before work starts",
     ],
-    get: ["Updates written so you can send them as your own", "Code and accounts in your client's name"],
+    get: ["Written progress updates and handover notes", "Code and accounts under the agreed owner"],
     proof: "Repeat work from the same client after the first engagement closed at 5 stars.",
   },
   referral: {
     id: "top",
-    label: "Your client",
-    summary: "A client asks for something outside what you do. You introduce them, I scope and deliver it.",
+    label: "Starting a project",
+    summary: "An introduction starts with the problem to solve. I discuss the requirements with the people who will use and review the software.",
     take: [
-      "You introduce the client and the need",
+      "You introduce the people and the problem to solve",
       "I scope it in writing before any work starts",
-      "Referral terms are agreed before any work starts",
+      "We agree on milestones and who approves the work",
     ],
     how: [
       "Nothing starts until the client approves the written scope",
       "I work with the client directly, in writing",
       "You decide how closely you want to be kept in the loop",
     ],
-    get: ["A client you didn't have to turn away", "Copies of the updates, if you want them"],
+    get: ["A written scope and agreed review points", "Copies of the updates, if you want them"],
     proof: "Repeat work from the same client after the first engagement closed at 5 stars.",
   },
 };
@@ -165,7 +165,7 @@ export const agencyLayer: Record<Mode, LayerCard> = {
 export const wholeBuild: LayerCard = {
   id: "whole",
   label: "Complete application",
-  summary: "Every layer in this stack, with one person responsible, scoped from your requirements to a deployed product.",
+  summary: "I take the application from requirements through build, testing and deployment, with a written handover.",
   take: [
     "Requirements and architecture",
     "Frontend, backend and database",

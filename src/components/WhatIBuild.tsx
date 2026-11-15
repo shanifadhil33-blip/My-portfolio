@@ -14,7 +14,7 @@ export default function WhatIBuild() {
           n="02"
           label="What I build"
           title="One area or the whole build."
-          lead="Custom software development, backend systems, APIs, integrations, AI applications and complete technical delivery. Clients bring me in for one technical area or several connected ones."
+          lead="I build web apps, backend systems, APIs, integrations and AI features. A project can cover one area or several connected parts of a product."
         />
 
         <div className="mt-14 md:mt-16">
@@ -35,7 +35,7 @@ export default function WhatIBuild() {
           href="/services"
           className="mt-10 inline-flex min-h-11 items-center gap-2 text-base text-accent underline-offset-4 hover:underline"
         >
-          See every software development service, stage by stage <ArrowRight size={16} aria-hidden />
+          See what each project stage includes <ArrowRight size={16} aria-hidden />
         </Link>
       </div>
     </section>

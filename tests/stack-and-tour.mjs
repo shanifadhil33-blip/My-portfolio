@@ -12,10 +12,10 @@ const browser = await (engine === "webkit" ? webkit.launch() : chromium.launch({
   args: ["--no-sandbox"],
 }));
 const steps = [
-  ["Agents that own the job", "A coordinator sends the work to the right agent."],
-  ["Work in the real tools", "Email, the CRM, accounting, and the company files."],
-  ["Routine work just runs", "A discount above the limit waits for a person."],
-  ["Cloud, or your server", "The data can stay inside the company."],
+  ["Tasks assigned to agents", "A coordinator sends the work to the right agent."],
+  ["Connections to business tools", "Email, the CRM, accounting, and the company files."],
+  ["Human approval steps", "An action outside the agreed rules waits for a person."],
+  ["Deployment options", "The data can stay inside the company."],
 ];
 const ids = ["deploy", "data", "integrations", "backend", "ai", "frontend", "top"];
 const center = async (locator) => {
@@ -64,7 +64,7 @@ try {
         await dialog.waitFor();
         assert.equal(await dialog.getAttribute("aria-labelledby"), `layer-card-${id}`);
         assert.equal(await page.locator(`[data-layer="${id}"]`).getAttribute("data-out"), "true");
-        assert.equal(await page.getByRole("radio", { name: /Behind your brand/ }).getAttribute("aria-checked"), "true");
+        assert.equal(await page.getByRole("radio", { name: /Work with your team/ }).getAttribute("aria-checked"), "true");
         await close();
       }
       console.log(`${engine} ${width}: every slab opens its matching card without changing the mode`);
@@ -144,7 +144,7 @@ try {
         assert.equal(await dialog.getAttribute("aria-labelledby"), `layer-card-${id}`);
         assert.equal(await page.locator(`[data-layer="${id}"]`).getAttribute("data-out"), "true");
         assert((await shifts())[ids.indexOf(id)] >= pulled - 0.5, "fly-out starts from the drawn pose without snapping closed");
-        assert.equal(await page.getByRole("radio", { name: /Behind your brand/ }).getAttribute("aria-checked"), "true");
+        assert.equal(await page.getByRole("radio", { name: /Work with your team/ }).getAttribute("aria-checked"), "true");
         await close();
         const returned = await shifts();
         assert(returned.every((x) => Math.abs(x) < 0.01), `closing ${id} returns the drawn slab: ${returned}`);
@@ -193,10 +193,10 @@ try {
         assert(await page.evaluate(() => scrollY) > before + 40, "vertical swipe in padding scrolls the page");
       }
       await reset();
-      await page.getByRole("radio", { name: /Refer it to me/ }).click();
+      await page.getByRole("radio", { name: /Introduce a project/ }).click();
       await page.locator('[aria-label="Open a layer"]').getByRole("button", { name: "Backend & security", exact: true }).click();
       await dialog.waitFor();
-      assert.equal(await page.getByRole("radio", { name: /Refer it to me/ }).getAttribute("aria-checked"), "true");
+      assert.equal(await page.getByRole("radio", { name: /Introduce a project/ }).getAttribute("aria-checked"), "true");
       await close();
       if (artifacts) await page.screenshot({ path: `${artifacts}/${engine}-${width}-stack.png` });
       console.log(`${engine} ${width}: rotation, Reset, chips, mode independence and empty-space touch policy pass`);
@@ -213,7 +213,7 @@ try {
         });
         assert.equal(await page.locator('#ai-team [aria-roledescription], #ai-team .aid-canvas, #ai-team [data-carousel-dot]').count(), 0);
         const headings = page.locator("#ai-team h3");
-        assert.deepEqual(await headings.allTextContents(), ["Forward deployed engineering, explained", ...steps.map(([title]) => title)]);
+        assert.deepEqual(await headings.allTextContents(), ["Business AI workflows, explained", ...steps.map(([title]) => title)]);
         for (const [title, line] of steps) {
           const heading = page.getByRole("heading", { name: title, exact: true });
           assert.equal(await heading.evaluate((node) => node.nextElementSibling.textContent), line);

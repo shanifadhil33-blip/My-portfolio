@@ -6,11 +6,11 @@ export type WorkArea = { id: string; label: string; detail: string };
 // Areas a client can hand over on their own or together.
 export const workAreas: WorkArea[] = [
   { id: "complete", label: "Complete application", detail: "Scoped from requirements to a deployed, working product." },
-  { id: "frontend", label: "Frontend", detail: "Interfaces, dashboards, admin panels and forms that work on every screen." },
+  { id: "frontend", label: "Frontend", detail: "Interfaces, dashboards, admin panels and forms checked on phone and desktop." },
   { id: "backend", label: "Backend", detail: "Business logic, background jobs, webhooks and file handling." },
-  { id: "apis", label: "APIs", detail: "Designing, building and documenting APIs other systems can rely on." },
-  { id: "databases", label: "Databases", detail: "Schemas, migrations, query performance and multi-tenant data models." },
-  { id: "integrations", label: "Integrations", detail: "Payments, CRMs, email and third-party services connected properly." },
+  { id: "apis", label: "APIs", detail: "APIs with documentation, input validation and error handling." },
+  { id: "databases", label: "Databases", detail: "Schemas, migrations, query performance and data models with tenant isolation." },
+  { id: "integrations", label: "Integrations", detail: "Payments, CRMs, email and external services connected through APIs and webhooks." },
   { id: "security", label: "Security", detail: "Authentication, roles, tenant isolation and fixing what a review finds." },
   { id: "deployment", label: "Deployment", detail: "Hosting, domains, CI/CD, environments, monitoring and error tracking." },
   { id: "troubleshooting", label: "Troubleshooting", detail: "Investigating production problems and repairing existing systems." },
@@ -29,25 +29,25 @@ export type Audience = {
 export const audiences: Audience[] = [
   {
     id: "agencies",
-    who: "Agencies & consultants",
-    heading: "Technical delivery for agencies and consultants.",
-    line: "Software for your clients, without hiring engineers.",
+    who: "Teams & consultants",
+    heading: "Software built with your team.",
+    line: "Web apps, integrations and AI features from an agreed brief.",
     needs: [
       "Portals, dashboards and web apps from your designs",
-      "Integrations and AI features your clients ask for",
-      "Behind your brand, or by referral",
-      "Written updates you can send as your own",
+      "Integrations and AI features for existing systems",
+      "Work in your repository and tools",
+      "Written updates on progress, decisions and issues",
     ],
-    cta: { label: "Discuss a partnership", href: "/brief?type=agency" },
+    cta: { label: "Start a project", href: "/brief?type=agency" },
   },
   {
     id: "founders",
     who: "Founders",
     heading: "From idea to working software.",
-    line: "You bring the idea and the customers. I take responsibility for the software.",
+    line: "I help define a first version, then build, test and deploy it.",
     needs: [
       "A rough idea shaped into a scoped first version",
-      "Security, payments and deployment handled properly",
+      "Access control, payments and deployment",
       "A prototype that stopped moving, taken over and finished",
       "Improvements after launch as real users arrive",
     ],
@@ -61,7 +61,7 @@ export const audiences: Audience[] = [
     needs: [
       "Internal applications and dashboards",
       "Connecting the systems you already use",
-      "Automating repetitive, rule-based work",
+      "Automating repetitive work with defined rules",
       "AI features with a person approving the output",
     ],
     cta: { label: "Discuss a project", href: "/brief?type=business" },
@@ -113,7 +113,7 @@ export const stages: Stage[] = [
         items: [
           "Backend and API development",
           "Database design, schemas and migrations",
-          "Multi-tenant architecture and data synchronisation",
+          "Tenant isolation and data synchronisation",
         ],
       },
     ],
@@ -127,7 +127,7 @@ export const stages: Stage[] = [
         id: "integrations",
         title: "Integrations and automations",
         items: [
-          "Third-party APIs, webhooks and notifications",
+          "External APIs, webhooks and notifications",
           "Workflow automation",
         ],
       },
@@ -144,14 +144,14 @@ export const stages: Stage[] = [
   {
     number: "04",
     title: "Secure & test",
-    summary: "Access control, security reviews, automated tests, my own hands-on testing and corrections.",
+    summary: "Access control, security reviews, automated tests, my own testing and corrections.",
     groups: [
       {
         id: "security",
         title: "Authentication and security",
         items: [
           "Authentication, roles and access control",
-          "Multi-tenant data isolation",
+          "Data isolation between tenants",
           "Input validation, rate limiting and abuse prevention",
         ],
       },
@@ -159,7 +159,7 @@ export const stages: Stage[] = [
         id: "testing",
         title: "Testing and quality assurance",
         items: [
-          "Unit, integration and end-to-end tests",
+          "Unit, integration and end to end tests",
           "Regression, edge cases and error handling",
           "I test it myself, then test every fix again",
         ],
@@ -220,7 +220,7 @@ export const TESTING_LINE =
 export const qualitySteps = [
   { title: "Implementation", detail: "Built to the agreed requirements." },
   { title: "Automated checks", detail: "Tests and type checks on every change." },
-  { title: "My hands-on review", detail: "I use the software and walk the important journeys." },
+  { title: "My workflow review", detail: "I use the software and check the main workflows." },
   { title: "Corrections", detail: "Problems fixed, then checked again." },
   { title: "Verified delivery", detail: "Delivered with a note of what was tested and any known limits." },
 ];
@@ -230,7 +230,7 @@ export const commitments = [
   "Nothing is called done until I have used it myself.",
   "Every delivery says what was tested, what wasn't, and any known limits.",
   "Problems are reported in writing when I find them, with the fix.",
-  "If a project needs more than one engineer, I say so before work starts.",
+  "If a project needs a larger team or specialist review, I say so before work starts.",
 ];
 
 // Only tools used in shipped portfolio projects (checked against each repo).

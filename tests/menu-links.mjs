@@ -3,7 +3,7 @@
 // Needs Chrome: set CHROME_PATH if it is not at /usr/bin/google-chrome.
 import { chromium } from "playwright-core";
 const base = process.argv[2] || "http://localhost:3001";
-const links = [["Agencies", "#agencies"], ["Services", "#services"], ["Work", "#work"], ["How I work", "#how-i-work"], ["Capabilities", "#capabilities"], ["AI team", "#ai-team"], ["About", "#about"], ["Contact", "#contact"]];
+const links = [["What I take on", "#agencies"], ["Services", "#services"], ["Work", "#work"], ["How I work", "#how-i-work"], ["Capabilities", "#capabilities"], ["AI systems", "#ai-team"], ["About", "#about"], ["Contact", "#contact"]];
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || "/usr/bin/google-chrome", args: ["--no-sandbox"] });
 const failures = [];
 const landed = (page, id) => page.evaluate((id) => {

@@ -27,9 +27,9 @@ const evidence = [
 
 const limits = [
   "Large programmes that need several engineers working at once over a long period",
-  "Regulated systems that need formal compliance or specialist security sign-off",
+  "Regulated systems that need formal compliance or specialist security approval",
   "Independent QA or penetration testing that has to be done by a separate party",
-  "Round-the-clock operational support with guaranteed response times",
+  "Continuous operational support with guaranteed response times",
 ];
 
 export default function ServicesPage() {
@@ -122,7 +122,7 @@ export default function ServicesPage() {
                     ))}
                     {stage.number === "04" && (
                       <p className="rounded-2xl border border-accent/40 px-5 py-4 text-base leading-relaxed text-foreground">
-                        {TESTING_LINE} Automated checks catch many problems; my own testing covers how the software behaves when a person uses it, and every fix is re-tested. For specialised or high-risk systems, an additional security, compliance or accessibility assessment may be needed.
+                        {TESTING_LINE} Automated checks catch many problems; my own testing covers how the software behaves when a person uses it, and every fix is tested again. For specialised systems or those with higher risk, an additional security, compliance or accessibility assessment may be needed.
                       </p>
                     )}
                   </div>
@@ -148,7 +148,7 @@ export default function ServicesPage() {
               </ul>
             </div>
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight text-foreground">When one engineer is not the right fit</h2>
+              <h2 className="text-3xl font-semibold tracking-tight text-foreground">When a project needs a wider team</h2>
               <p className="mt-5 text-pretty text-base leading-relaxed text-muted">
                 The complexity, risk and ongoing operational needs of a project decide the right delivery model. I will say so early if a project needs more than I can responsibly provide, for example:
               </p>

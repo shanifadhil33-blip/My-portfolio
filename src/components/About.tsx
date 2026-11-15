@@ -4,9 +4,9 @@ import { SectionHead } from "./ui";
 
 // Facts that stay true: no counts or ratings that drift.
 const facts = [
-  { big: "End to end", small: "Database, backend, frontend, AI and deployment, with one person responsible." },
+  { big: "End to end", small: "I take responsibility for scope, build, testing, deployment and handover." },
   { big: "Multi-tenant", small: "SaaS delivered for a client with isolation enforced in the database." },
-  { big: "In writing", small: "Decisions, progress and handover notes are written down and easy to forward." },
+  { big: "In writing", small: "Decisions, progress, known issues and handover notes are written down." },
   { big: "You own it", small: "Code, accounts and infrastructure belong to the client from day one." },
 ];
 
@@ -18,19 +18,19 @@ export default function About() {
           id="about-title"
           n="06"
           label="About"
-          title="Adhil Shanif. I own the technical delivery."
+          title="Adhil Shanif. How I build products."
         />
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="space-y-5 text-pretty text-lg leading-relaxed text-muted lg:col-span-7">
             <p className="text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
-              I build complete products by directing AI coding agents, and I&apos;m responsible for the scope, the testing, the deployment and the handover.
+              I build complete products by directing AI coding agents. I define the scope, test the software and manage the GitHub repositories. I handle deployment and infrastructure on Vercel, Cloudflare and Supabase myself.
             </p>
             <p>
-              I&apos;m based in Dubai and work remotely, mostly with agencies and consultants, and also with founders and businesses. Some projects start from an idea, some from a specification, and some from an existing app with problems to solve. I stay involved after launch when a system needs looking after.
+              I&apos;m based in Dubai and work remotely with teams, founders and businesses. Some projects start from an idea, some from a specification, and some from an existing app with problems to solve. I stay involved after launch when a system needs looking after.
             </p>
             <p>
-              Most software problems are data problems. I start with the database and the rules, then build the screens on top, so the system stays correct as it grows.
+              I start by defining the data model and business rules, then direct the build around them. I check how the screens, permissions and integrations use that data.
             </p>
             <a
               href={UPWORK_URL}

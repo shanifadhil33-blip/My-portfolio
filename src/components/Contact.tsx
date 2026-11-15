@@ -57,7 +57,7 @@ const contactCards = [
 ];
 
 const footerLinks = [
-  { label: "Agency partnerships", href: "/partners" },
+  { label: "Working together", href: "/partners" },
   { label: "Services", href: "/services" },
   { label: "Work", href: "/#work" },
   { label: "How I work", href: "/#how-i-work" },
@@ -83,7 +83,7 @@ export default function Contact() {
           <div className="order-3 lg:col-span-6 lg:row-start-2 lg:mt-10">
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <PillLink href="/brief">Discuss a project</PillLink>
-              <GhostLink href="/brief?type=agency">Discuss an agency partnership</GhostLink>
+              <GhostLink href="/brief?type=agency">Get in touch</GhostLink>
             </div>
             <p className="mt-8 flex items-center gap-2.5 text-muted">
               <Mail size={16} aria-hidden />
@@ -111,7 +111,7 @@ export default function Contact() {
         </div>
 
         <footer className="mt-24 flex flex-col gap-6 border-t border-border pt-8 md:mt-32 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif · Software delivery partner, Dubai</p>
+          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif · Product builder, Dubai</p>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
               {footerLinks.map((l) => (
