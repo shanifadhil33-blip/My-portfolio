@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant short (@media (max-height: 640px));
 
 /* Direction: clean agency editorial. Near-black and off-white zones alternate; one sky accent.
    Components read tokens only, so a section flips theme by adding .zone-light or .zone-dark. */
@@ -270,7 +271,7 @@ button:disabled {
   transition: transform var(--view-duration, 0ms) cubic-bezier(.2,.8,.2,1), --gap 750ms cubic-bezier(.2,.8,.2,1), --part 750ms cubic-bezier(.2,.8,.2,1), --lift 750ms cubic-bezier(.2,.8,.2,1);
 }
 /* Open: every block has clear air above it, and the stack parts a little above the selected block. */
-.slab-scene[data-open="true"] .slab-stack { --gap: 64px; --part: 36px; --lift: 10px; }
+.slab-scene[data-open="true"] .slab-stack { --gap: clamp(50px, 8.8svh, 64px); --part: clamp(26px, 5svh, 36px); --lift: 10px; }
 .slab {
   position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none;
   --press: 0px; --exit: 0px; --face-opacity: 1;
@@ -296,7 +297,10 @@ button:disabled {
 .slab[data-out="true"] .slab-top,
 .slab[data-out="true"] .slab-side { transition: opacity 140ms ease; }
 .slab-stack-wrap, .slab-stack, .slab, .slab-shift, .slab-top, .slab-side, .slab-label { touch-action: none; }
-.slab-bottom { inset: 0; clip-path: var(--cap); transform: rotateY(180deg); background: var(--side-dark); }
+/* The square wrapper box reaches past the stage on short screens; only the faces take pointers, so the layer buttons below stay clickable. */
+.slab-stack-wrap, .slab-stack { pointer-events: none; }
+/* Visible from inside too, so any sub-pixel seam shows the dark floor, not the slab below. */
+.slab-bottom { inset: 0; clip-path: var(--cap); transform: rotateY(180deg); background: var(--side-dark); backface-visibility: visible; -webkit-backface-visibility: visible; }
 .slab-top {
   inset: 0; clip-path: var(--cap); transform: translateZ(var(--t));
   display: flex; align-items: flex-end; padding: 14px;
@@ -305,13 +309,15 @@ button:disabled {
   background-color: var(--wall);
   background-image: linear-gradient(var(--edge-light, to top), rgba(255,255,255,.16), transparent 24%, rgba(0,0,0,.12));
 }
-.slab-front { left: var(--r); right: var(--r); bottom: 0; height: var(--t); transform-origin: bottom; transform: rotateX(-90deg); --wall: var(--side-light); --edge-light: to bottom; }
-.slab-back { left: var(--r); right: var(--r); top: 0; height: var(--t); transform-origin: top; transform: rotateX(90deg); --wall: var(--side-light); }
-.slab-right { top: var(--r); bottom: var(--r); right: 0; width: var(--t); transform-origin: right; transform: rotateY(90deg); --wall: var(--side-dark); --edge-light: to right; }
-.slab-left { top: var(--r); bottom: var(--r); left: 0; width: var(--t); transform-origin: left; transform: rotateY(-90deg); --wall: var(--side-dark); --edge-light: to left; }
+/* Straight walls overlap the corner walls by 1px so the join never opens a see-through seam. */
+.slab-front { left: calc(var(--r) - 1px); right: calc(var(--r) - 1px); bottom: 0; height: var(--t); transform-origin: bottom; transform: rotateX(-90deg); --wall: var(--side-light); --edge-light: to bottom; }
+.slab-back { left: calc(var(--r) - 1px); right: calc(var(--r) - 1px); top: 0; height: var(--t); transform-origin: top; transform: rotateX(90deg); --wall: var(--side-light); }
+.slab-right { top: calc(var(--r) - 1px); bottom: calc(var(--r) - 1px); right: 0; width: var(--t); transform-origin: right; transform: rotateY(90deg); --wall: var(--side-dark); --edge-light: to right; }
+.slab-left { top: calc(var(--r) - 1px); bottom: calc(var(--r) - 1px); left: 0; width: var(--t); transform-origin: left; transform: rotateY(-90deg); --wall: var(--side-dark); --edge-light: to left; }
 .slab-corner { height: var(--t); transform-origin: 0 0; }
 .slab-label { font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
 @media (max-width: 640px) { .slab-stack { --t: 15px; --r: 11px; } .slab-scene[data-open="true"] .slab-stack { --gap: 50px; --part: 26px; --lift: 8px; } .slab-label { font-size: 12px; } .slab-top { padding: 10px; } }
+@media (min-width: 641px) and (max-height: 640px) { .slab-label { font-size: 13px; } .slab-top { padding: 11px; } }
 
 .slab-mine .slab-top { background: linear-gradient(135deg, #7dd3fc, #38bdf8 45%, #0ea5e9); color: #04121c; }
 .slab-mine { --side-light: #0284c7; --side-dark: #0369a1; }
