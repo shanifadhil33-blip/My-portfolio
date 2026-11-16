@@ -95,7 +95,7 @@ export default function HeroCard() {
   return (
     <div className="mx-auto flex w-full max-w-[20rem] flex-col items-center">
       <div
-        className="coin-scene relative aspect-square w-[min(15rem,62vw)] select-none sm:w-[17rem] lg:w-[20rem]"
+        className="coin-scene relative aspect-square w-[min(15rem,62vw)] select-none sm:w-[17rem] lg:w-[min(20rem,42svh)]"
         style={{ touchAction: "pan-y" }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

@@ -192,7 +192,7 @@ export default function LayerCardModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 [perspective:1300px]"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 [perspective:1300px] [@media(max-height:500px)]:items-start [@media(max-height:500px)]:overflow-y-auto"
       onClick={(e) => { if (e.target === e.currentTarget || e.target === backdropRef.current) close(); }}
     >
       <div ref={backdropRef} className="absolute inset-0 bg-[#05070a]/92" style={{ opacity: 0 }} />
@@ -204,7 +204,7 @@ export default function LayerCardModal({
         className="lift-wrap relative w-[min(24rem,100%)] [transform-style:preserve-3d]"
         style={{ opacity: 0 }}
       >
-        <div className="lift-chrome mb-3 flex items-center justify-between text-white">
+        <div className="lift-chrome mb-3 short:mb-1.5 flex items-center justify-between text-white">
           <span className="font-mono text-xs tracking-[0.16em] text-white/70 uppercase">
             {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
@@ -231,22 +231,22 @@ export default function LayerCardModal({
           <div ref={innerRef} className="card3d-inner">
             {/* Front */}
             <section inert={back} className="face overflow-hidden rounded-[22px] bg-white text-[#0b1220] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.75)]">
-              <div className={`px-6 pt-6 pb-5 ${band}`}>
+              <div className={`px-6 pt-6 pb-5 short:pt-4 short:pb-3.5 ${band}`}>
                 <p className="font-mono text-[11px] tracking-[0.16em] uppercase opacity-80">{OWNER_LABEL[owner]}</p>
-                <h3 id={titleId} className="mt-3 text-2xl font-semibold leading-tight tracking-tight">{card.label}</h3>
+                <h3 id={titleId} className="mt-3 text-2xl short:text-[1.375rem] font-semibold leading-tight tracking-tight">{card.label}</h3>
               </div>
-              <div className="px-6 pt-5 pb-6">
+              <div className="px-6 pt-5 pb-6 short:pt-3.5 short:pb-4">
                 <p className="text-pretty text-base leading-relaxed text-[#334155]">{card.summary}</p>
-                <p className="mt-5 font-mono text-[11px] tracking-[0.16em] text-[#026fa9] uppercase">What I take on</p>
-                <ul className="mt-3 space-y-2.5">
+                <p className="mt-5 short:mt-3 font-mono text-[11px] tracking-[0.16em] text-[#026fa9] uppercase">What I take on</p>
+                <ul className="mt-3 space-y-2.5 short:mt-2 short:space-y-1.5">
                   {card.take.map((t) => (
-                    <li key={t} className="flex gap-3 text-[15px] leading-snug text-[#0b1220]">
+                    <li key={t} className="flex gap-3 text-[15px] short:text-sm leading-snug text-[#0b1220]">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0ea5e9]" aria-hidden />
                       {t}
                     </li>
                   ))}
                 </ul>
-                <p className="mt-6 flex items-center gap-2 text-xs text-[#64748b]">
+                <p className="mt-6 short:mt-3.5 flex items-center gap-2 text-xs text-[#64748b]">
                   <MoveHorizontal size={13} aria-hidden /> Swipe or tap the card to turn it over
                 </p>
               </div>
@@ -254,26 +254,26 @@ export default function LayerCardModal({
 
             {/* Back */}
             <section inert={!back} className="face face-back overflow-hidden rounded-[22px] bg-[radial-gradient(circle_at_20%_0%,#13293a,#070d14_65%)] text-white shadow-[0_40px_90px_-30px_rgba(0,0,0,0.75)]">
-              <div className="px-6 pt-6 pb-6">
+              <div className="px-6 pt-6 pb-6 short:pt-4 short:pb-4">
                 <p className="font-mono text-[11px] tracking-[0.16em] text-sky-300 uppercase">How it works with you</p>
-                <ul className="mt-3 space-y-2.5">
+                <ul className="mt-3 space-y-2.5 short:mt-2 short:space-y-1.5">
                   {card.how.map((t) => (
-                    <li key={t} className="flex gap-3 text-[15px] leading-snug text-white/85">
+                    <li key={t} className="flex gap-3 text-[15px] short:text-sm leading-snug text-white/85">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400" aria-hidden />
                       {t}
                     </li>
                   ))}
                 </ul>
-                <p className="mt-6 font-mono text-[11px] tracking-[0.16em] text-sky-300 uppercase">What you get</p>
-                <ul className="mt-3 space-y-2.5">
+                <p className="mt-6 short:mt-3.5 font-mono text-[11px] tracking-[0.16em] text-sky-300 uppercase">What you get</p>
+                <ul className="mt-3 space-y-2.5 short:mt-2 short:space-y-1.5">
                   {card.get.map((t) => (
-                    <li key={t} className="flex gap-3 text-[15px] leading-snug text-white/85">
+                    <li key={t} className="flex gap-3 text-[15px] short:text-sm leading-snug text-white/85">
                       <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-400" aria-hidden />
                       {t}
                     </li>
                   ))}
                 </ul>
-                <div className="mt-6 rounded-2xl border border-sky-400/40 bg-white/5 p-4">
+                <div className="mt-6 short:mt-3.5 rounded-2xl border border-sky-400/40 bg-white/5 p-4 short:p-3">
                   <p className="font-mono text-[11px] tracking-[0.16em] text-sky-300 uppercase">Proof</p>
                   <p className="mt-2 text-pretty text-sm leading-relaxed text-white/85">{card.proof}</p>
                 </div>
@@ -283,7 +283,7 @@ export default function LayerCardModal({
         </div>
         </div>
 
-        <div className="lift-chrome mt-4 flex items-center justify-between gap-3">
+        <div className="lift-chrome mt-4 short:mt-2 flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => onStep(-1)}

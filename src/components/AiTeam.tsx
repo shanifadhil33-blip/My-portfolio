@@ -19,7 +19,7 @@ export default function AiTeam() {
           </p>
           <h2
             id="ai-team-title"
-            className="mt-8 text-balance text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-foreground"
+            className="mt-8 text-balance text-[length:clamp(2.4rem,min(5vw,9.5svh),4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-foreground"
           >
             AI connected to business tools
           </h2>

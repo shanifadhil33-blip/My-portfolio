@@ -420,7 +420,7 @@ export default function AgencyStack() {
         {/* Include the reserved space above the stack in the drawer clamp bounds. */}
         <div
           ref={sceneRef}
-          className="slab-scene relative mx-auto w-full max-w-[32rem] cursor-grab pt-8 select-none active:cursor-grabbing sm:pt-24"
+          className="slab-scene relative mx-auto w-full max-w-[32rem] sm:max-w-[min(32rem,calc(100svh-10rem))] cursor-grab pt-8 select-none active:cursor-grabbing sm:pt-[min(6rem,7svh)] sm:pb-4"
           data-open={open}
           style={{ touchAction: "pan-y" }}
           onPointerDown={onPointerDown}

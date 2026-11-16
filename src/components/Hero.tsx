@@ -13,8 +13,8 @@ export default function Hero() {
   return (
     <section id="hero" aria-labelledby="hero-title" className="zone-dark glow relative">
       <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden />
-      <div className="relative mx-auto grid min-h-[100svh] max-w-6xl grid-cols-1 items-center gap-14 px-5 pt-28 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:pt-24">
-        <div className="lg:col-span-7">
+      <div className="relative mx-auto grid min-h-[100svh] max-w-6xl grid-cols-1 items-center gap-14 px-5 pt-28 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:pt-[clamp(5rem,13svh,6rem)] lg:pb-[clamp(1.5rem,5svh,4rem)]">
+        <div className="lg:col-span-7 @container">
           <p className="rise flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs tracking-[0.16em] text-muted uppercase" style={{ "--d": 0 } as React.CSSProperties}>
             <span className="text-accent">Adhil Shanif</span>
             <span aria-hidden className="h-px w-6 bg-border" />
@@ -23,23 +23,23 @@ export default function Hero() {
 
           <h1
             id="hero-title"
-            className="lift mt-7 text-balance text-[clamp(3rem,8.4vw,6.4rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-foreground"
+            className="lift mt-7 lg:mt-[clamp(1rem,3svh,1.75rem)] text-balance text-[length:clamp(3rem,min(10.6cqi,11svh),6.4rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-foreground"
           >
             {HEADLINE}
           </h1>
 
-          <p className="rise mt-7 max-w-xl text-pretty text-lg leading-relaxed text-muted sm:text-xl" style={{ "--d": 2 } as React.CSSProperties}>
+          <p className="rise mt-7 lg:mt-[clamp(0.875rem,3svh,1.75rem)] max-w-xl text-pretty text-lg leading-relaxed text-muted sm:text-xl lg:text-[length:clamp(1rem,2.6svh,1.25rem)]" style={{ "--d": 2 } as React.CSSProperties}>
             {SUBHEADLINE}
           </p>
 
-          <div className="rise mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" style={{ "--d": 3 } as React.CSSProperties}>
+          <div className="rise mt-10 lg:mt-[clamp(1.25rem,4.5svh,2.5rem)] flex flex-col gap-3 sm:flex-row sm:items-center" style={{ "--d": 3 } as React.CSSProperties}>
             <PillLink href="/brief?type=agency">Start a project</PillLink>
             <GhostLink href="#work">
               See delivered work <ArrowDown size={16} aria-hidden />
             </GhostLink>
           </div>
 
-          <ul className="rise mt-12 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6 text-sm text-muted" style={{ "--d": 4 } as React.CSSProperties}>
+          <ul className="rise mt-12 lg:mt-[clamp(1.25rem,5svh,3rem)] flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6 text-sm text-muted" style={{ "--d": 4 } as React.CSSProperties}>
             {proof.map((item) => (
               <li key={item.label} className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
