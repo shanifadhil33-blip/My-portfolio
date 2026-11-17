@@ -19,7 +19,7 @@ export default function Projects() {
           Apps I built to show how I work. You can open them and try them. They are not client projects.
         </p>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="project-grid mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {projects.map((project) => (
             <ProjectCard
               key={project.id}

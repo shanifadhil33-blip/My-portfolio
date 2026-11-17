@@ -50,7 +50,7 @@ export default function ClientWork() {
           Details are anonymised to respect client confidentiality.
         </p>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="project-grid mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {clientProjects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -67,11 +67,11 @@ export default function ClientWork() {
             Client reviews
           </h3>
 
-          <div className="mt-8 grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
+          <div className="review-grid mt-8 grid grid-cols-1 items-start gap-5 md:grid-cols-2">
             {reviews.map((review) => (
               <figure
                 key={review.attribution}
-                className="flex h-full flex-col rounded-2xl border border-border bg-surface p-6 sm:p-8"
+                className="client-review flex min-w-0 flex-col rounded-2xl border border-border bg-surface p-6 sm:p-8"
               >
                 <div className="flex items-center gap-2">
                   <span className="inline-flex gap-0.5" role="img" aria-label="5 out of 5 stars">

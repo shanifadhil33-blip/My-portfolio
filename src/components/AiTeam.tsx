@@ -10,7 +10,7 @@ export default function AiTeam() {
   return (
     <section id="ai-team" aria-labelledby="ai-team-title" className="zone-dark glow relative px-5 py-24 sm:px-6 md:py-36">
       <div className="mx-auto max-w-6xl">
-        <header className="max-w-3xl">
+        <header className="section-head max-w-3xl">
           <p className="flex items-center gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground font-mono text-sm text-background">
               AI

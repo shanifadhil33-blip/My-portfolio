@@ -36,7 +36,7 @@ export default function FlipCard({ audience, index }: { audience: Audience; inde
               >
                 <RotateCcw size={14} aria-hidden /> What this usually involves
               </button>
-              <span className="hidden items-center gap-1.5 text-xs text-muted sm:flex" aria-hidden>
+              <span className="hidden items-center gap-1.5 text-xs text-muted xl:flex" aria-hidden>
                 <MoveHorizontal size={13} /> Swipe
               </span>
             </div>

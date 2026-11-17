@@ -237,7 +237,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             <div className="sheet-handle" data-sheet-grab="" aria-hidden="true">
               <span className="h-1 w-9 rounded-full bg-foreground/30" />
             </div>
-            <div data-sheet-header="" className="flex justify-end px-4 pt-1 pb-0 sm:pt-4">
+            <div data-sheet-header="" className="flex shrink-0 justify-end px-4 pt-1 pb-0 sm:pt-4">
               <button
                 id="project-modal-close"
                 type="button"
@@ -249,7 +249,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               </button>
             </div>
 
-            <div ref={scrollerRef} className="scrollbar-none flex-1 touch-pan-y overflow-y-auto overscroll-y-contain">
+            <div ref={scrollerRef} className="scrollbar-none min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-y-contain">
               <div className="px-5 pt-2 pb-0 sm:px-6">
                 {project.tags.length > 0 && (
                   <div className="mb-3 flex flex-wrap gap-1.5">
@@ -307,6 +307,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 {project.businessOutcome && (
                   <p className="mt-2 text-pretty text-sm leading-relaxed text-muted">{project.businessOutcome}</p>
                 )}
+                {project.owned && (
+                  <p className="mt-3 text-pretty text-sm leading-relaxed text-foreground">
+                    <span className="font-medium">What I owned:</span> <span className="text-muted">{project.owned}</span>
+                  </p>
+                )}
                 {project.whatYouCanTry && project.whatYouCanTry.length > 0 && (
                   <section className="mt-6" aria-labelledby="project-demo-title">
                     <h3 id="project-demo-title" className={labelClass}>
@@ -343,7 +348,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               </div>
 
               {(heroSrc || modalVideos.length > 0 || modalImages.length > 0) && (
-                <div className="mx-5 mt-6 space-y-4 sm:mx-6">
+                <div className="project-modal-media mx-5 mt-6 space-y-4 sm:mx-6">
                   {heroSrc && project && (
                     <button
                       type="button"
