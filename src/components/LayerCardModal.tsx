@@ -192,7 +192,7 @@ export default function LayerCardModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 [perspective:1300px] [@media(max-height:500px)]:items-start [@media(max-height:500px)]:overflow-y-auto"
+      className="layer-modal fixed inset-0 z-[100] flex items-center justify-center p-4 [perspective:1300px] [@media(max-height:500px)]:items-start [@media(max-height:500px)]:overflow-y-auto"
       onClick={(e) => { if (e.target === e.currentTarget || e.target === backdropRef.current) close(); }}
     >
       <div ref={backdropRef} className="absolute inset-0 bg-[#05070a]/92" style={{ opacity: 0 }} />

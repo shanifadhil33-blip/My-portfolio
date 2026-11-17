@@ -21,8 +21,8 @@ export default function About() {
           title="Adhil Shanif. How I build products."
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="space-y-5 text-pretty text-lg leading-relaxed text-muted lg:col-span-7">
+        <div className="about-layout mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="about-copy space-y-5 text-pretty text-lg leading-relaxed text-muted lg:col-span-7">
             <p className="text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
               I build complete products by directing AI coding agents. I define the scope, test the software and manage the GitHub repositories. I handle deployment and infrastructure on Vercel, Cloudflare and Supabase myself.
             </p>
@@ -42,7 +42,7 @@ export default function About() {
             </a>
           </div>
 
-          <dl className="divide-y divide-border border-y border-border lg:col-span-5">
+          <dl className="about-facts divide-y divide-border border-y border-border lg:col-span-5">
             {facts.map((f) => (
               <div key={f.big} className="py-6">
                 <dt className="text-3xl font-semibold tracking-tight text-foreground">{f.big}</dt>
@@ -57,7 +57,7 @@ export default function About() {
           <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted">
             When a project needs unfamiliar or specialist technology, I check feasibility and risks before committing.
           </p>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="tools-grid mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {techLayers.map((group) => (
               <div key={group.layer} className="rounded-2xl border border-border bg-surface p-5">
                 <h4 className="font-mono text-xs tracking-[0.16em] text-accent uppercase">{group.layer}</h4>

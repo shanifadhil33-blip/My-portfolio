@@ -69,7 +69,7 @@ export default function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="zone-dark glow relative px-5 pt-24 pb-10 sm:px-6 md:pt-36">
       <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-14 lg:gap-y-0">
+        <div className="contact-layout grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-14 lg:gap-y-0">
           <div className="order-1 lg:col-span-6">
             <SectionHead
               id="contact-title"
@@ -93,7 +93,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <ul className="order-2 flex flex-col gap-3 lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 lg:pt-20">
+          <ul className="contact-links order-2 flex flex-col gap-3 lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 lg:pt-20">
             {contactCards.map(({ label, href, logo }) => (
               <li key={label}>
                 <a

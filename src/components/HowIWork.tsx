@@ -21,7 +21,7 @@ function QualityLoop() {
         <span className="pulse-y absolute -left-[3px] h-[7px] w-[7px] -translate-y-1/2 rounded-full bg-accent" />
       </div>
 
-      <ol className="relative grid grid-cols-1 gap-6 lg:grid-cols-5 lg:gap-4">
+      <ol className="quality-steps relative grid grid-cols-1 gap-6 lg:grid-cols-5 lg:gap-4">
         {qualitySteps.map((step, i) => {
           const mine = i === 2;
           return (
@@ -62,7 +62,7 @@ export default function HowIWork() {
         </div>
 
 
-        <div className="mt-24 grid grid-cols-1 gap-12 md:mt-28 lg:grid-cols-12">
+        <div className="verification-layout mt-24 grid grid-cols-1 gap-12 md:mt-28 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <h3 className="text-2xl font-semibold tracking-tight text-foreground">How work gets verified</h3>
             <p className="mt-4 text-pretty text-base leading-relaxed text-muted">{TESTING_LINE}</p>

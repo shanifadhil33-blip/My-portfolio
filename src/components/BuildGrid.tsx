@@ -17,7 +17,7 @@ const ICONS: Record<string, typeof Boxes> = {
 /** What clients bring me in for. Plain, scannable tiles: one area or several. */
 export default function BuildGrid() {
   return (
-    <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+    <ul className="build-grid grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {workAreas.map((area) => {
         const Icon = ICONS[area.id] ?? Boxes;
         return (

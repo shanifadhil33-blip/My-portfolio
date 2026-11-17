@@ -95,7 +95,7 @@ export default function HeroCard() {
   return (
     <div className="mx-auto flex w-full max-w-[20rem] flex-col items-center">
       <div
-        className="coin-scene relative aspect-square w-[min(15rem,62vw)] select-none sm:w-[17rem] lg:w-[min(20rem,42svh)]"
+        className="hero-coin coin-scene relative aspect-square w-[min(15rem,62vw)] select-none sm:w-[17rem] lg:w-[min(20rem,max(15rem,42svh))]"
         style={{ touchAction: "pan-y" }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -128,13 +128,13 @@ export default function HeroCard() {
           {/* Back */}
           <div
             inert={!showingBack}
-            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-6 text-center text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14)]"
+            className="coin-face absolute inset-0 flex flex-col items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_20%,#13293a,#070d14_70%)] px-4 text-center text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.14)]"
             style={{ transform: "rotateY(180deg) translateZ(1px)" }}
           >
             <p className="font-mono text-[11px] tracking-[0.2em] text-sky-300 uppercase">Get in touch</p>
             <p className="mt-1.5 text-lg font-semibold tracking-tight">Adhil Shanif</p>
             <p className="mt-0.5 text-xs text-white/60">Replies within 24 hours</p>
-            <div className="mt-3 grid grid-cols-4 gap-1.5 sm:gap-2.5">
+            <div className="mt-3 grid grid-cols-4 gap-1.5">
               <a href={`mailto:${EMAIL}`} className={iconLink} aria-label="Email" title="Email"><Mail size={17} aria-hidden /></a>
               <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="LinkedIn" title="LinkedIn"><LinkedinIcon size={17} /></a>
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label="WhatsApp" title="WhatsApp"><WhatsappIcon size={17} /></a>
@@ -147,7 +147,7 @@ export default function HeroCard() {
         </div>
       </div>
 
-      <div className="mt-6 text-center">
+      <div className="hero-caption mt-6 text-center">
         <p className="text-lg font-semibold tracking-tight text-foreground">Adhil Shanif</p>
         <p className="mt-0.5 text-sm text-muted">Full-stack product builder · Dubai</p>
         <p className={`mt-3 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs text-muted transition-opacity duration-500 ${hinted ? "opacity-100" : "opacity-70"}`}>

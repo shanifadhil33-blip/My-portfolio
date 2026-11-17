@@ -25,7 +25,7 @@ export default function WhatIBuild() {
         </div>
 
         <h3 className="mt-24 text-2xl font-semibold tracking-tight text-foreground md:mt-28">Who I work with</h3>
-        <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="audience-grid mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {audiences.map((audience, i) => (
             <FlipCard key={audience.id} audience={audience} index={i} />
           ))}

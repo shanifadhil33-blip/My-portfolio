@@ -380,7 +380,7 @@ export default function AgencyStack() {
   const openSlab = deck.find((s) => s.card.id === openId) ?? null;
 
   return (
-    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
+    <div className="agency-layout grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
       <div className="flex flex-col gap-3 lg:pt-6">
         <div role="radiogroup" aria-label="How we work together" className="flex flex-col gap-3">
           {modes.map((m, i) => {
@@ -409,10 +409,10 @@ export default function AgencyStack() {
       </div>
 
       <div>
-        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted">
+        <div className="stack-hints flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted">
           <span className="hidden items-center gap-1.5 sm:flex"><Move3d size={14} aria-hidden /> Drag to turn it any way</span>
           <span className="flex items-center gap-1.5"><ArrowRight size={14} aria-hidden /> Tap a layer to open its card, or drag it right</span>
-          <button type="button" onClick={resetView} className="flex min-h-9 items-center gap-1 text-accent hover:underline">
+          <button type="button" onClick={resetView} className="flex min-h-10 items-center gap-1 text-accent hover:underline">
             <RotateCcw size={12} aria-hidden /> Reset
           </button>
         </div>

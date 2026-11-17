@@ -7,16 +7,16 @@ const steps = [
 
 export default function AiLayers() {
   return (
-    <div className="mt-16 md:mt-24">
+    <div className="ai-walkthrough mt-16 md:mt-24">
       <h3 className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
         Business AI workflows, explained
       </h3>
       <p className="mt-3 max-w-xl text-pretty text-lg leading-relaxed text-muted">
         A short overview of tool access, task routing, approval steps and deployment options.
       </p>
-      <div className="mt-8 overflow-hidden rounded-2xl border border-[#dbe2ea] bg-white shadow-[0_18px_40px_-28px_rgba(15,30,50,0.28)] sm:mt-10">
+      <div className="ai-video-card mx-auto mt-8 overflow-hidden rounded-2xl border border-[#dbe2ea] bg-white shadow-[0_18px_40px_-28px_rgba(15,30,50,0.28)] sm:mt-10">
         <video
-          className="aspect-video w-full bg-[#F8F1E7]"
+          className="block aspect-video h-auto w-full bg-[#F8F1E7] object-contain"
           controls
           playsInline
           preload="metadata"
@@ -28,7 +28,7 @@ export default function AiLayers() {
           <source src="/ai-team/forward-deployed.mp4" type="video/mp4" />
         </video>
       </div>
-      <div className="mt-12 space-y-10 sm:mt-16 sm:space-y-12">
+      <div className="ai-workflow-steps mt-12 grid gap-10 sm:mt-16 sm:grid-cols-2 sm:gap-12">
         {steps.map((step) => (
           <div key={step.title}>
             <h3 className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{step.title}</h3>
