@@ -447,11 +447,9 @@ button:disabled {
   .hero-layout { gap: 2.5rem; padding-top: 6rem; padding-bottom: 3rem; }
   .hero-copy > h1 { margin-top: 1rem; }
   .hero-copy > p:not(:first-child) { margin-top: 1rem; font-size: 1rem; line-height: 1.5; }
-  .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-top: 1.5rem; }
-  .hero-actions > a { min-width: 0; min-height: 3rem; padding-inline: .75rem; gap: .5rem; font-size: .875rem; }
-  .hero-actions > a > span:first-child { padding-left: 0; }
-  .hero-actions > a > span:last-child { width: 2rem; height: 2rem; }
+  .hero-actions { margin-top: 1.5rem; gap: .625rem; }
   .hero-proof { margin-top: 1.5rem; padding-top: 1rem; gap: .25rem 1.25rem; }
+  .hero-proof > li { min-height: 2.5rem; }
   .hero-coin { width: min(16rem, 72vw); }
   .project-card-openable .project-card-media { max-height: 18svh; }
   .project-card-openable .project-card-body { padding: 1rem; }
