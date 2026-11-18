@@ -57,7 +57,6 @@ const contactCards = [
 ];
 
 const footerLinks = [
-  { label: "Working together", href: "/partners" },
   { label: "Services", href: "/services" },
   { label: "Work", href: "/#work" },
   { label: "How I work", href: "/#how-i-work" },
@@ -73,7 +72,7 @@ export default function Contact() {
           <div className="order-1 lg:col-span-6">
             <SectionHead
               id="contact-title"
-              n="07"
+              n="05"
               label="Contact"
               title="Tell me what you need built."
               lead="WhatsApp and email are the main ways to reach me. The brief form is optional if you would rather write it out. I reply within 24 hours."
@@ -83,7 +82,7 @@ export default function Contact() {
           <div className="order-3 lg:col-span-6 lg:row-start-2 lg:mt-10">
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <PillLink href="/brief">Discuss a project</PillLink>
-              <GhostLink href="/brief?type=agency">Get in touch</GhostLink>
+              <GhostLink href="/brief">Get in touch</GhostLink>
             </div>
             <p className="mt-8 flex items-center gap-2.5 text-muted">
               <Mail size={16} aria-hidden />
@@ -111,7 +110,7 @@ export default function Contact() {
         </div>
 
         <footer className="mt-24 flex flex-col gap-6 border-t border-border pt-8 md:mt-32 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif, Dubai. Full-stack product builder</p>
+          <p className="text-sm text-muted">© {new Date().getFullYear()} Adhil Shanif, Dubai. Full-stack software engineer</p>
           <nav aria-label="Footer">
             <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
               {footerLinks.map((l) => (

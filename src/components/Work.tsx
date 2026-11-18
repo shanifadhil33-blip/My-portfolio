@@ -8,7 +8,7 @@ export default function Work() {
       <div className="mx-auto max-w-6xl">
         <SectionHead
           id="work-title"
-          n="03"
+          n="01"
           label="Work"
           title="Projects I have shipped."
           lead="Client work first, with details anonymised, then demos and personal builds you can open and try."

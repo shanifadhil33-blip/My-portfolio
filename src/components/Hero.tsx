@@ -18,7 +18,7 @@ export default function Hero() {
           <p className="rise flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs tracking-[0.16em] text-muted uppercase" style={{ "--d": 0 } as React.CSSProperties}>
             <span className="text-accent">Adhil Shanif</span>
             <span aria-hidden className="h-px w-6 bg-border" />
-            <span>Full-stack product builder · Dubai</span>
+            <span>Full-stack software engineer · Dubai</span>
           </p>
 
           <h1
@@ -33,7 +33,7 @@ export default function Hero() {
           </p>
 
           <div className="hero-actions rise mt-10 lg:mt-[clamp(1.25rem,4.5svh,2.5rem)] flex flex-col gap-3 sm:flex-row sm:items-center" style={{ "--d": 3 } as React.CSSProperties}>
-            <PillLink href="/brief?type=agency">Start a project</PillLink>
+            <PillLink href="/brief">Start a project</PillLink>
             <GhostLink href="#work">
               See delivered work <ArrowDown size={16} aria-hidden />
             </GhostLink>

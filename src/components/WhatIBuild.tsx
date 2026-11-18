@@ -1,42 +1,30 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { audiences } from "@/data/services";
-import FlipCard from "./FlipCard";
-import BuildGrid from "./BuildGrid";
-import { PillLink, SectionHead } from "./ui";
+import { techLayers } from "@/data/services";
+import { SectionHead } from "./ui";
 
 export default function WhatIBuild() {
   return (
-    <section id="services" aria-labelledby="services-title" className="zone-dark glow glow-left relative px-5 py-24 sm:px-6 md:py-36">
+    <section id="services" aria-labelledby="services-title" className="zone-light relative px-5 py-24 sm:px-6 md:py-36">
       <div className="mx-auto max-w-6xl">
-        <SectionHead
-          id="services-title"
-          n="02"
-          label="What I build"
-          title="One area or the whole build."
-          lead="I build web apps, backend systems, APIs, integrations and AI features. A project can cover one area or several connected parts of a product."
-        />
-
-        <div className="mt-14 md:mt-16">
-          <BuildGrid />
-        </div>
-        <div className="mt-8">
-          <PillLink href="/brief">Send a brief</PillLink>
-        </div>
-
-        <h3 className="mt-24 text-2xl font-semibold tracking-tight text-foreground md:mt-28">Who I work with</h3>
-        <div className="audience-grid mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {audiences.map((audience, i) => (
-            <FlipCard key={audience.id} audience={audience} index={i} />
+        <SectionHead id="services-title" n="03" label="What I build" title="The stack behind the work." />
+        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 md:mt-16">
+          {techLayers.map((group) => (
+            <div key={group.layer}>
+              <h3 className="font-mono text-xs tracking-[0.16em] text-accent uppercase">{group.layer}</h3>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className={`inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm text-foreground ${
+                      item === "AI agent orchestration" ? "border-accent bg-accent/10 font-medium" : "border-border bg-surface"
+                    }`}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
-
-        <Link
-          href="/services"
-          className="mt-10 inline-flex min-h-11 items-center gap-2 text-base text-accent underline-offset-4 hover:underline"
-        >
-          See what each project stage includes <ArrowRight size={16} aria-hidden />
-        </Link>
       </div>
     </section>
   );

@@ -1,24 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, Move3d, RotateCcw } from "lucide-react";
 import { agencyLayer, engineeringLayers, wholeBuild, type LayerCard, type Mode } from "@/data/agencyLayers";
 import LayerCardModal, { type CardOwner, type Pose, type Rect } from "./LayerCardModal";
-
-const modes: { id: Mode; title: string; detail: string }[] = [
-  {
-    id: "whitelabel",
-    title: "Work with your team",
-    detail:
-      "I work in your repository and tools, with an agreed scope, review points and written updates.",
-  },
-  {
-    id: "referral",
-    title: "Introduce a project",
-    detail:
-      "Introduce me to the people who need the software. I clarify the requirements with them and agree on scope, milestones and updates.",
-  },
-];
 
 const DEFAULT_SPIN = -38;
 const DEFAULT_TILT = 58;
@@ -111,8 +96,10 @@ const clampDrawer = (shift: HTMLElement, requested: number, limit: ReturnType<ty
   return { applied, limit: best };
 };
 
-export default function AgencyStack() {
-  const [mode, setMode] = useState<Mode>("whitelabel");
+// The top layer always shows the team card; the old mode switch is gone.
+const mode: Mode = "whitelabel";
+
+export default function LayerStack({ aside }: { aside?: ReactNode }) {
   const [selected, setSelected] = useState<string>("backend");
   const [openId, setOpenId] = useState<string | null>(null);
   const [from, setFrom] = useState<Rect | null>(null);
@@ -380,33 +367,8 @@ export default function AgencyStack() {
   const openSlab = deck.find((s) => s.card.id === openId) ?? null;
 
   return (
-    <div className="agency-layout grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
-      <div className="flex flex-col gap-3 lg:pt-6">
-        <div role="radiogroup" aria-label="How we work together" className="flex flex-col gap-3">
-          {modes.map((m, i) => {
-            const on = mode === m.id;
-            return (
-              <button
-                key={m.id}
-                type="button"
-                role="radio"
-                aria-checked={on}
-                onClick={() => setMode(m.id)}
-                className={`rounded-2xl border p-6 text-left transition-[border-color,background-color,box-shadow] duration-200 sm:p-7 ${
-                  on ? "border-accent bg-surface shadow-[var(--card-shadow)]" : "border-border hover:border-foreground/30"
-                }`}
-              >
-                <span className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-sm text-accent">0{i + 1}</span>
-                  <span className={`h-4 w-4 rounded-full border-2 transition-colors ${on ? "border-accent bg-accent" : "border-border"}`} aria-hidden />
-                </span>
-                <span className="mt-4 block text-xl font-semibold tracking-tight text-foreground">{m.title}</span>
-                <span className="mt-2 block text-pretty text-base leading-relaxed text-muted">{m.detail}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+    <div className="stack-layout grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className="flex flex-col gap-3 lg:pt-6">{aside}</div>
 
       <div>
         <div className="stack-hints flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted">

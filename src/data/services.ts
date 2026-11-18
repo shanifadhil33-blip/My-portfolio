@@ -238,6 +238,6 @@ export const techLayers = [
   { layer: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Three.js"] },
   { layer: "Backend", items: ["Node.js", "Python", "Auth.js", "Zod"] },
   { layer: "Data", items: ["Postgres", "Supabase", "Neon", "Drizzle", "pgvector", "SQLite"] },
-  { layer: "AI", items: ["Gemini", "Groq", "OpenRouter", "Whisper"] },
+  { layer: "AI", items: ["AI agent orchestration", "Gemini", "Groq", "OpenRouter", "Whisper"] },
   { layer: "Infrastructure", items: ["Vercel", "Cloudflare", "GitHub Actions"] },
 ];

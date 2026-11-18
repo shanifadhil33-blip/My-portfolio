@@ -15,12 +15,12 @@ export const WHATSAPP_URL = "https://wa.me/971504874729";
 
 export const GITHUB_URL = "https://github.com/shanifadhil33-blip";
 
-export const ROLE = "Full-stack product builder";
+export const ROLE = "Full-stack software engineer";
 
-export const HEADLINE = "I build and ship complete software products.";
+export const HEADLINE = "I design, build and ship complete software products.";
 
 export const SUBHEADLINE =
-  "Web apps, backends, integrations and AI features, from scope to a tested, deployed product. Based in Dubai, working remotely with teams and founders.";
+  "Full-stack software engineer and architect. From system design and data to security and deployment, I own the whole build and hand back a finished product.";
 
 export const PAGE_TITLE = "Adhil Shanif | Software and AI products";
 
