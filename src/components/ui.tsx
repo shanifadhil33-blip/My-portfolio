@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-/** "(01) Agency partnerships": numbered circle plus an outlined pill. */
+/** "(01) Work": numbered circle plus an outlined pill. */
 export function SectionLabel({ n, children, center = false }: { n: string; children: React.ReactNode; center?: boolean }) {
   return (
     <p className={`flex items-center gap-3 ${center ? "justify-center" : ""}`}>

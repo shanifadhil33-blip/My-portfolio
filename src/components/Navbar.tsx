@@ -3,12 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
-  { label: "What I take on", href: "#agencies" },
-  { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "How I work", href: "#how-i-work" },
-  { label: "Capabilities", href: "#capabilities" },
-  { label: "AI systems", href: "#ai-team" },
+  { label: "What I build", href: "#services" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ];
@@ -67,7 +64,7 @@ export default function Navbar() {
           <span className="hidden sm:inline">Adhil Shanif</span>
         </a>
 
-        <div className="hidden items-center gap-0.5 xl:flex">
+        <div className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -87,7 +84,7 @@ export default function Navbar() {
           id="mobile-menu-toggle"
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70 xl:hidden"
+          className="flex h-11 w-11 items-center justify-center text-muted transition-colors duration-150 hover:text-foreground active:opacity-70 lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-menu"
@@ -98,7 +95,7 @@ export default function Navbar() {
       </div>
 
       {/* Always mounted so it can grow down from under the bar and back. */}
-      <div id="mobile-menu" className="mobile-panel xl:hidden" aria-hidden={!mobileOpen} inert={!mobileOpen}>
+      <div id="mobile-menu" className="mobile-panel lg:hidden" aria-hidden={!mobileOpen} inert={!mobileOpen}>
           <div className="menu-rows">
             {navLinks.map((link) => (
               <a

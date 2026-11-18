@@ -1,13 +1,10 @@
-// Direction: clean agency editorial. Dark and light zones alternate, one sky accent, CSS 3D where it explains something.
+// Direction: clean editorial. Dark and light zones alternate, one sky accent, CSS 3D where it explains something.
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Agencies from "@/components/Agencies";
 import WhatIBuild from "@/components/WhatIBuild";
 import Work from "@/components/Work";
 import HowIWork from "@/components/HowIWork";
-import AiCapabilities from "@/components/AiCapabilities";
-import AiTeam from "@/components/AiTeam";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import JsonLd from "@/components/JsonLd";
@@ -24,12 +21,9 @@ export default function Home() {
       <Navbar />
       <main id="main" className="flex-1">
         <Hero />
-        <Agencies />
-        <WhatIBuild />
         <Work />
         <HowIWork />
-        <AiCapabilities />
-        <AiTeam />
+        <WhatIBuild />
         <About />
         <Contact />
       </main>

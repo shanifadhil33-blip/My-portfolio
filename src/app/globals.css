@@ -2,7 +2,7 @@
 @custom-variant short (@media (max-height: 640px));
 @custom-variant wide-tall (@media (min-width: 1024px) and (min-height: 641px));
 
-/* Direction: clean agency editorial. Near-black and off-white zones alternate; one sky accent.
+/* Direction: clean editorial. Near-black and off-white zones alternate; one sky accent.
    Components read tokens only, so a section flips theme by adding .zone-light or .zone-dark. */
 :root,
 .zone-dark {
@@ -246,13 +246,9 @@ button:disabled {
 .face-back { position: absolute; inset: 0; transform: rotateY(180deg); }
 
 /* ---------- 3D: flip cards ---------- */
-.flipcard { perspective: 1400px; }
-.flipcard-inner { display: grid; transform-style: preserve-3d; transition: transform 700ms cubic-bezier(.2,.7,.2,1); }
-.flipcard-inner > .face { grid-area: 1 / 1; }
-.flipcard-inner > .face-back { position: relative; inset: auto; }
 /* Rotation is driven by useSwipeFlip (swipe, tap or button). */
 
-/* ---------- 3D: agency layer stack ----------
+/* ---------- 3D: layer stack ----------
    Closed rounded boxes: inset straight walls and chord-matched corner walls. */
 /* Animate the inputs, then clamp the resulting pose on every frame. Animating
    the final transform could carry a pulled slab through an opening neighbour. */
@@ -348,12 +344,6 @@ button:disabled {
 .card3d-inner > .face-back { position: relative; inset: auto; transform: rotateY(180deg); }
 
 /* ---------- Progress and loop ---------- */
-.track-fill { transform-origin: left center; transform: scaleX(var(--p, 0)); transition: transform 120ms linear; }
-.track-fill-y { transform-origin: center top; transform: scaleY(var(--p, 0)); transition: transform 120ms linear; }
-@keyframes travel { from { left: 0%; } to { left: 100%; } }
-@keyframes travel-y { from { top: 0%; } to { top: 100%; } }
-.pulse-x { animation: travel 4.5s cubic-bezier(.45,0,.55,1) infinite; }
-.pulse-y { animation: travel-y 4.5s cubic-bezier(.45,0,.55,1) infinite; }
 
 /* ---------- Entrance ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -363,31 +353,10 @@ button:disabled {
 .lift { animation: lift 800ms cubic-bezier(.2,.7,.2,1) both; }
 
 @media (prefers-reduced-motion: reduce) {
-  .flipcard-inner, .slab-stack, .slab, .slab-shift, .slab-top, .slab-side, .coin, .card3d-inner { transition-duration: 1ms !important; }
-  .pulse-x, .pulse-y { animation: none !important; display: none; }
+  .slab-stack, .slab, .slab-shift, .slab-top, .slab-side, .coin, .card3d-inner { transition-duration: 1ms !important; }
   .rise, .lift { animation: none !important; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .cap-card {
-    animation: cap-rise linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 42%;
-    animation-duration: 1ms;
-  }
-}
-@keyframes cap-rise { from { transform: translateY(12px); } to { transform: none; } }
-
-#ai-team :focus,
-#capabilities :focus { outline: none; }
-#ai-team :focus-visible,
-#capabilities :focus-visible {
-  outline: 1px solid var(--accent);
-  outline-offset: 3px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .cap-card { animation: none !important; transform: none !important; }
-}
 
 .cap-line { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 8px; padding: 0; list-style: none; }
 .cap-line li { position: relative; text-align: center; }
@@ -421,23 +390,17 @@ button:disabled {
   background: color-mix(in srgb, var(--accent) 55%, transparent);
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .cap-card-body { transition: transform 180ms cubic-bezier(.2, .7, .2, 1); }
-  .cap-card:hover .cap-card-body { transform: translateY(-3px); }
 }
 
 /* Media budgets leave room for the text and controls in the same block. */
-.cap-card-body > img { height: auto; max-height: min(36svh, 20rem); }
 .project-card-media { max-height: 28svh; }
 .project-card-media > img { max-height: inherit; }
-.ai-video-card { width: min(100%, calc(58svh * 16 / 9)); }
-.ai-video-card > video { max-height: 58svh; }
 .project-modal-media :is(img, video) { max-height: 54svh; object-fit: contain; }
 .project-modal-media img { width: auto; max-width: 100%; margin-inline: auto; }
 .mobile-panel { max-height: calc(100svh - 4rem); overflow-y: auto; overscroll-behavior-y: contain; }
 .layer-modal { overflow-y: auto; overscroll-behavior-y: contain; }
 .layer-modal .lift-wrap { margin-block: auto; }
 .stack-hints > span > svg { flex-shrink: 0; }
-.flipcard .face > div:last-child { flex-wrap: wrap; }
 
 @media (max-width: 640px) {
   #main > section:not(#hero) { padding-block: 4rem; }
@@ -456,16 +419,10 @@ button:disabled {
   .project-card-openable .project-card-body p { font-size: .875rem; line-height: 1.5; }
   .project-card-openable .project-card-body .mt-4 { margin-top: .75rem; }
   .project-card-link { padding: 0 1rem 1rem; }
-  .cap-card-body > img { max-height: 30svh; }
-  .cap-card-body > div { padding: 1.25rem; }
-  .cap-card-body h3 { font-size: 1.375rem; }
-  .cap-card-body p { margin-top: .75rem; font-size: 1rem; line-height: 1.5; }
   .client-review { padding: 1.25rem; }
   .client-review blockquote { font-size: .875rem; line-height: 1.5; }
   .about-copy { font-size: 1rem; line-height: 1.5; }
   .about-copy > p:first-child { font-size: 1.125rem; }
-  .about-facts > div { padding-block: 1.25rem; }
-  .about-facts dt { font-size: 1.5rem; }
   .contact-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-links a { padding: .75rem; min-height: 3.5rem; }
   #contact footer { margin-top: 3rem; }
@@ -484,10 +441,6 @@ button:disabled {
   }
   .section-head > h2 { margin-top: 1rem; font-size: clamp(1.875rem, 6.5svh, 2.75rem); line-height: 1.06; }
   .section-head > p:last-child:not(:first-child) { margin-top: .875rem; font-size: 1rem; line-height: 1.5; }
-  .cap-card-body > img { max-height: 32svh; }
-  .cap-card-body > div { padding: 1.25rem; }
-  .cap-card-body h3 { font-size: 1.375rem; line-height: 1.25; }
-  .cap-card-body p { margin-top: .75rem; font-size: 1rem; line-height: 1.5; }
   .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project-card-openable .project-card-media { max-height: 20svh; }
   .project-card-openable .project-card-body { padding: 1rem; }
@@ -497,25 +450,9 @@ button:disabled {
   .client-review { padding: 1.25rem; }
   .client-review blockquote { margin-top: .75rem; font-size: .875rem; line-height: 1.5; }
   .client-review figcaption { padding-top: .75rem; }
-  .ai-workflow-steps { gap: 1.5rem 2rem; }
-  .ai-walkthrough h3 { font-size: 1.5rem; }
-  .ai-walkthrough p { font-size: 1rem; line-height: 1.5; }
-  .agency-layout [role="radio"] { padding: 1.25rem; }
-  .agency-layout [role="radio"] span.mt-4 { margin-top: .75rem; }
-  .flipcard-inner { min-height: 20rem; }
-  .flipcard .face { padding: 1.25rem; }
-  .flipcard h3 { margin-top: 1.5rem; font-size: 1.375rem; }
-  .flipcard .face > div:last-child { margin-top: 1.25rem; }
-  .build-grid > li { padding: 1rem; gap: .75rem; }
-  .verification-layout, .about-layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  .verification-layout > div, .about-layout > * { grid-column: auto; }
-  .verification-layout > div:last-child { padding-top: 3.5rem; }
   .about-copy { font-size: 1rem; line-height: 1.5; }
   .about-copy > p:first-child { font-size: 1.125rem; }
   .about-copy > * + * { margin-top: 1rem; }
-  .about-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; }
-  .about-facts > div { padding-block: 1.25rem; }
-  .about-facts dt { font-size: 1.5rem; }
   .contact-layout { column-gap: 2rem; }
   .contact-links { gap: .5rem; padding-top: 0; }
   .contact-links a { min-height: 3rem; padding-block: .625rem; }
@@ -548,11 +485,6 @@ button:disabled {
   .section-head > h2 { margin-top: .75rem; }
   .section-head > p:last-child:not(:first-child) { margin-top: .75rem; }
   .stack-hints { column-gap: .5rem; font-size: 11px; }
-  .cap-card-body > img { max-height: 30svh; }
-  .cap-card-body > div { padding: 1rem; }
-  .cap-card-body h3 { font-size: 1.25rem; }
-  .ai-video-card { width: min(100%, calc(50svh * 16 / 9)); margin-top: 1.25rem; }
-  .ai-video-card > video { max-height: 50svh; }
   .project-modal-media :is(img, video) { max-height: 32svh; }
   .project-grid, .review-grid { grid-template-columns: minmax(0, 1fr); }
   /* A wide text column fits the full outcome without shrinking the touch targets. */
@@ -565,12 +497,7 @@ button:disabled {
   .project-card-openable .project-card-body p { line-height: 1.4; }
   .client-review { padding: 1rem 1.25rem; }
   .client-review blockquote { line-height: 1.45; }
-  .flipcard-inner { min-height: 18rem; }
-  .flipcard h3 { margin-top: 1rem; font-size: 1.25rem; }
-  .flipcard .face p:not(:first-child), .flipcard .face li { font-size: .875rem; line-height: 1.45; }
-  .flipcard .face ul { margin-top: 1rem; }
   .stage-panel { padding: 1.25rem; }
-  .stage-detail { gap: 1rem; }
   .contact-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-links a { padding-inline: .75rem; }
   .lift-wrap .face > div { padding: 1rem 1.25rem; }
