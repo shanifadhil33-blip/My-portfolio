@@ -8,7 +8,7 @@ export default function About() {
         <SectionHead id="about-title" n="04" label="About" title="Adhil Shanif." />
         <div className="about-copy mt-10 max-w-3xl space-y-5">
           <p className="text-pretty text-xl font-medium leading-relaxed text-foreground sm:text-2xl">
-            I build complete products by directing AI coding agents, and I own the scope, the testing, the GitHub repositories and the deployment on Vercel, Cloudflare and Supabase. I&apos;m based in Dubai and work remotely, from an idea, a specification or an existing app that needs fixing. Code, accounts and infrastructure belong to the client from day one.
+            I&apos;m a full-stack software engineer based in Dubai. I take a product from an idea, a specification or an existing app that needs fixing to a finished, deployed system. I own the architecture, the build, the testing and the deployment, and I pick the stack each project actually needs. Code, accounts and infrastructure belong to the client from day one.
           </p>
           <a
             href={UPWORK_URL}
