@@ -57,7 +57,6 @@ const contactCards = [
 ];
 
 const footerLinks = [
-  { label: "Working together", href: "/partners" },
   { label: "Services", href: "/services" },
   { label: "Work", href: "/#work" },
   { label: "How I work", href: "/#how-i-work" },
@@ -83,7 +82,7 @@ export default function Contact() {
           <div className="order-3 lg:col-span-6 lg:row-start-2 lg:mt-10">
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <PillLink href="/brief">Discuss a project</PillLink>
-              <GhostLink href="/brief?type=agency">Get in touch</GhostLink>
+              <GhostLink href="/brief">Get in touch</GhostLink>
             </div>
             <p className="mt-8 flex items-center gap-2.5 text-muted">
               <Mail size={16} aria-hidden />

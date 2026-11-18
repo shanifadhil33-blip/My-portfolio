@@ -4,13 +4,12 @@ import { PillLink } from "@/components/ui";
 import { namedClientProjects } from "@/data/clientWork";
 import { shareMeta, UPWORK_URL } from "@/lib/site";
 
-// The short agency landing is linked from the footer and listed in the sitemap.
-// It should be indexed.
+// Older landing page, no longer linked or in the sitemap (Nov 18 2026). Kept but not indexed.
 export const metadata: Metadata = {
   title: "Working Together on Software",
   description:
     "I work with teams, founders and businesses on web apps, backends, integrations and AI features, with agreed scope, milestones and written updates.",
-  robots: { index: true, follow: true },
+  robots: { index: false, follow: true },
   ...shareMeta(
     "Working Together on Software",
     "Web apps, backends, integrations and AI features, with agreed scope, milestones and written updates.",
