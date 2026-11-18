@@ -43,7 +43,7 @@
 
 /* Section grounds (Nov 18 2026), measured from the reference page's computed CSS.
    Light: #efefef with a sky tint top right (ellipse 78% 58% at 84% 0, 17%) and a warm tint top left
-   (ellipse 58% 44% at 4% 2%, 12%), plus two thin 1px rings (520px circle off the top right corner,
+   (ellipse 58% 44% at 4% 2%, 12%), both on a hero sized 1000px box so tall sections keep the same proportions, plus two thin 1px rings (520px circle off the top right corner,
    320px circle off the left edge) at 8% ink. Dark: pure black with one sky aura in the top right corner
    (ellipse 58% 50% at 95% 0, 22%). Every section starts with a 1px sky to coral hairline.
    All painted as background layers: no pseudo elements, no overflow, nothing animates. */
@@ -54,9 +54,10 @@ section.zone-light {
     var(--hairline) top / 100% 1px no-repeat,
     radial-gradient(circle at calc(100% - 40px) 0, transparent 259.5px, rgba(17, 24, 39, 0.08) 260px, transparent 261px),
     radial-gradient(circle at -20px 380px, transparent 159.5px, rgba(17, 24, 39, 0.08) 160px, transparent 161px),
-    radial-gradient(ellipse 78% 58% at 84% 0%, rgba(55, 189, 248, 0.17), transparent 68%),
-    radial-gradient(ellipse 58% 44% at 4% 2%, rgba(255, 138, 92, 0.12), transparent 70%),
-    #efefef;
+    radial-gradient(ellipse 78% 58% at 84% 0%, rgba(55, 189, 248, 0.17), transparent 68%) top / 100% 1000px no-repeat,
+    radial-gradient(ellipse 58% 44% at 4% 2%, rgba(255, 138, 92, 0.12), transparent 70%) top / 100% 1000px no-repeat,
+    linear-gradient(180deg, #efefef 0, #efefef 900px, #f7f8f9 1600px),
+    #f7f8f9;
 }
 section.zone-dark {
   background:
