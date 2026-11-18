@@ -5,7 +5,7 @@ const steps = ["Plan", "Build", "Test", "Learn"] as const;
 
 const lines = [
   "I plan the data model, roles and business rules before anything is built.",
-  "AI coding agents work from written tasks, with limits on what they can change.",
+  "Every part of the build starts from a written task, and I review each change before it ships.",
   "I test the main workflows myself and check every fix again.",
   "It ships to your accounts with monitoring and a written handover.",
 ];
