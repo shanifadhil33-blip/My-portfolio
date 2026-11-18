@@ -8,7 +8,7 @@ export function SectionLabel({ n, children, center = false }: { n: string; child
       <span className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground font-mono text-sm text-background">
         {n}
       </span>
-      <span className="inline-flex h-10 items-center rounded-full border border-foreground/25 px-4 text-sm text-foreground">
+      <span className="inline-flex h-10 items-center rounded-full border border-foreground/25 px-4 font-mono text-xs font-bold tracking-[0.3em] text-accent uppercase">
         {children}
       </span>
     </p>
@@ -34,11 +34,11 @@ export function SectionHead({
   return (
     <header className={`section-head ${center ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}`}>
       <SectionLabel n={n} center={center}>{label}</SectionLabel>
-      <h2 id={id} className="mt-8 text-balance text-[length:clamp(2.1rem,min(4.6vw,8.5svh),3.5rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-foreground">
+      <h2 id={id} className="mt-6 font-display text-balance text-[length:clamp(1.875rem,min(4vw,8svh),3rem)] font-normal italic leading-[1.15] tracking-normal text-foreground">
         {title}
       </h2>
       {lead ? (
-        <p className={`mt-6 text-pretty text-lg leading-relaxed text-muted sm:text-xl ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}>
+        <p className={`mt-6 text-pretty text-base leading-6 text-muted sm:text-lg sm:leading-7 ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}>
           {lead}
         </p>
       ) : null}
