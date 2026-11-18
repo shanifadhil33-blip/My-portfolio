@@ -6,11 +6,11 @@
    Components read tokens only, so a section flips theme by adding .zone-light or .zone-dark. */
 :root,
 .zone-dark {
-  --background: #05070a;
-  --surface: #0b1219;
-  --foreground: #eef2f6;
-  --muted: #93a0ae;
-  --border: #1d2733;
+  --background: #000000;
+  --surface: #0c161f;
+  --foreground: #f3f6fa;
+  --muted: #aab4c0;
+  --border: #273440;
   --accent: #38bdf8;
   --accent-hover: #7dd3fc;
   --accent-pressed: #0ea5e9;
@@ -21,15 +21,15 @@
 }
 
 .zone-light {
-  --background: #f4f6f8;
+  --background: #efefef;
   --surface: #ffffff;
-  --foreground: #0b1220;
-  --muted: #536071;
-  --border: #dbe2ea;
+  --foreground: #111827;
+  --muted: #566273;
+  --border: #dce2e8;
   --accent: #026fa9;
   --accent-hover: #03649a;
   --accent-pressed: #024f7a;
-  --card-shadow: 0 18px 40px -26px rgba(15, 30, 50, 0.28);
+  --card-shadow: 0 22px 70px -24px rgba(7, 18, 28, 0.16);
   color-scheme: light;
 }
 
@@ -39,6 +39,38 @@
 .zone-dark {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Section grounds (Nov 18 2026), measured from the reference page's computed CSS.
+   Light: #efefef with a sky tint top right (ellipse 78% 58% at 84% 0, 17%) and a warm tint top left
+   (ellipse 58% 44% at 4% 2%, 12%), both on a hero sized 1000px box so tall sections keep the same proportions, plus two thin 1px rings (520px circle off the top right corner,
+   320px circle off the left edge) at 8% ink. Dark: pure black with one sky aura in the top right corner
+   (ellipse 58% 50% at 95% 0, 22%). Every section starts with a 1px sky to coral hairline.
+   All painted as background layers: no pseudo elements, no overflow, nothing animates. */
+section.zone-light,
+section.zone-dark { --hairline: linear-gradient(90deg, transparent, rgba(55, 189, 248, 0.55), rgba(255, 138, 92, 0.4), transparent); }
+section.zone-light {
+  background:
+    var(--hairline) top / 100% 1px no-repeat,
+    radial-gradient(circle at calc(100% - 40px) 0, transparent 259.5px, rgba(17, 24, 39, 0.08) 260px, transparent 261px),
+    radial-gradient(circle at -20px 380px, transparent 159.5px, rgba(17, 24, 39, 0.08) 160px, transparent 161px),
+    radial-gradient(ellipse 78% 58% at 84% 0%, rgba(55, 189, 248, 0.17), transparent 68%) top / 100% 1000px no-repeat,
+    radial-gradient(ellipse 58% 44% at 4% 2%, rgba(255, 138, 92, 0.12), transparent 70%) top / 100% 1000px no-repeat,
+    linear-gradient(180deg, #efefef 0, #efefef 900px, #f7f8f9 1600px),
+    #f7f8f9;
+}
+section.zone-dark {
+  background:
+    var(--hairline) top / 100% 1px no-repeat,
+    radial-gradient(ellipse 58% 50% at 95% 0%, rgba(55, 189, 248, 0.22), transparent 70%),
+    #000000;
+}
+section#hero.zone-dark { background: radial-gradient(ellipse 58% 50% at 95% 0%, rgba(55, 189, 248, 0.22), transparent 70%), #000000; }
+section#contact.zone-dark {
+  background:
+    var(--hairline) top / 100% 1px no-repeat,
+    radial-gradient(ellipse 54% 48% at 4% 0%, rgba(255, 138, 92, 0.18), transparent 70%),
+    #000000;
 }
 
 @theme inline {
@@ -54,6 +86,7 @@
   --color-accent-ink: var(--accent-ink);
   --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-dm-mono);
+  --radius-2xl: 1.125rem;
 }
 
 body {
@@ -220,8 +253,9 @@ button:disabled {
 
 /* ---------- Editorial pieces ---------- */
 
-/* Soft teal light in one corner of a dark zone. Decorative only. */
+/* Corner light now comes from the aura layer on section.zone-dark (Nov 18 2026); kept for other pages. */
 .glow { position: relative; isolation: isolate; overflow: hidden; }
+section.glow::before { display: none; }
 .glow::before {
   content: ""; position: absolute; z-index: -1; pointer-events: none;
   width: 70vmax; height: 70vmax; right: -28vmax; top: -34vmax; border-radius: 9999px;

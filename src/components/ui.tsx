@@ -34,11 +34,11 @@ export function SectionHead({
   return (
     <header className={`section-head ${center ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}`}>
       <SectionLabel n={n} center={center}>{label}</SectionLabel>
-      <h2 id={id} className="mt-8 text-balance text-[length:clamp(2.1rem,min(4.6vw,8.5svh),3.5rem)] font-semibold leading-[1.04] tracking-[-0.035em] text-foreground">
+      <h2 id={id} className="mt-7 text-balance text-[length:clamp(2rem,min(4.6vw,8.5svh),3.375rem)] font-medium leading-[1.13] tracking-[-0.035em] text-foreground">
         {title}
       </h2>
       {lead ? (
-        <p className={`mt-6 text-pretty text-lg leading-relaxed text-muted sm:text-xl ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}>
+        <p className={`mt-5 text-pretty text-[19px] leading-[1.75] text-muted ${center ? "mx-auto max-w-2xl" : "max-w-2xl"}`}>
           {lead}
         </p>
       ) : null}

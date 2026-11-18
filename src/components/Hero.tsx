@@ -12,27 +12,26 @@ const proof = [
 export default function Hero() {
   return (
     <section id="hero" aria-labelledby="hero-title" className="zone-dark glow relative">
-      <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden />
       <div className="hero-layout relative mx-auto grid min-h-[100svh] max-w-6xl grid-cols-1 items-center gap-14 px-5 pt-28 pb-16 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:pt-[clamp(5rem,13svh,6rem)] lg:pb-[clamp(1.5rem,5svh,4rem)]">
         <div className="hero-copy min-w-0 lg:col-span-7 @container">
-          <p className="rise flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs tracking-[0.16em] text-muted uppercase" style={{ "--d": 0 } as React.CSSProperties}>
+          <p className="rise flex flex-wrap items-center gap-x-3 gap-y-1 text-xs leading-[1.65] font-bold tracking-[0.13em] text-accent uppercase" style={{ "--d": 0 } as React.CSSProperties}>
             <span className="text-accent">Adhil Shanif</span>
-            <span aria-hidden className="h-px w-6 bg-border" />
+            <span aria-hidden className="h-px w-6 bg-accent/40" />
             <span>Full-stack software engineer · Dubai</span>
           </p>
 
           <h1
             id="hero-title"
-            className="lift mt-7 lg:mt-[clamp(1rem,3svh,1.75rem)] text-balance text-[length:clamp(3rem,min(10.6cqi,11svh),6.4rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-foreground"
+            className="lift mt-[18px] lg:mt-[clamp(0.75rem,2.2svh,1.125rem)] text-balance text-[length:clamp(2.4375rem,min(10.6cqi,11svh),4.375rem)] font-medium leading-[1.06] tracking-[-0.045em] text-foreground"
           >
             {HEADLINE}
           </h1>
 
-          <p className="rise mt-7 lg:mt-[clamp(0.875rem,3svh,1.75rem)] max-w-xl text-pretty text-lg leading-relaxed text-muted sm:text-xl lg:text-[length:clamp(1rem,2.6svh,1.25rem)]" style={{ "--d": 2 } as React.CSSProperties}>
+          <p className="rise mt-[26px] lg:mt-[clamp(0.875rem,3svh,1.625rem)] max-w-xl text-pretty text-[length:clamp(1.0625rem,2vw,1.3125rem)] leading-[1.65] text-muted lg:text-[length:clamp(1rem,2.6svh,1.3125rem)]" style={{ "--d": 2 } as React.CSSProperties}>
             {SUBHEADLINE}
           </p>
 
-          <div className="hero-actions rise mt-10 lg:mt-[clamp(1.25rem,4.5svh,2.5rem)] flex flex-col gap-3 sm:flex-row sm:items-center" style={{ "--d": 3 } as React.CSSProperties}>
+          <div className="hero-actions rise mt-[42px] lg:mt-[clamp(1.25rem,4.5svh,2.625rem)] flex flex-col gap-3 sm:flex-row sm:items-center" style={{ "--d": 3 } as React.CSSProperties}>
             <PillLink href="/brief">Start a project</PillLink>
             <GhostLink href="#work">
               See delivered work <ArrowDown size={16} aria-hidden />
