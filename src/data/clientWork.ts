@@ -43,12 +43,11 @@ export const clientCaseStudies: ClientCaseStudy[] = [
     highlights: [
       "A rules engine picks a shortlist of one to four.",
       "AI explanations cite only verified sources that are still current.",
-      "The server checks each explanation before it is shown, with a plain fallback when the evidence is thin.",
       "586 passing unit tests.",
     ],
-    stack: ["Next.js", "Supabase Postgres", "OpenAI", "Sentry", "Vercel"],
+    stack: ["Next.js", "Postgres", "LLM integration", "Error monitoring"],
     relationship:
-      "Repeat client. A second contract followed, and it grew when he added another branded site and the AI explanations.",
+      "Repeat client. A second contract followed, and it grew when I added another branded site and the cited explanations.",
   },
   {
     id: "vision-screening",
@@ -57,12 +56,11 @@ export const clientCaseStudies: ClientCaseStudy[] = [
     summary: "A home screening of glasses or lenses for 6/6 vision. Never a diagnosis.",
     highlights: [
       "True size calibration with a bank card, to within one pixel on Chrome, Firefox and Safari.",
-      "The laptop shows the chart and the phone is the answer pad, paired by a QR code and kept in sync.",
       "An ISO Landolt C test for staff, where guessing alone passes one time in 64.",
-      "437 unit tests, and a feasibility prototype ready on the deadline day.",
+      "437 unit tests.",
     ],
-    stack: ["Next.js", "TypeScript", "Supabase Postgres", "Vercel"],
+    stack: ["Next.js", "TypeScript", "Postgres"],
     relationship:
-      "Repeat client. We were already working together on another platform, and after feasibility the work grew into nine milestones, then one more.",
+      "Repeat client. I was already working with them on another platform, and after feasibility the work grew into nine milestones, then one more.",
   },
 ];
