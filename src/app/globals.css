@@ -318,6 +318,17 @@ section.glow::before { display: none; }
 .slab[data-dragging="true"] .slab-shift { transition: none; }
 /* Lifted out: the slab rises and fades while the card flies in. */
 .slab[data-out="true"] { --exit: 120px; --face-opacity: 0; transition-duration: 500ms; }
+/* Return: the layer is already back in its slot. JS sets --exit and the face opacity.
+   These rules keep that pose if a stylesheet transition would otherwise lift it again. */
+.slab[data-returning="true"] {
+  --exit: 0px;
+  --press: 0px;
+  transition: none !important;
+}
+.slab[data-returning="true"] .slab-shift {
+  transform: translateX(0px) !important;
+  transition: none !important;
+}
 @media (hover: hover) and (pointer: fine) { .slab:hover { --press: 10px; } }
 .slab-top, .slab-side {
   position: absolute; pointer-events: auto; cursor: pointer;

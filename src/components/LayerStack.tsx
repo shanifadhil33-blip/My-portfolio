@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, Move3d, RotateCcw } from "lucide-react";
 import { agencyLayer, engineeringLayers, wholeBuild, type LayerCard, type Mode } from "@/data/agencyLayers";
 import LayerCardModal, { type CardOwner, type Pose, type Rect } from "./LayerCardModal";
@@ -184,7 +184,9 @@ export default function LayerStack({ aside }: { aside?: ReactNode }) {
   };
 
   const openIdRef = useRef<string | null>(null);
-  useEffect(() => { openIdRef.current = openId; }, [openId]);
+  openIdRef.current = openId;
+  // The layer whose card is flying home. Its slab is already in the home slot, hidden.
+  const returningId = useRef<string | null>(null);
   const step = useCallback((dir: -1 | 1) => {
     const cur = openIdRef.current;
     if (!cur) return;
@@ -286,6 +288,45 @@ export default function LayerStack({ aside }: { aside?: ReactNode }) {
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
+  // After the flying card unmounts, reveal the home slab in the pose it already holds.
+  // Doing this before paint avoids a frame where the layer is still lifted or slid out.
+  useLayoutEffect(() => {
+    if (openId) return;
+    const id = returningId.current;
+    if (!id) return;
+    returningId.current = null;
+    const slab = stackRef.current?.querySelector<HTMLElement>(`[data-layer="${id}"]`);
+    if (!slab) return;
+    const shift = slab.querySelector<HTMLElement>(".slab-shift");
+    const faces = [...slab.querySelectorAll<HTMLElement>(".slab-top, .slab-side")];
+    // data-out is already gone. Drop the inline hold without letting --exit or opacity animate.
+    slab.style.transition = "none";
+    slab.style.removeProperty("--exit");
+    slab.style.removeProperty("--press");
+    if (shift) {
+      shift.style.transition = "none";
+      shift.style.transform = "";
+    }
+    faces.forEach((face) => {
+      face.style.transition = "none";
+      face.style.opacity = "1";
+    });
+    delete slab.dataset.returning;
+    delete slab.dataset.show;
+    delete slab.dataset.dragging;
+    slab.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        slab.style.transition = "";
+        if (shift) shift.style.transition = "";
+        faces.forEach((face) => {
+          face.style.transition = "";
+          face.style.opacity = "";
+        });
+      });
+    });
+  }, [openId]);
+
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     if (e.button !== 0 || !e.isPrimary || g.current) return;
     const layer = layerAtPoint(e.currentTarget, e.clientX, e.clientY);
@@ -362,6 +403,106 @@ export default function LayerStack({ aside }: { aside?: ReactNode }) {
     cancelGesture();
     view.current = { spin: DEFAULT_SPIN, tilt: DEFAULT_TILT };
     applyView(true);
+  };
+
+  // Commit every layer to its resting slot with no motion, then read where the open
+  // layer actually sits. The card animates to that rect. The slab stays hidden until it arrives.
+  const prepareReturn = (): { rect: Rect; pose: Pose } | null => {
+    const id = openIdRef.current;
+    const stack = stackRef.current;
+    if (!id || !stack) return null;
+    const slabs = [...stack.querySelectorAll<HTMLElement>(".slab")];
+    slabs.forEach((el) => {
+      el.style.transition = "none";
+      const shift = el.querySelector<HTMLElement>(".slab-shift");
+      if (shift) {
+        shift.style.transition = "none";
+        shift.style.transform = "translateX(0px)";
+      }
+      delete el.dataset.dragging;
+    });
+    movingDrawers.current.clear();
+    returnUntil.current.clear();
+    const slab = id === "whole" ? null : stack.querySelector<HTMLElement>(`[data-layer="${id}"]`);
+    if (slab) {
+      // Inline values beat the lifted-out rule, including while its @property transition is frozen.
+      slab.dataset.returning = "true";
+      slab.style.transition = "none";
+      slab.style.setProperty("--exit", "0px");
+      slab.style.setProperty("--press", "0px");
+      slab.querySelectorAll<HTMLElement>(".slab-top, .slab-side").forEach((face) => {
+        face.style.transition = "none";
+        face.style.opacity = "0";
+      });
+    }
+    stack.getBoundingClientRect();
+    const rect = rectOf(id);
+    const pose = poseNow();
+    slabs.forEach((el) => {
+      if (el === slab) return;
+      el.style.transition = "";
+      const shift = el.querySelector<HTMLElement>(".slab-shift");
+      if (shift) {
+        shift.style.transition = "";
+        shift.style.transform = "";
+      }
+    });
+    if (!rect) {
+      if (slab) delete slab.dataset.returning;
+      return null;
+    }
+    returningId.current = id;
+    return { rect, pose };
+  };
+
+  const parkAll = () => {
+    const stack = stackRef.current;
+    if (!stack) return;
+    const slabs = [...stack.querySelectorAll<HTMLElement>(".slab")];
+    slabs.forEach((slab) => {
+      slab.style.transition = "none";
+      slab.style.setProperty("--exit", "0px");
+      slab.style.setProperty("--press", "0px");
+      const shift = slab.querySelector<HTMLElement>(".slab-shift");
+      if (shift) {
+        shift.style.transition = "none";
+        shift.style.transform = "";
+      }
+      delete slab.dataset.dragging;
+      delete slab.dataset.returning;
+      delete slab.dataset.show;
+    });
+    movingDrawers.current.clear();
+    returnUntil.current.clear();
+    stack.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      slabs.forEach((slab) => {
+        slab.style.transition = "";
+        slab.style.removeProperty("--exit");
+        slab.style.removeProperty("--press");
+        const shift = slab.querySelector<HTMLElement>(".slab-shift");
+        if (shift) shift.style.transition = "";
+      });
+    });
+  };
+
+  const handleClose = () => {
+    // Reduced motion skips the flight, so the layer has to be parked before it reappears.
+    if (!returningId.current) parkAll();
+    setOpenId(null);
+    setFrom(null);
+  };
+
+  const revealReturn = () => {
+    const id = returningId.current;
+    if (!id) return;
+    const slab = stackRef.current?.querySelector<HTMLElement>(`[data-layer="${id}"]`);
+    if (!slab) return;
+    slab.dataset.show = "true";
+    slab.querySelectorAll<HTMLElement>(".slab-top, .slab-side").forEach((face) => {
+      face.style.transition = "none";
+      face.style.opacity = "1";
+    });
   };
 
   const openSlab = deck.find((s) => s.card.id === openId) ?? null;
@@ -491,7 +632,9 @@ export default function LayerStack({ aside }: { aside?: ReactNode }) {
           from={from}
           pose={pose}
           onStep={step}
-          onClose={() => { setOpenId(null); setFrom(null); snapDrawer(); }}
+          prepareReturn={prepareReturn}
+          onReveal={revealReturn}
+          onClose={handleClose}
         />
       )}
     </div>

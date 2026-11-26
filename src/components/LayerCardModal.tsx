@@ -38,6 +38,8 @@ export default function LayerCardModal({
   pose,
   onClose,
   onStep,
+  prepareReturn,
+  onReveal,
 }: {
   card: LayerCard;
   owner: CardOwner;
@@ -47,6 +49,10 @@ export default function LayerCardModal({
   pose: Pose | null;
   onClose: () => void;
   onStep: (dir: -1 | 1) => void;
+  /** Fresh home slot, measured with the layer already back in the stack and still hidden. */
+  prepareReturn?: () => { rect: Rect; pose: Pose } | null;
+  /** Show the home layer as the flying card fades into it. */
+  onReveal?: () => void;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const liftRef = useRef<HTMLDivElement>(null);
@@ -60,16 +66,20 @@ export default function LayerCardModal({
   const back = backFor === card.id;
   const leaving = useRef(false);
   const reduce = useRef(false);
+  const prepareReturnRef = useRef(prepareReturn);
+  const onRevealRef = useRef(onReveal);
+  const onCloseRef = useRef(onClose);
+  const closeAction = useRef<() => void>(() => {});
 
-  /** The transform that puts the card back where the layer lay in the stack: same spot, tilt, spin and size. */
-  const inStack = (el: HTMLElement): string | null => {
-    if (!from || !pose) return null;
+  /** Same spot, tilt, spin and size as the layer in the stack. */
+  const flyTo = (el: HTMLElement, rect: Rect, at: Pose): string => {
     const r = el.getBoundingClientRect();
-    const dx = from.x + from.w / 2 - (r.left + r.width / 2);
-    const dy = from.y + from.h / 2 - (r.top + r.height / 2);
-    const scale = Math.max(0.2, pose.size / r.width);
-    return `translate(${dx}px, ${dy}px) rotateX(${pose.tilt}deg) rotateZ(${pose.spin}deg) scale(${scale})`;
+    const dx = rect.x + rect.w / 2 - (r.left + r.width / 2);
+    const dy = rect.y + rect.h / 2 - (r.top + r.height / 2);
+    const scale = Math.max(0.2, at.size / r.width);
+    return `translate(${dx}px, ${dy}px) rotateX(${at.tilt}deg) rotateZ(${at.spin}deg) scale(${scale})`;
   };
+  const inStack = (el: HTMLElement): string | null => (from && pose ? flyTo(el, from, pose) : null);
 
   // Pick up: the card starts lying in the stack and rises to face the viewer.
   useLayoutEffect(() => {
@@ -107,7 +117,7 @@ export default function LayerCardModal({
     document.body.style.overflow = "hidden";
     closeRef.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") closeAction.current();
       if (e.key === "ArrowRight") onStep(1);
       if (e.key === "ArrowLeft") onStep(-1);
     };
@@ -126,17 +136,40 @@ export default function LayerCardModal({
     const wrap = wrapRef.current;
     const lift = liftRef.current;
     const bd = backdropRef.current;
-    if (bd) { bd.style.transition = "opacity 420ms ease 120ms"; bd.style.opacity = "0"; }
-    const end = !reduce.current && lift ? inStack(lift) : null;
-    if (!wrap || !lift || !end) { onClose(); return; }
-    // Put it back: the card lies down into its place in the stack.
+    const dest = reduce.current ? null : prepareReturnRef.current?.() ?? null;
+    if (!wrap || !lift || !dest) { onCloseRef.current(); return; }
+    if (bd) { bd.style.transition = "opacity 420ms ease 180ms"; bd.style.opacity = "0"; }
+    // Lie down onto the home slot. Rotation moves the painted center, so measure that
+    // and shift until it sits on the layer. The slab stays hidden until the card fades.
     wrap.dataset.lifting = "true";
-    if (innerRef.current) { innerRef.current.style.transition = "transform 300ms ease"; innerRef.current.style.transform = `rotateY(${Math.round(angle.current / 360) * 360}deg)`; }
-    lift.style.transition = "transform 560ms cubic-bezier(.5,0,.75,.2), opacity 200ms ease 380ms";
-    lift.style.transform = end;
+    if (innerRef.current) { innerRef.current.style.transition = "transform 280ms ease"; innerRef.current.style.transform = `rotateY(${Math.round(angle.current / 360) * 360}deg)`; }
+    const start = getComputedStyle(lift).transform;
+    let scale = Math.max(0.2, dest.pose.size / lift.getBoundingClientRect().width);
+    const turned = (s: number) => `rotateX(${dest.pose.tilt}deg) rotateZ(${dest.pose.spin}deg) scale(${s})`;
+    lift.style.transition = "none";
+    lift.style.transformOrigin = "center center";
+    lift.style.transform = turned(scale);
+    let mid = lift.getBoundingClientRect();
+    scale *= dest.rect.w / Math.max(1, mid.width);
+    lift.style.transform = turned(scale);
+    mid = lift.getBoundingClientRect();
+    const dx = dest.rect.x + dest.rect.w / 2 - (mid.left + mid.width / 2);
+    const dy = dest.rect.y + dest.rect.h / 2 - (mid.top + mid.height / 2);
+    lift.style.transform = start === "none" ? "none" : start;
+    void lift.offsetWidth;
+    lift.style.transition = "transform 640ms cubic-bezier(.2,.8,.2,1), opacity 120ms ease 640ms";
+    lift.style.transform = `translate(${dx}px, ${dy}px) ${turned(scale)}`;
     lift.style.opacity = "0";
-    setTimeout(onClose, 580);
+    window.setTimeout(() => onRevealRef.current?.(), 740);
+    window.setTimeout(() => onCloseRef.current(), 780);
   }
+
+  useLayoutEffect(() => {
+    prepareReturnRef.current = prepareReturn;
+    onRevealRef.current = onReveal;
+    onCloseRef.current = onClose;
+    closeAction.current = close;
+  });
 
   const turnTo = (deg: number, animate: boolean) => {
     const inner = innerRef.current;

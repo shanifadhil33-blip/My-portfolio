@@ -233,11 +233,16 @@ export const commitments = [
   "If a project needs a larger team or specialist review, I say so before work starts.",
 ];
 
-// Only tools used in shipped portfolio projects (checked against each repo).
+// Practices and tools behind the shipped work. The AI groups describe directing agents
+// (skills, context, review) and the agent tools used. They do not name model or API vendors.
 export const techLayers = [
   { layer: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Three.js"] },
   { layer: "Backend", items: ["Node.js", "Python", "Auth.js", "Zod"] },
   { layer: "Data", items: ["Postgres", "Supabase", "Neon", "Drizzle", "pgvector", "SQLite"] },
-  { layer: "AI", items: ["AI agent orchestration", "Gemini", "Groq", "OpenRouter", "Whisper"] },
+  {
+    layer: "Working with AI agents",
+    items: ["AI agent orchestration", "Agent skills", "Context engineering", "Human in the loop review"],
+  },
+  { layer: "AI tools", items: ["Claude Code", "Cursor", "Codex", "Antigravity", "Grok Bot"] },
   { layer: "Infrastructure", items: ["Vercel", "Cloudflare", "GitHub Actions"] },
 ];
