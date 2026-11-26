@@ -23,3 +23,44 @@ export const clientProjects: Project[] = [
 ];
 
 export const namedClientProjects = clientProjects;
+
+export interface ClientCaseStudy {
+  id: string;
+  client: string;
+  title: string;
+  summary: string;
+  highlights: string[];
+  stack: string[];
+  relationship: string;
+}
+
+export const clientCaseStudies: ClientCaseStudy[] = [
+  {
+    id: "recommendation-engine",
+    client: "A Canadian startup",
+    title: "Recommendation flow with cited AI explanations",
+    summary: "A few questions, then a shortlist with a plain explanation of why.",
+    highlights: [
+      "A rules engine picks a shortlist of one to four.",
+      "AI explanations cite only verified sources that are still current.",
+      "586 passing unit tests.",
+    ],
+    stack: ["Next.js", "Postgres", "LLM integration", "Error monitoring"],
+    relationship:
+      "Repeat client. A second contract followed, and it grew when I added another branded site and the cited explanations.",
+  },
+  {
+    id: "vision-screening",
+    client: "A UK online eye-care business",
+    title: "Vision screening at home, in the browser",
+    summary: "A home screening of glasses or lenses for 6/6 vision. Never a diagnosis.",
+    highlights: [
+      "True size calibration with a bank card, to within one pixel on Chrome, Firefox and Safari.",
+      "An ISO Landolt C test for staff, where guessing alone passes one time in 64.",
+      "437 unit tests.",
+    ],
+    stack: ["Next.js", "TypeScript", "Postgres"],
+    relationship:
+      "Repeat client. I was already working with them on another platform, and after feasibility the work grew into nine milestones, then one more.",
+  },
+];

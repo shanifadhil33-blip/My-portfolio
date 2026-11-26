@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { clientProjects } from "@/data/clientWork";
+import { clientProjects, clientCaseStudies } from "@/data/clientWork";
 import type { Project } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
+import ClientCaseCard from "./ClientCaseCard";
 import ProjectModal from "./ProjectModal";
 import { UPWORK_URL } from "@/lib/site";
 
@@ -50,7 +51,7 @@ export default function ClientWork() {
           Details are anonymised to respect client confidentiality.
         </p>
 
-        <div className="project-grid mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="client-project-grid project-grid mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {clientProjects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -59,6 +60,9 @@ export default function ClientWork() {
                 if (project.caseStudy) setSelectedProject(project);
               }}
             />
+          ))}
+          {clientCaseStudies.map((study) => (
+            <ClientCaseCard key={study.id} study={study} />
           ))}
         </div>
 
