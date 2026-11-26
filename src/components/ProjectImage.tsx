@@ -28,6 +28,8 @@ const SCREENSHOT_SIZE: Record<string, { width: number; height: number }> = {
   "/screenshots/heroes/meridian-freight.webp": { width: 2880, height: 1800 },
   "/screenshots/heroes/reclaim.webp": { width: 2880, height: 1800 },
   "/screenshots/heroes/eob-reader.webp": { width: 2880, height: 1800 },
+  "/screenshots/heroes/nazir.webp": { width: 2880, height: 1800 },
+  "/screenshots/heroes/nazir-report.webp": { width: 2880, height: 1800 },
   "/screenshots/groundwork-desktop-home.png": { width: 2880, height: 1800 },
   "/screenshots/groundwork-desktop-schedule.png": { width: 2880, height: 1800 },
   "/screenshots/groundwork-desktop-documents.png": { width: 2880, height: 1800 },
