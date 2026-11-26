@@ -52,6 +52,71 @@ export interface Project {
 
 const baseProjects: Project[] = [
   {
+    id: "nazir",
+    title: "Nazir",
+    liveUrlLabel: "Visit Web Application",
+    brief:
+      "Nazir tests an AI agent before people use it. You connect the agent by pasting its chat address, or through a small SDK file with a NAZIR_KEY, and Nazir asks it questions and tries safety tricks in English and Arabic.",
+    businessOutcome: "A team can see where its agent gives wrong answers or gives away private details before launch, approve a fix to its instructions, and test again, with a full report to download or share.",
+    tags: ["AI agent testing", "English and Arabic", "Safety tests"],
+    thumbnail: "/screenshots/heroes/nazir.webp",
+    thumbnailAlt:
+      "Nazir on desktop in the demo, with a list of checks and one check of 8 right answers in English and Arabic.",
+    techStackDetailed: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Auth.js",
+      "Neon Postgres",
+      "Vercel",
+    ],
+    underTheHood: [
+      {
+        title: "Connect",
+        description:
+          "Paste a public https chat address and choose how the agent talks: OpenAI style chat, a simple message and reply, or agent to agent. For a full check, add the SDK file for Node or Python and keep the NAZIR_KEY on your server, so Nazir can also see the tools the agent calls. Nazir never calls a private or local address and does not need your source code.",
+        cardDescription:
+          "Paste the chat address, or add the SDK file for Node or Python with a NAZIR_KEY.",
+      },
+      {
+        title: "Checks",
+        description:
+          "An answer check asks 8 questions, 4 in English and 4 in Arabic, and marks each reply right, wrong, or could not tell. A safety test tries tricks such as a hidden instruction in a pasted letter, pretending to be a supervisor, or asking for another person's details.",
+        cardDescription:
+          "8 questions in English and Arabic, and safety tests in both languages.",
+      },
+      {
+        title: "Report",
+        description:
+          "A report sums up one check and can be downloaded as a PDF or shared with a link. From a wrong answer Nazir can suggest a fix to the instructions. You approve it, copy it into your agent, and see before and after.",
+        cardDescription:
+          "A report you can download as a PDF or share, with fixes you approve.",
+      },
+      {
+        title: "Stack",
+        description:
+          "Next.js 16, React 19, TypeScript, Auth.js and Neon Postgres, hosted on Vercel.",
+        cardDescription:
+          "Next.js 16, React 19, TypeScript, Auth.js, Neon Postgres, and Vercel.",
+      },
+    ],
+    honestNote:
+      "Nazir cannot change your agent. The demo uses City Help Desk, a made up agent with mistakes planted on purpose, and nothing in it touches real people or data.",
+    showLiveOnCard: true,
+    caseStudy: {
+      screenshots: [
+        "/screenshots/heroes/nazir.webp",
+        "/screenshots/heroes/nazir-report.webp",
+      ],
+      screenshotAlts: {
+        "/screenshots/heroes/nazir.webp":
+          "Nazir on desktop in the demo, with a list of checks and one check of 8 right answers in English and Arabic.",
+        "/screenshots/heroes/nazir-report.webp":
+          "Nazir report on desktop, with 8 right answers out of 8, checked in English and Arabic, and buttons to download a PDF or share.",
+      },
+    },
+  },
+  {
     id: "reclaim",
     title: "Reclaim",
     liveUrlLabel: "Visit Web Application",

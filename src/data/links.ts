@@ -33,4 +33,7 @@ export const projectLinks: Record<string, { liveUrl?: string; githubUrl?: string
   "groundwork": {
     liveUrl: "https://groundwork-portal.vercel.app",
   },
+  "nazir": {
+    liveUrl: "https://nazir-liard.vercel.app/signin#demo",
+  },
 };
