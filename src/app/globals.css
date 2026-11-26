@@ -550,3 +550,15 @@ section.glow::before { display: none; }
   .lift-wrap .face li { font-size: .875rem; }
   .lift-wrap .face li + li { margin-top: .375rem; }
 }
+
+@media (max-width: 640px) {
+  .client-case-body { padding: 1rem; }
+  .client-case-body p:not(.client-case-eyebrow), .client-case-body ul.space-y-2\.5 > li { font-size: .875rem; line-height: 1.5; }
+  .client-case-body h3 { font-size: 1.0625rem; }
+}
+
+@media (min-width: 641px) and (max-height: 800px) {
+  .client-case-body { padding: 1rem; }
+  .client-case-body > div > p:not(:first-child) { font-size: .875rem; line-height: 1.45; }
+  .client-case-body h4 { margin-top: .875rem; }
+}

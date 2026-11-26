@@ -23,3 +23,48 @@ export const clientProjects: Project[] = [
 ];
 
 export const namedClientProjects = clientProjects;
+
+export interface ClientCaseStudy {
+  id: string;
+  client: string;
+  title: string;
+  summary: string;
+  highlights: string[];
+  stack: string[];
+  relationship: string;
+}
+
+export const clientCaseStudies: ClientCaseStudy[] = [
+  {
+    id: "recommendation-engine",
+    client: "Canadian startup",
+    title: "Recommendation engine with cited AI explanations",
+    summary:
+      "The public recommendation flow for a multi site platform. Visitors answer a few questions and get a shortlist of one to four specialist providers, with a plain explanation of why.",
+    highlights: [
+      "A pure rules engine picks the shortlist, and prices never affect it",
+      "AI explanations cite only verified, current sources, and the server checks every answer before it is shown",
+      "Row level security on every table, with 31 reviewed migrations that each have a rollback",
+      "586 passing unit tests",
+    ],
+    stack: ["Next.js", "Supabase Postgres", "OpenAI", "Sentry", "Vercel"],
+    relationship:
+      "Repeat client. The first contract closed with a 5.0 review, and he hired me again for this work, which grew when he added a second branded site.",
+  },
+  {
+    id: "vision-screening",
+    client: "UK online eye care business",
+    title: "At home vision screening in the browser",
+    summary:
+      "Customers check at home whether their glasses or lenses still give 6/6 vision, with the laptop as the chart and the phone as the answer pad. Screening only, never a diagnosis.",
+    highlights: [
+      "True size letters on any laptop, calibrated with a bank card, within one screen pixel on Chrome, Firefox and Safari",
+      "Laptop and phone paired by QR code and kept in sync, with answers safe to resend",
+      "ISO standard Landolt C test, where pure guessing passes a size 1 time in 64",
+      "Feasibility prototype delivered on the deadline day, and 437 unit tests",
+    ],
+    stack: ["Next.js", "TypeScript", "Supabase Postgres", "Vercel"],
+    relationship:
+      "Repeat client. We were already working together on another platform, and after a signed off feasibility phase the work grew into nine more milestones.",
+  },
+];

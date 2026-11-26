@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { clientProjects } from "@/data/clientWork";
+import { clientProjects, clientCaseStudies } from "@/data/clientWork";
 import type { Project } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
+import ClientCaseCard from "./ClientCaseCard";
 import ProjectModal from "./ProjectModal";
 import { UPWORK_URL } from "@/lib/site";
 
@@ -59,6 +60,9 @@ export default function ClientWork() {
                 if (project.caseStudy) setSelectedProject(project);
               }}
             />
+          ))}
+          {clientCaseStudies.map((study) => (
+            <ClientCaseCard key={study.id} study={study} />
           ))}
         </div>
 
