@@ -39,12 +39,14 @@ export interface ClientCaseStudy {
   stack: string[];
   relationship: string;
   sections: ClientCaseSection[];
+  page: string;
 }
 
 export const clientCaseStudies: ClientCaseStudy[] = [
   {
     id: "recommendation-engine",
-    client: "A Canadian startup",
+    client: "A founder running several online consumer businesses",
+    page: "/work/multi-site-recommendation-platform",
     title: "Recommendation flow with cited AI explanations",
     summary: "A few questions, then a shortlist with a plain explanation of why.",
     highlights: [
@@ -59,7 +61,7 @@ export const clientCaseStudies: ClientCaseStudy[] = [
       {
         label: "The ask",
         paragraphs: [
-          "A small Canadian startup that earns from customer leads and paid advice. The founder wanted one platform to run many branded recommendation sites.",
+          "A founder running several online consumer businesses. He wanted one platform to run many branded recommendation sites.",
           "Visitors answer a few questions, get a shortlist with a plain explanation, and are passed to specialist providers. The first site covered international company setup, with more verticals planned.",
         ],
       },
@@ -90,7 +92,7 @@ export const clientCaseStudies: ClientCaseStudy[] = [
         ],
       },
       {
-        label: "What was delivered",
+        label: "Delivered",
         paragraphs: [
           "Multi site architecture, database, admin and publishing, then production hardening, the public recommendation flow, rules and supplier integration, and a knowledge library with AI explanations.",
           "Every milestone accepted. 31 migrations and 586 passing unit tests.",
@@ -107,7 +109,8 @@ export const clientCaseStudies: ClientCaseStudy[] = [
   },
   {
     id: "vision-screening",
-    client: "A UK online eye-care business",
+    client: "An online eye care business run by an optometrist",
+    page: "/work/at-home-vision-screening",
     title: "Vision screening at home, in the browser",
     summary: "A home screening of glasses or lenses for 6/6 vision. Never a diagnosis.",
     highlights: [
@@ -122,7 +125,7 @@ export const clientCaseStudies: ClientCaseStudy[] = [
       {
         label: "The ask",
         paragraphs: [
-          "A UK online eye care business run by a qualified optometrist. He wanted customers to check at home, in a browser, whether their glasses or lenses still give 6/6 vision.",
+          "An online eye care business run by a qualified optometrist. He wanted customers to check at home, in a browser, whether their glasses or lenses still give 6/6 vision.",
           "Screening, never diagnosis. Feasibility first, then small steps.",
         ],
       },
@@ -150,7 +153,7 @@ export const clientCaseStudies: ClientCaseStudy[] = [
         ],
       },
       {
-        label: "What was delivered",
+        label: "Delivered",
         bullets: [
           "A feasibility prototype on the deadline day, with calibration signed off in writing.",
           "A free public quick test with card calibration, phone pairing, 3 or 2 metre setup, automatic start and the agreed result wording.",

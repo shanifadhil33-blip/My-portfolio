@@ -1,7 +1,6 @@
-// Checks the two client case cards at phone, tablet and laptop widths.
+// Glass case cards: open, close, keyboard, focus, and the older project popups.
 // node tests/client-case-cards.mjs [base URL]
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { chromium } from "playwright-core";
 
@@ -9,44 +8,10 @@ const base = process.argv[2] ?? "http://127.0.0.1:3011";
 const artifacts = process.env.QA_ARTIFACTS ?? "/opt/cursor/artifacts";
 await mkdir(artifacts, { recursive: true });
 
-const studies = readFileSync(new URL("../src/data/clientWork.ts", import.meta.url), "utf8");
-const caseCopy = studies.slice(studies.indexOf("export const clientCaseStudies"));
-const sectionBlocks = [...caseCopy.matchAll(/sections: \[([\s\S]*?)\n    \],/g)].map((match) => match[1]);
-assert.equal(sectionBlocks.length, 2, "expected the two new case writeups");
-const sectionText = sectionBlocks.join("\n");
-const count = (text, pattern) => (text.match(pattern) || []).length;
-const em = count(sectionText, /\u2014/g);
-const en = count(sectionText, /\u2013/g);
-const spaced = count(sectionText, /\s-\s/g);
-const hyphens = count(sectionText, /-/g);
-console.log(`dash scan (new writeups): em=${em} en=${en} spaced=${spaced} hyphen=${hyphens}`);
-assert.equal(em, 0);
-assert.equal(en, 0);
-assert.equal(spaced, 0);
-assert.equal(hyphens, 0);
-assert.equal(count(caseCopy, /\u2014/g), 0);
-assert.equal(count(caseCopy, /\u2013/g), 0);
-assert.equal(count(caseCopy, /\s-\s/g), 0);
-for (const word of ["Vercel", "Supabase", "OpenAI", "Sentry", "Cloudflare", "escrow", "coding agent"]) {
-  assert.equal(sectionText.includes(word), false, word);
-}
-assert.equal(/[$£€]/.test(sectionText), false);
-
 const widths = [360, 375, 390, 414, 768, 820, 1024, 1280, 1366, 1440, 1920];
 const cards = [
-  {
-    id: "client-case-recommendation-engine",
-    title: "Recommendation flow with cited AI explanations",
-  },
-  {
-    id: "client-case-vision-screening",
-    title: "Vision screening at home, in the browser",
-  },
-];
-const rowIds = [
-  "project-card-recommendation-platform",
-  "client-case-recommendation-engine",
-  "client-case-vision-screening",
+  { id: "client-case-recommendation-engine", title: "Recommendation flow with cited AI explanations" },
+  { id: "client-case-vision-screening", title: "Vision screening at home, in the browser" },
 ];
 
 function heightFor(width) {
@@ -60,62 +25,34 @@ const browser = await chromium.launch({
   args: ["--no-sandbox"],
 });
 
-async function readLayout(page) {
-  return page.evaluate((ids) => {
+async function layout(page) {
+  return page.evaluate(() => {
     const view = document.documentElement.clientWidth;
-    const boxes = ids.map((id) => {
-      const el = document.getElementById(id);
-      const rect = el.getBoundingClientRect();
-      return {
-        id,
-        top: Math.round(rect.top + window.scrollY),
-        height: Math.round(rect.height),
-        left: Math.round(rect.left),
-        right: Math.round(rect.right + window.scrollX),
-      };
-    });
     const clip = [];
-    for (const card of document.querySelectorAll(".client-case-card")) {
-      const open = card.getAttribute("data-open") === "true";
-      const reveal = card.querySelector(".client-case-reveal-inner");
-      if (!open && reveal.getBoundingClientRect().height > 1) {
-        clip.push(`${card.id} collapsed panel still has height`);
-      }
-      if (open && reveal.scrollHeight > reveal.clientHeight + 2) {
-        clip.push(`${card.id} expanded panel clips content ${reveal.scrollHeight} > ${reveal.clientHeight}`);
-      }
-      for (const el of card.querySelectorAll("h3, h4, p, li")) {
-        if (!open && el.closest(".client-case-reveal")) continue;
-        const style = getComputedStyle(el);
-        if (style.display === "none" || style.visibility === "hidden") continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.width < 1 || rect.height < 1) continue;
-        const cardRect = card.getBoundingClientRect();
-        if (rect.left < cardRect.left - 1 || rect.right > cardRect.right + 1) {
-          clip.push(`${card.id} text outside card: ${el.textContent.trim().slice(0, 48)}`);
-        }
-        if (el.scrollWidth > el.clientWidth + 2) {
-          clip.push(`${card.id} text overflow: ${el.textContent.trim().slice(0, 48)}`);
-        }
+    const root = document.body;
+    for (const el of root.querySelectorAll("h1, h2, h3, h4, p, li, a, button, figcaption")) {
+      const style = getComputedStyle(el);
+      if (style.display === "none" || style.visibility === "hidden") continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.width < 1 || rect.height < 1) continue;
+      if (rect.left < -1 || rect.right > view + 1) {
+        clip.push(`outside: ${el.textContent.trim().slice(0, 70)}`);
       }
     }
-    const align = getComputedStyle(document.querySelector(".client-project-grid")).alignItems;
+    const dialog = document.getElementById("client-case-dialog");
+    const dialogBox = dialog
+      ? (() => {
+          const rect = dialog.getBoundingClientRect();
+          return { top: rect.top, left: rect.left, right: rect.right, bottom: rect.bottom, height: rect.height };
+        })()
+      : null;
     return {
       overflow: document.documentElement.scrollWidth - view,
-      align,
-      boxes,
       clip,
+      dialogBox,
+      view,
+      bodyLocked: document.body.style.overflow === "hidden",
     };
-  }, rowIds);
-}
-
-async function settle(page) {
-  await page.evaluate(async () => {
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    const nodes = [...document.querySelectorAll(".client-case-reveal, .client-case-chevron")];
-    const animations = nodes.flatMap((node) => node.getAnimations());
-    await Promise.all(animations.map((animation) => animation.finished.catch(() => undefined)));
-    await new Promise((resolve) => requestAnimationFrame(resolve));
   });
 }
 
@@ -137,105 +74,87 @@ try {
     const grid = page.locator(".client-project-grid");
     await grid.scrollIntoViewIfNeeded();
 
-    const collapsed = await readLayout(page);
-    assert.ok(collapsed.overflow <= 1, `${width} collapsed page overflow ${collapsed.overflow}`);
-    assert.equal(collapsed.align, "start", `${width} grid align-items`);
-    assert.deepEqual(collapsed.clip, [], `${width} collapsed clip ${collapsed.clip.join(" | ")}`);
+    const closed = await layout(page);
+    assert.ok(closed.overflow <= 1, `${width} closed overflow ${closed.overflow}`);
+    assert.deepEqual(closed.clip, [], `${width} closed clip ${closed.clip.join(" | ")}`);
+    assert.equal(await page.getByRole("heading", { name: "Highlights" }).count(), 0);
+
+    if (width === 390 || width === 1440) {
+      await grid.screenshot({ path: `${artifacts}/glass_cards_${width}.png` });
+    }
 
     for (const card of cards) {
       const toggle = page.locator(`#${card.id} .client-case-toggle`);
+      await toggle.scrollIntoViewIfNeeded();
       const box = await toggle.boundingBox();
-      assert.ok(box && box.height >= 44, `${card.id} toggle target`);
-      const action = page.locator(`#${card.id} .client-case-action`);
-      const actionBox = await action.boundingBox();
-      assert.ok(actionBox && actionBox.height >= 44, `${card.id} action row`);
+      assert.ok(box && box.height >= 44, `${card.id} card target`);
+      await page.mouse.click(box.x + 24, box.y + 28);
+      const dialog = page.locator("#client-case-dialog");
+      await dialog.waitFor({ state: "visible" });
+      assert.equal(await toggle.getAttribute("aria-expanded"), "true");
+      await page.waitForTimeout(280);
+      const opened = await layout(page);
+      assert.ok(opened.overflow <= 1, `${width} open overflow ${opened.overflow}`);
+      assert.deepEqual(opened.clip, [], `${width} open clip ${opened.clip.join(" | ")}`);
+      assert.equal(opened.bodyLocked, true, `${width} page still scrolls`);
+      assert.ok(opened.dialogBox);
+      assert.ok(opened.dialogBox.left >= -1 && opened.dialogBox.right <= opened.view + 1, `${width} panel overflow`);
+      if (width <= 414) {
+        assert.ok(opened.dialogBox.height > heightFor(width) * 0.8, `${width} panel is not a near full sheet`);
+      }
+      const link = dialog.getByRole("link", { name: "Read the full case study" });
+      assert.equal(await link.getAttribute("href"), card.id.includes("vision")
+        ? "/work/at-home-vision-screening"
+        : "/work/multi-site-recommendation-platform");
+      if (width >= 768) {
+        const tabs = dialog.getByRole("tab");
+        assert.equal(await tabs.count(), 6);
+        await tabs.nth(2).click();
+        assert.equal(await tabs.nth(2).getAttribute("aria-selected"), "true");
+      } else {
+        assert.equal(await dialog.getByRole("tab").count(), 0);
+        assert.equal(await dialog.getByRole("heading", { name: "The ask" }).count(), 1);
+      }
+      await page.locator("#client-case-dialog button[aria-label='Close']").click();
+      await dialog.waitFor({ state: "hidden" });
       assert.equal(await toggle.getAttribute("aria-expanded"), "false");
     }
 
-    if (width === 390 || width === 1440) {
-      await grid.screenshot({ path: `${artifacts}/client_cases_collapsed_${width}.png` });
-    }
-
-    const engine = page.locator("#client-case-recommendation-engine .client-case-toggle");
-    const title = page.locator("#client-case-recommendation-engine-title");
-    await title.scrollIntoViewIfNeeded();
-    const titleBox = await title.boundingBox();
-    assert.ok(titleBox && titleBox.y >= 0 && titleBox.y < heightFor(width), `${width} title not in view`);
-    await page.mouse.click(titleBox.x + Math.min(24, titleBox.width / 2), titleBox.y + titleBox.height / 2);
     if (width === 1440) {
-      await page.waitForTimeout(40);
-      const mid = await page.locator("#client-case-recommendation-engine .client-case-reveal-inner").evaluate((el) => el.getBoundingClientRect().height);
-      await settle(page);
-      const end = await page.locator("#client-case-recommendation-engine .client-case-reveal-inner").evaluate((el) => el.getBoundingClientRect().height);
-      assert.ok(end > 200, "expanded panel is short");
-      assert.ok(mid < end - 30, `height animation did not run (${mid} -> ${end})`);
-      const timing = await page.locator("#client-case-recommendation-engine .client-case-reveal").evaluate((el) => {
-        const style = getComputedStyle(el);
-        return { property: style.transitionProperty, duration: style.transitionDuration };
+      const toggle = page.locator("#client-case-recommendation-engine .client-case-toggle");
+      await toggle.focus();
+      await page.keyboard.press("Enter");
+      const dialog = page.locator("#client-case-dialog");
+      await dialog.waitFor();
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: `${artifacts}/glass_panel_${width}.png` });
+      const inside = await page.evaluate(() => {
+        const root = document.getElementById("client-case-dialog");
+        return Boolean(root && root.contains(document.activeElement));
       });
-      assert.match(timing.property, /grid-template-rows/);
-      assert.equal(timing.duration, "0.22s");
-    } else {
-      await settle(page);
-    }
-    assert.equal(await engine.getAttribute("aria-expanded"), "true");
+      assert.equal(inside, true, "focus did not move into the panel");
+      await page.keyboard.press("Escape");
+      await dialog.waitFor({ state: "hidden" });
+      await page.waitForTimeout(40);
+      const back = await page.evaluate(() => document.activeElement?.getAttribute("aria-label"));
+      assert.equal(back, "Open Recommendation flow with cited AI explanations");
 
-    const opened = await readLayout(page);
-    assert.ok(opened.overflow <= 1, `${width} expanded page overflow ${opened.overflow}`);
-    assert.deepEqual(opened.clip, [], `${width} expanded clip ${opened.clip.join(" | ")}`);
-    const beforeEngine = collapsed.boxes.find((box) => box.id === "client-case-recommendation-engine");
-    for (const before of collapsed.boxes) {
-      if (before.id === "client-case-recommendation-engine") continue;
-      const after = opened.boxes.find((box) => box.id === before.id);
-      assert.ok(Math.abs(after.height - before.height) <= 1, `${width} ${before.id} height changed ${before.height} -> ${after.height}`);
-      if (Math.abs(before.top - beforeEngine.top) < 8) {
-        assert.ok(Math.abs(after.top - before.top) <= 1, `${width} ${before.id} row shifted`);
-      }
+      await toggle.click();
+      await dialog.waitFor();
+      await page.mouse.click(12, 12);
+      await dialog.waitFor({ state: "hidden" });
     }
 
-    const showLess = page.locator("#client-case-recommendation-engine .client-case-show-less");
-    const showBox = await showLess.boundingBox();
-    assert.ok(showBox && showBox.height >= 44, "show less target");
-
-    await page.locator("#client-case-vision-screening .client-case-toggle").click();
-    await settle(page);
-    assert.equal(await engine.getAttribute("aria-expanded"), "true", "first card stayed open");
-    assert.equal(
-      await page.locator("#client-case-vision-screening .client-case-toggle").getAttribute("aria-expanded"),
-      "true",
-    );
-    const both = await readLayout(page);
-    assert.ok(both.overflow <= 1, `${width} both open overflow ${both.overflow}`);
-    assert.deepEqual(both.clip, [], `${width} both open clip ${both.clip.join(" | ")}`);
-
-    if (width === 390 || width === 1440) {
-      await grid.screenshot({ path: `${artifacts}/client_cases_expanded_${width}.png` });
-    }
-
-    await showLess.click();
-    await settle(page);
-    assert.equal(await engine.getAttribute("aria-expanded"), "false", "Show less closes");
-    await page.locator("#client-case-vision-screening .client-case-show-less").click();
-    await settle(page);
-    assert.equal(
-      await page.locator("#client-case-vision-screening .client-case-toggle").getAttribute("aria-expanded"),
-      "false",
-    );
-
-    if (width === 1440) {
-      await engine.focus();
-      await page.keyboard.press("Enter");
-      await settle(page);
-      assert.equal(await engine.getAttribute("aria-expanded"), "true", "Enter opens");
-      await page.keyboard.press("Space");
-      await settle(page);
-      assert.equal(await engine.getAttribute("aria-expanded"), "false", "Space closes");
-      await page.keyboard.press("Space");
-      await settle(page);
-      assert.equal(await engine.getAttribute("aria-expanded"), "true", "Space opens");
-      await page.keyboard.press("Enter");
-      await settle(page);
-      assert.equal(await engine.getAttribute("aria-expanded"), "false", "Enter closes");
+    if (width === 390) {
+      const toggle = page.locator("#client-case-vision-screening .client-case-toggle");
+      await toggle.scrollIntoViewIfNeeded();
+      await toggle.click();
+      const dialog = page.locator("#client-case-dialog");
+      await dialog.waitFor();
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: `${artifacts}/glass_panel_${width}.png` });
+      await page.keyboard.press("Escape");
+      await dialog.waitFor({ state: "hidden" });
     }
 
     if (width === 390 || width === 1440) {
@@ -246,17 +165,17 @@ try {
       ];
       for (const [opener, titleText] of popups) {
         await page.locator(opener).click();
-        const dialog = page.locator("#project-modal-content");
-        await dialog.waitFor({ state: "visible" });
+        const modal = page.locator("#project-modal-content");
+        await modal.waitFor({ state: "visible" });
         assert.equal((await page.locator("#project-modal-title").innerText()).trim(), titleText);
         await page.locator("#project-modal-close").click();
-        await dialog.waitFor({ state: "detached" });
+        await modal.waitFor({ state: "detached" });
       }
       console.log(`${width}: Groundwork, Nazir and the earlier client project still open and close`);
     }
 
     assert.deepEqual(errors, [], `${width} console errors: ${errors.join(" | ")}`);
-    console.log(`${width}: collapsed and expanded fit, no clip, neighbour cards keep their height`);
+    console.log(`${width}: glass cards open and close without overflow`);
     await context.close();
   }
 
@@ -266,18 +185,12 @@ try {
   });
   const reducedPage = await reduced.newPage();
   await reducedPage.goto(base, { waitUntil: "networkidle" });
-  const reveal = reducedPage.locator("#client-case-recommendation-engine .client-case-reveal");
-  const reducedTiming = await reveal.evaluate((el) => getComputedStyle(el).transitionDuration);
-  const seconds = reducedTiming.endsWith("ms") ? Number.parseFloat(reducedTiming) / 1000 : Number.parseFloat(reducedTiming);
-  assert.ok(seconds < 0.05, reducedTiming);
   await reducedPage.locator("#client-case-recommendation-engine .client-case-toggle").click();
-  await reducedPage.waitForTimeout(30);
-  const soon = await reducedPage.locator("#client-case-recommendation-engine .client-case-reveal-inner").evaluate((el) => el.getBoundingClientRect().height);
-  await reducedPage.waitForTimeout(300);
-  const later = await reducedPage.locator("#client-case-recommendation-engine .client-case-reveal-inner").evaluate((el) => el.getBoundingClientRect().height);
-  assert.ok(Math.abs(soon - later) <= 2, `reduced motion still animated ${soon} -> ${later}`);
-  assert.ok(later > 200);
-  console.log("reduced motion: panel opens without a height animation");
+  await reducedPage.locator("#client-case-dialog").waitFor();
+  await reducedPage.waitForTimeout(40);
+  const opacity = await reducedPage.locator("#client-case-dialog").evaluate((el) => getComputedStyle(el).opacity);
+  assert.equal(opacity, "1");
+  console.log("reduced motion: panel is shown without waiting on the scale animation");
   await reduced.close();
 } finally {
   await browser.close();

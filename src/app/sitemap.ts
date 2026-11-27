@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { caseStudies } from "@/data/caseStudies";
 import { projects } from "@/data/projects";
 import { SITE_URL } from "@/lib/site";
 
@@ -9,6 +10,7 @@ const UPDATED = {
   services: "2026-11-11",
   brief: "2026-11-11",
   privacy: "2026-10-12",
+  caseStudies: "2026-11-27",
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -33,5 +35,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/services`, lastModified: UPDATED.services },
     { url: `${SITE_URL}/brief`, lastModified: UPDATED.brief },
     { url: `${SITE_URL}/privacy`, lastModified: UPDATED.privacy },
+    ...caseStudies.map((study) => ({
+      url: `${SITE_URL}/work/${study.slug}`,
+      lastModified: UPDATED.caseStudies,
+    })),
   ];
 }
