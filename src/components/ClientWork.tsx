@@ -51,7 +51,7 @@ export default function ClientWork() {
           Details are anonymised to respect client confidentiality.
         </p>
 
-        <div className="client-project-grid project-grid mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="client-project-grid project-grid mt-12 grid grid-cols-1 items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {clientProjects.map((project) => (
             <ProjectCard
               key={project.id}
