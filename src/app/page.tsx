@@ -7,6 +7,7 @@ import Work from "@/components/Work";
 import HowIWork from "@/components/HowIWork";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
+import HashScroll from "@/components/HashScroll";
 import JsonLd from "@/components/JsonLd";
 import { homeGraph } from "@/lib/schema";
 
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <>
       <JsonLd data={homeGraph()} />
+      <HashScroll />
       <Navbar />
       <main id="main" className="flex-1">
         <Hero />
